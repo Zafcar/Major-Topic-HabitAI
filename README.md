@@ -29,3 +29,5 @@ Built on the robust and versatile React Native framework, our app offers a seaml
 * Gamification- Rewarding users as they progress towards their goal using in app coins.
 * Marketplace- Users can redeem the coins they've earned to contribute to society with various channels.
 * User Login- Providing users to store their progress in a secure login account to access it from any device.
+
+***
