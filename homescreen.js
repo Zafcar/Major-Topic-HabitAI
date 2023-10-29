@@ -10,7 +10,7 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-import CalenderScreen from "./calenderscreen";
+import CalendarScreen from "./Calendarscreen";
 
 function HomeLayout() {
   return (
@@ -86,7 +86,7 @@ function OngoingTask({ count }) {
   return (
     <View key={count} style={styles.ongoingButton}>
       <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
-        Task {count + 1}
+        Task {count + 1}                                                      X🔥
       </Text>
     </View>
   );
@@ -95,16 +95,15 @@ function OngoingTask({ count }) {
 function BottonTools() {
   return (
     <View style={styles.buttonBar}>
-      <UtilTool page="HomeScreen" icon="home" name="Home" />
-      <UtilTool page="SomeScreen" icon="cog" name="Settings" />
+      <UtilTool page="HomeScreen" icon="home" size={25} />
+      <UtilTool page="SomeScreen" icon="trophy" size={25} />
       <TouchableOpacity style={[styles.bottomButton, styles.middleButton]}>
         <View style={styles.buttonContent}>
-          <Icon name="plus" size={20} color="black" />
-          <Text style={styles.buttonText}>Create</Text>
+          <Icon name="plus" size={30} color="black" />
         </View>
       </TouchableOpacity>
-      <UtilTool page="calenderScreen" icon="calendar" name="Calendar" />
-      <UtilTool page="NotificationsScreen" icon="bell" name="Notis" />
+      <UtilTool page="calendarScreen" icon="calendar" size={25} />
+      <UtilTool page="NotificationsScreen" icon="bell" size={25} />
     </View>
   );
 }
@@ -117,10 +116,7 @@ function UtilTool({ page, icon, name }) {
   return (
     <TouchableOpacity key={name} style={styles.bottomButton} onPress={onPress}>
       <View style={[styles.buttonContent]}>
-        <Icon name={icon} size={30} color="#5c5bfb" />
-        <Text style={[styles.bottombuttonText, { color: "white" }]}>
-          {name}
-        </Text>
+        <Icon name={icon} size={30} color="#0466C8" />
       </View>
     </TouchableOpacity>
   );
@@ -135,7 +131,7 @@ const HomeScreen = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="homeLayout" component={HomeLayout} />
-        <Stack.Screen name="calenderScreen" component={CalenderScreen} />
+        <Stack.Screen name="calendarScreen" component={CalendarScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -170,7 +166,7 @@ const styles = StyleSheet.create({
   completedButton: {
     width: 100,
     height: 100,
-    backgroundColor: "#5c5bfb",
+    backgroundColor: "#0466C8",
     margin: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -178,13 +174,13 @@ const styles = StyleSheet.create({
   ongoingButton: {
     width: 400,
     height: 80,
-    backgroundColor: "#5c5bfb",
+    backgroundColor: "#0466C8",
     margin: 8,
     justifyContent: "center",
     alignItems: "left",
   },
   buttonText: {
-    color: "#5c5bfb",
+    color: "#0466C8",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -194,7 +190,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#1A2421",
-    padding: 10,
+    padding: 5,
     position: "absolute",
     bottom: 0,
     left: 0,
@@ -206,15 +202,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   middleButton: {
-    backgroundColor: "#5c5bfb",
-    borderWidth: 1,
-    borderColor: "#5c5bfb",
+    backgroundColor: "#0466C8",
+    width: 40, // Adjust the width and height to make it a circle
+    height: 40,
+    borderRadius: 30, // Set the borderRadius to half of the width or height
+    overflow: "hidden",
+    marginBottom: 1,
   },
   buttonContent: {
     alignItems: "center",
-  },
-  bottombuttonText: {
-    fontSize: 12,
   },
 });
 
