@@ -3,36 +3,36 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import HomeScreen from './homescreen'; 
+import HomeLayout from './homescreen.js'; 
 
 const Stack = createStackNavigator();
+
+const MainScreen = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={[styles.mainText, {color: 'white'}]}>HabitAI</Text>
+      <Text style={[styles.subText, {color: '#0466C8'}]}>Precision Habit Mastery</Text>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Enter"
+          color="#0466C8" 
+          onPress={() => {
+            navigation.navigate('HomeLayout'); 
+          }}
+        />
+      </View>
+    </View>
+  );
+};
 
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="HomeLayout" component={HomeLayout} />
       </Stack.Navigator>
     </NavigationContainer>
-  );
-};
-
-const MainScreen = ({ navigation }) => {
-  return (
-    <View style={styles.container}>
-      <Text style={[styles.mainText, {color: 'white'}]}>HabitAI</Text>
-      <Text style={[styles.subText, {color: '#5c5bfb'}]}>Precision Habit Mastery</Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Enter"
-          color="#5c5bfb" 
-          onPress={() => {
-            navigation.navigate('HomeScreen'); 
-          }}
-        />
-      </View>
-    </View>
   );
 };
 
