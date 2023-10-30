@@ -29,7 +29,7 @@ function UserDisplay() {
   const name = "Amogh Iyengar"; //Name changed here later on
   return (
     <Text style={[styles.welcomeText, { color: "white", marginTop: 40 }]}>
-      Welcome {name}
+      Welcome {name}!!
     </Text>
   );
 }
@@ -55,7 +55,7 @@ function CompletedTasks() {
 
 function CompletedTask({ count }) {
   return (
-    <View key={count} style={styles.completedButton}>
+    <View key={count} style={[styles.completedButton, { borderRadius: 10 }]}>
       <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
         Task {count + 1}
       </Text>
@@ -84,13 +84,14 @@ function OngoingTasks() {
 
 function OngoingTask({ count }) {
   return (
-    <View key={count} style={styles.ongoingButton}>
+    <View key={count} style={[styles.ongoingButton, { borderRadius: 10 }]}>
       <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
-        Task {count + 1}                                                      X🔥
+             Task {count + 1}                                              X🔥
       </Text>
     </View>
   );
 }
+
 
 function BottonTools() {
   return (
@@ -141,20 +142,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-    padding: 16,
+    padding: 5,
   },
   welcomeText: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 16,
+    marginTop: 20,
+    marginBottom: 40,
   },
   categoriesContainer: {},
   categoryContainer: {
-    marginBottom: 16,
+    marginBottom: 15,
     flex: 1,
   },
   categoryText: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
     color: "white",
     marginBottom: 16,
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   ongoingButton: {
-    width: 400,
+    width: 375,
     height: 80,
     backgroundColor: "#0466C8",
     margin: 8,
@@ -203,9 +205,9 @@ const styles = StyleSheet.create({
   },
   middleButton: {
     backgroundColor: "#0466C8",
-    width: 40, // Adjust the width and height to make it a circle
+    width: 40, 
     height: 40,
-    borderRadius: 30, // Set the borderRadius to half of the width or height
+    borderRadius: 30, 
     overflow: "hidden",
     marginBottom: 1,
   },

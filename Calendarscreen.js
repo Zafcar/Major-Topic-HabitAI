@@ -1,71 +1,85 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/FontAwesome"; 
 
-function CalendarScreen() {
+function Calendar() {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState("");
+  const [currentWeek, setCurrentWeek] = useState([]);
+
+  useEffect(() => {
+    const date = new Date();
+    setCurrentDate(date);
+
+    const options = { month: "long", day: "numeric" };
+    setCurrentMonth(date.toLocaleDateString("en-US", options));
+
+    const week = getWeekDates(date);
+    setCurrentWeek(week);
+  }, []);
+
+  const getWeekDates = (date) => {
+    const currentDay = date.getDay();
+    const weekStart = new Date(date);
+    weekStart.setDate(date.getDate() - currentDay);
+
+    const week = [];
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(weekStart);
+      day.setDate(weekStart.getDate() + i);
+      week.push({ date: day.getDate(), isCurrentDay: isSameDay(day, currentDate) });
+    }
+    return week;
+  };
+
+  const isSameDay = (date1, date2) => {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Schedule</Text>
-      </View>
       <View style={styles.content}>
-        <CalendarDates />
-        <DateTasks />
+        <Category1 currentMonth={currentMonth} currentWeek={currentWeek} />
+        <Category2 />
+        <CircleButton />
       </View>
     </View>
   );
 }
 
-function CalendarDates() {
-  const currentDate = new Date().getDate();
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-
-  const daysInMonths = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-  const initialScrollX = (currentDate - 1) * 80;
-
+function Category1({ currentMonth, currentWeek }) {
   return (
     <View style={styles.categoryContainer}>
       <Text style={styles.categoryText}>Today</Text>
       <View style={styles.weekContainer}>
-        <ScrollView
-          horizon
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentOffset={{ x: initialScrollX, y: 0 }}
-        >
-          {Array.from({ length: Number(daysInMonths) }).map((_, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.dateButton,
-                index + 1 == currentDate ? styles.currentDayButton : null,
-              ]}
-            >
-              <Text key={index} style={styles.dateText}>
-                {index + 1}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        {currentWeek.map((day, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.dateButton,
+              day.isCurrentDay ? styles.currentDayButton : {},
+            ]}
+          >
+            <Text style={styles.dateText}>{day.date}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
 }
 
-function DateTasks() {
-  // Add your logic to fetch and display today's tasks
+function Category2() {
+  // Add your logic to fetch and display today's tasks WORK FOR LATER
   const todayTasks = [
-    "Task 1: Complete todays work :cry:",
-    "Task 2: Attend the meeting",
-    "Task 3: Sleep early KEKW",
+    "Task 1: Attend Meeting",
+    "Task 2: Sleep early KEKW",
+    "Task 3: Go To RV Tomorrow",
     // Add more tasks for today
   ];
 
@@ -78,6 +92,44 @@ function DateTasks() {
         </TouchableOpacity>
       ))}
     </View>
+  );
+}
+
+// This button goes nowhere cuz i cant work on buttons, stupid thing
+function CircleButton() {
+  return (
+    <TouchableOpacity style={styles.circleButton}> 
+      <Icon name="plus" size={30} color="black" /> 
+    </TouchableOpacity>
+  );
+}
+
+function CalendarStack() {
+  const Stack = createStackNavigator();
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Calendar"
+        component={Calendar}
+        options={({ navigation }) => ({
+          headerTitle: "Schedule",
+          headerLeft: () => (
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.navigate("Home")} //THIS NEEDS TO BE FIXED
+            >
+              <Icon name="arrow-left" size={24} color="#0466C8" />
+            </TouchableOpacity>
+          ),
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: "black",
+          },
+          headerTintColor: "white",
+        })}
+      />
+    </Stack.Navigator>
   );
 }
 
@@ -102,7 +154,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   categoryText: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "bold",
     color: "white",
   },
@@ -117,7 +169,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 3,
-    borderColor: "white",
+    borderColor: "#0466C8",
+    backgroundColor: "black",
   },
   dateText: {
     fontSize: 20,
@@ -135,9 +188,20 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   taskText: {
-    fontSize: 16,
-    color: "white",
+    fontSize: 20,
+    color: "black",
+  },
+  circleButton: {
+    width: 60,
+    height: 60,
+    backgroundColor: "#0466C8",
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 20,
+    right: 20, 
   },
 });
 
-export default CalendarScreen;
+export default CalendarStack;
