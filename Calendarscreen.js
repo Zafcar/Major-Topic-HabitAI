@@ -88,9 +88,9 @@ function CalendarDates() {
 function DateTasks() {
   // Add your logic to fetch and display today's tasks
   const todayTasks = [
-    "Task 1: Complete todays work :cry:",
-    "Task 2: Attend the meeting",
-    "Task 3: Sleep early KEKW",
+    "Task 1",
+    "Task 2",
+    "Task 3",
     // Add more tasks for today
   ];
 
@@ -163,9 +163,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   dateButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 54,
+    height: 54,
+    borderRadius: 27,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 3,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     width: 385,
     height: 80,
     backgroundColor: "#0466C8",
-    padding: 8,
+    padding: 10,
     borderRadius: 8,
     marginBottom: 8,
   },

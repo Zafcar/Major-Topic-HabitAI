@@ -45,7 +45,7 @@ function CompletedTasks() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.buttonContainer}
       >
-        {Array.from({ length: 10 }).map((_, index) => (
+        {Array.from({ length: 8 }).map((_, index) => (
           <CompletedTask key={index} count={index} />
         ))}
       </ScrollView>
