@@ -10,6 +10,7 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/FontAwesome";
 
+// ?
 import HomeScreen from "./homescreen";
 import CreateTaskScreen from "./Createtaskscreen";
 
@@ -19,7 +20,7 @@ function CalendarLayout() {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => navigation.navigate("homeScreen")} //THIS NEEDS TO BE FIXED
+        onPress={() => navigation.navigate("homeScreen")}
       >
         <Icon name="arrow-left" size={24} color="#0466C8" />
       </TouchableOpacity>
@@ -35,26 +36,50 @@ function CalendarLayout() {
   );
 }
 
-function getSevenDayList(currentDay, currentdaysInMonths) {
-  const sevenDay = [0, 1, 2, 3, 4, 5, 6];
-  function callback(sevenDay) {
-    const tmpDate = (sevenDay + this.day) % this.daysInMonths;
-    return tmpDate == 0 ? currentdaysInMonths : tmpDate;
+function getSevenDayList(currentDay, currentDaysInMonths, currentMonth) {
+  const sevenDay = [];
+  const sevenMonth = [];
+
+  for (let i = 0; i < 7; i++) {
+    const tmpDate = currentDay - 3 + i;
+    sevenDay.push(
+      tmpDate > currentDaysInMonths ? tmpDate % currentDaysInMonths : tmpDate
+    );
+    sevenMonth.push(
+      tmpDate > currentDaysInMonths ? currentMonth + 1 : currentMonth
+    );
   }
 
-  return sevenDay.map(callback, {
-    day: currentDay - 3,
-    daysInMonths: currentdaysInMonths,
-  });
+  return [sevenDay, sevenMonth];
 }
 
+// TODO: Need to a drop to display the entire month.
 function CalendarDates() {
   const currentDate = new Date().getDate();
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const daysInMonths = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-  const sevenDayList = getSevenDayList(currentDate, daysInMonths);
+  const months = [
+    "Jan",
+    "Feb",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const [sevenDayList, sevenDayMonth] = getSevenDayList(
+    currentDate,
+    daysInMonths,
+    currentMonth
+  );
 
   return (
     <View style={styles.categoryContainer}>
@@ -64,18 +89,21 @@ function CalendarDates() {
           horizon
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentOffset={{ x: 90, y: 0 }}
+          // contentOffset={{ x: 90, y: 0 }}
         >
-          {sevenDayList.map((index) => (
+          {sevenDayList.map((element, index) => (
             <TouchableOpacity
-              key={index}
+              key={element}
               style={[
                 styles.dateButton,
-                index == currentDate ? styles.currentDayButton : null,
+                element == currentDate ? styles.currentDayButton : null,
               ]}
             >
-              <Text key={index} style={styles.dateText}>
-                {index}
+              <Text key={element} style={styles.dateText}>
+                {element}
+              </Text>
+              <Text style={{ color: "white" }}>
+                {months[sevenDayMonth[index]]}
               </Text>
             </TouchableOpacity>
           ))}
