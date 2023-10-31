@@ -46,7 +46,7 @@ function CompletedTasks() {
         contentContainerStyle={styles.buttonContainer}
       >
         {Array.from({ length: 10 }).map((_, index) => (
-          <CompletedTask count={index} />
+          <CompletedTask key={index} count={index} />
         ))}
       </ScrollView>
     </View>
@@ -55,7 +55,7 @@ function CompletedTasks() {
 
 function CompletedTask({ count }) {
   return (
-    <View key={count} style={[styles.completedButton, { borderRadius: 10 }]}>
+    <View style={[styles.completedButton, { borderRadius: 10 }]}>
       <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
         Task {count + 1}
       </Text>
@@ -75,7 +75,7 @@ function OngoingTasks() {
         snapToEnd={false}
       >
         {Array.from({ length: 10 }).map((_, index) => (
-          <OngoingTask count={index} />
+          <OngoingTask key={index} count={index} />
         ))}
       </ScrollView>
     </View>
@@ -84,14 +84,13 @@ function OngoingTasks() {
 
 function OngoingTask({ count }) {
   return (
-    <View key={count} style={[styles.ongoingButton, { borderRadius: 10 }]}>
+    <View style={[styles.ongoingButton, { borderRadius: 10 }]}>
       <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
-             Task {count + 1}                                              X🔥
+        Task {count + 1} X🔥
       </Text>
     </View>
   );
 }
-
 
 function BottonTools() {
   return (
@@ -111,11 +110,11 @@ function BottonTools() {
 
 function UtilTool({ page, icon, name }) {
   const navigation = useNavigation();
-  const onPress = () => {
-    navigation.navigate(page);
-  };
   return (
-    <TouchableOpacity key={name} style={styles.bottomButton} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.bottomButton}
+      onPress={() => navigation.navigate(page)}
+    >
       <View style={[styles.buttonContent]}>
         <Icon name={icon} size={30} color="#0466C8" />
       </View>
@@ -205,9 +204,9 @@ const styles = StyleSheet.create({
   },
   middleButton: {
     backgroundColor: "#0466C8",
-    width: 40, 
+    width: 40,
     height: 40,
-    borderRadius: 30, 
+    borderRadius: 30,
     overflow: "hidden",
     marginBottom: 1,
   },
