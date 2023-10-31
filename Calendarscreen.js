@@ -35,14 +35,26 @@ function CalendarLayout() {
   );
 }
 
+function getSevenDayList(currentDay, currentdaysInMonths) {
+  const sevenDay = [0, 1, 2, 3, 4, 5, 6];
+  function callback(sevenDay) {
+    const tmpDate = (sevenDay + this.day) % this.daysInMonths;
+    return tmpDate == 0 ? currentdaysInMonths : tmpDate;
+  }
+
+  return sevenDay.map(callback, {
+    day: currentDay - 3,
+    daysInMonths: currentdaysInMonths,
+  });
+}
+
 function CalendarDates() {
   const currentDate = new Date().getDate();
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
-
   const daysInMonths = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-  const initialScrollX = (currentDate - 1) * 80;
+  const sevenDayList = getSevenDayList(currentDate, daysInMonths);
 
   return (
     <View style={styles.categoryContainer}>
@@ -52,18 +64,18 @@ function CalendarDates() {
           horizon
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentOffset={{ x: initialScrollX, y: 0 }}
+          contentOffset={{ x: 90, y: 0 }}
         >
-          {Array.from({ length: Number(daysInMonths) }).map((_, index) => (
+          {sevenDayList.map((index) => (
             <TouchableOpacity
               key={index}
               style={[
                 styles.dateButton,
-                index + 1 == currentDate ? styles.currentDayButton : null,
+                index == currentDate ? styles.currentDayButton : null,
               ]}
             >
               <Text key={index} style={styles.dateText}>
-                {index + 1}
+                {index}
               </Text>
             </TouchableOpacity>
           ))}
