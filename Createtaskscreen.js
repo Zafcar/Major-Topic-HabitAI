@@ -29,7 +29,7 @@ export default function TodoList() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Todo List</Text>
+      <Text style={styles.title}>Tasks</Text>
       <TextInput
         style={styles.input}
         placeholder="Add a new task"
