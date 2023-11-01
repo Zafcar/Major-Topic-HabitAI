@@ -5,12 +5,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Button,
 } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-// ?
 import HomeScreen from "./homescreen";
 import TodoList from "./Createtaskscreen";
 
@@ -71,12 +71,11 @@ function getSevenDayList(currentDay, currentMonth) {
   return [sevenDay, sevenMonth];
 }
 
-// TODO: Need to a drop to display the entire month.
 function CalendarDates() {
   const currentDate = new Date().getDate();
   const currentMonth = new Date().getMonth();
 
-  const months = [
+  const monthList = [
     "Jan",
     "Feb",
     "March",
@@ -91,14 +90,52 @@ function CalendarDates() {
     "Dec",
   ];
 
+  const [isComponentVisible, setComponentVisible] = useState(false);
+
+  const toggleComponentVisibility = () => {
+    setComponentVisible(!isComponentVisible);
+  };
+
+  return (
+    <View style={styles.categoryContainer}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={[styles.categoryText]}>
+          {(isComponentVisible && "Month") || isComponentVisible || "Today"}
+        </Text>
+        <Button
+          color="#0466C8"
+          title={
+            (isComponentVisible && "Week") || isComponentVisible || "Month"
+          }
+          onPress={toggleComponentVisibility}
+        />
+      </View>
+      {!isComponentVisible && (
+        <DisplaySevenDayCalendar
+          currentDate={currentDate}
+          currentMonth={currentMonth}
+          monthList={monthList}
+        />
+      )}
+      {isComponentVisible && (
+        <DisplayMonthCalendar
+          currentDate={currentDate}
+          currentMonth={currentMonth}
+          monthList={monthList}
+        />
+      )}
+    </View>
+  );
+}
+
+function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
   const [sevenDayList, sevenDayMonth] = getSevenDayList(
     currentDate,
     currentMonth
   );
 
   return (
-    <View style={styles.categoryContainer}>
-      <Text style={styles.categoryText}>Today</Text>
+    <>
       <View style={styles.weekContainer}>
         <ScrollView
           horizon
@@ -118,13 +155,46 @@ function CalendarDates() {
                 {element}
               </Text>
               <Text style={{ color: "white" }}>
-                {months[sevenDayMonth[index]]}
+                {monthList[sevenDayMonth[index]]}
               </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
-    </View>
+    </>
+  );
+}
+
+function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
+  const currentYear = new Date().getFullYear();
+  const daysInMonths = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const initialScrollX = (currentDate - 1) * 54;
+  return (
+    <>
+      <View style={styles.weekContainer}>
+        <ScrollView
+          horizon
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentOffset={{ x: initialScrollX, y: 0 }}
+        >
+          {Array.from({ length: Number(daysInMonths) }).map((_, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.dateButton,
+                index + 1 == currentDate ? styles.currentDayButton : null,
+              ]}
+            >
+              <Text key={index} style={styles.dateText}>
+                {index + 1}
+              </Text>
+              <Text style={{ color: "white" }}>{monthList[currentMonth]}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+    </>
   );
 }
 
