@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -10,16 +10,27 @@ const Stack = createStackNavigator();
 const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={[styles.mainText, {color: 'white'}]}>HabitAI</Text>
-      <Text style={[styles.subText, {color: '#0466C8'}]}>Precision Habit Mastery</Text>
+      <Text style={[styles.mainText, { color: 'white' }]}>HabitAI</Text>
+      <Text style={[styles.subText, { color: '#0466C8' }]}>Precision Habit Mastery</Text>
       <View style={styles.buttonContainer}>
-        <Button
-          title="Enter"
-          color="#0466C8" 
-          onPress={() => {
-            navigation.navigate('HomeLayout'); 
-          }}
-        />
+        <View style={styles.buttonWrapper}>
+          <Button
+            title="Sign-in"
+            color="#0466C8"
+            onPress={() => {
+              navigation.navigate('HomeLayout');
+            }}
+          />
+        </View>
+        <View style={styles.buttonWrapper}>
+          <Button
+            title="Sign-up"
+            color="#0466C8"
+            onPress={() => {
+              navigation.navigate('HomeLayout');
+            }}
+          />
+        </View>
       </View>
     </View>
   );
@@ -51,10 +62,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   buttonContainer: {
-    width: 300, 
-    height: 70, 
     position: 'absolute',
-    bottom: 100, 
+    bottom: 70, 
+  },
+  buttonWrapper: {
+    width: 300, 
+    borderRadius: 20, 
+    margin: 20, 
   },
 });
 

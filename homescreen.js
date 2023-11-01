@@ -56,10 +56,17 @@ function CompletedTasks() {
 
 function CompletedTask({ count }) {
   return (
-    <View style={[styles.completedButton, { borderRadius: 10 }]}>
-      <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
-        Task {count + 1}
-      </Text>
+    <View style={[styles.completedButton, { borderRadius: 10, borderColor: "#0466C8", borderWidth: 1 }]}>
+      <View style={{ flex: 1 }}>
+        <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
+          Task {count + 1}
+        </Text>
+      </View>
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8 }}>
+        <Text style={{ flex: 1, color: "black", fontSize: 14, marginLeft: 10, fontWeight: 'bold' }}>Completed</Text>
+        <Text style={{ color: "black", fontSize: 15, marginRight: 10, fontWeight: 'bold' }}>100%</Text>
+      </View>
+      <View style={{ height: 6, width: 135, backgroundColor: "black", marginTop: 10, marginBottom: 20, borderRadius: 5  }}></View>
     </View>
   );
 }
@@ -67,7 +74,7 @@ function CompletedTask({ count }) {
 function OngoingTasks() {
   return (
     <View style={styles.categoriesContainer}>
-      <Text style={[styles.categoryText, { color: "white" }]}>
+      <Text style={[styles.categoryText, { color: "white", marginTop: 20 }]}>
         Ongoing Tasks
       </Text>
       <ScrollView
@@ -85,10 +92,15 @@ function OngoingTasks() {
 
 function OngoingTask({ count }) {
   return (
-    <View style={[styles.ongoingButton, { borderRadius: 10 }]}>
-      <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
-        Task {count + 1} X🔥
-      </Text>
+    <View style={[styles.ongoingButton, { borderRadius: 10, position: "relative", borderColor: "#0466C8", borderWidth: 1 }]}>
+      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+        <Text style={[styles.buttonText, { fontWeight: "bold", color: "black", marginLeft: 10 }]}>
+          Task {count + 1}
+        </Text>
+      </View>
+      <View style={{ position: "absolute", top: 0, right: 0, width: "25%", height: "100%", backgroundColor: "black", justifyContent: "center", alignItems: "center", borderRadius: 10 }}>
+        <Text style={{ color: "#0466C8", fontSize: 18 }}>X 🏆/🔥</Text> 
+      </View>
     </View>
   );
 }
@@ -152,7 +164,7 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 40,
   },
   categoriesContainer: {},
@@ -164,22 +176,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
-    marginBottom: 16,
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
   },
   completedButton: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     backgroundColor: "#0466C8",
     margin: 8,
     justifyContent: "center",
     alignItems: "center",
   },
   ongoingButton: {
-    width: 375,
+    width: 384,
     height: 80,
     backgroundColor: "#0466C8",
     margin: 8,
@@ -188,7 +200,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#0466C8",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
   },
   buttonBar: {
