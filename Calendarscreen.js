@@ -12,7 +12,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 // ?
 import HomeScreen from "./homescreen";
-import TodoList from "./CreatetaskScreen";
+import TodoList from "./Createtaskscreen";
 
 function CalendarLayout() {
   const navigation = useNavigation();
@@ -36,18 +36,36 @@ function CalendarLayout() {
   );
 }
 
-function getSevenDayList(currentDay, currentDaysInMonths, currentMonth) {
+function getSevenDayList(currentDay, currentMonth) {
   const sevenDay = [];
   const sevenMonth = [];
 
+  const currentYear = new Date().getFullYear();
+  const currentDaysInMonths = new Date(
+    currentYear,
+    currentMonth + 1,
+    0
+  ).getDate();
+  const tempDate = currentDay - 3;
+
   for (let i = 0; i < 7; i++) {
-    const tmpDate = currentDay - 3 + i;
-    sevenDay.push(
-      tmpDate > currentDaysInMonths ? tmpDate % currentDaysInMonths : tmpDate
-    );
-    sevenMonth.push(
-      tmpDate > currentDaysInMonths ? currentMonth + 1 : currentMonth
-    );
+    if (tempDate + i > currentDaysInMonths) {
+      sevenDay.push((tempDate + i) % currentDaysInMonths);
+      sevenMonth.push((currentMonth + 1) % 12);
+    } else {
+      if (tempDate + i < 1) {
+        const tempDaysInMonths = new Date(
+          currentYear,
+          currentMonth,
+          0
+        ).getDate();
+        sevenDay.push(tempDate + i + tempDaysInMonths);
+        sevenMonth.push(currentMonth - 1 == -1 ? 11 : currentMonth - 1);
+      } else {
+        sevenDay.push(tempDate + i);
+        sevenMonth.push(currentMonth);
+      }
+    }
   }
 
   return [sevenDay, sevenMonth];
@@ -57,8 +75,6 @@ function getSevenDayList(currentDay, currentDaysInMonths, currentMonth) {
 function CalendarDates() {
   const currentDate = new Date().getDate();
   const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const daysInMonths = new Date(currentYear, currentMonth + 1, 0).getDate();
 
   const months = [
     "Jan",
@@ -77,7 +93,6 @@ function CalendarDates() {
 
   const [sevenDayList, sevenDayMonth] = getSevenDayList(
     currentDate,
-    daysInMonths,
     currentMonth
   );
 
