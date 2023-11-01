@@ -11,6 +11,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import CalendarScreen from "./Calendarscreen";
+import TodoList from "./CreatetaskScreen";
 
 function HomeLayout() {
   return (
@@ -93,11 +94,12 @@ function OngoingTask({ count }) {
 }
 
 function BottonTools() {
+  const navigation = useNavigation();
   return (
     <View style={styles.buttonBar}>
       <UtilTool page="HomeScreen" icon="home" size={25} />
       <UtilTool page="SomeScreen" icon="trophy" size={25} />
-      <TouchableOpacity style={[styles.bottomButton, styles.middleButton]}>
+      <TouchableOpacity style={[styles.bottomButton, styles.middleButton]} onPress={() => navigation.navigate("createTaskScreen")}>
         <View style={styles.buttonContent}>
           <Icon name="plus" size={30} color="black" />
         </View>
@@ -132,6 +134,7 @@ const HomeScreen = () => {
       >
         <Stack.Screen name="homeLayout" component={HomeLayout} />
         <Stack.Screen name="calendarScreen" component={CalendarScreen} />
+        <Stack.Screen name="createTaskScreen" component={TodoList} />
       </Stack.Navigator>
     </NavigationContainer>
   );
