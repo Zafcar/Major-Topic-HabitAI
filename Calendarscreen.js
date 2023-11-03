@@ -22,7 +22,7 @@ function CalendarLayout() {
         style={styles.backButton}
         onPress={() => navigation.navigate("homeScreen")}
       >
-        <Icon name="arrow-left" size={24} color="#0466C8" />
+        <Icon name="arrow-left" size={24} color="black" />
       </TouchableOpacity>
       <View style={styles.header}>
         <Text style={styles.headerText}>Schedule</Text>
@@ -102,13 +102,20 @@ function CalendarDates() {
         <Text style={[styles.categoryText]}>
           {(isComponentVisible && "Month") || isComponentVisible || "Today"}
         </Text>
-        <Button
-          color="#0466C8"
-          title={
-            (isComponentVisible && "Week") || isComponentVisible || "Month"
-          }
+        <TouchableOpacity
           onPress={toggleComponentVisibility}
-        />
+          style={{
+            backgroundColor: "black", 
+            borderRadius: 14, 
+            paddingHorizontal: 16, 
+          }}
+        >
+        <Text style={{ color: "white", top: 5 }}>
+        {(isComponentVisible && "Week") || isComponentVisible || "Month"}
+        </Text>
+        </TouchableOpacity>
+
+
       </View>
       {!isComponentVisible && (
         <DisplaySevenDayCalendar
@@ -138,26 +145,43 @@ function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
     <>
       <View style={styles.weekContainer}>
         <ScrollView
-          horizon
-          horizontal
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
-          // contentOffset={{ x: 90, y: 0 }}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+          contentOffset={{ x: (currentDate - 4) * 60, y: 0 }}
         >
           {sevenDayList.map((element, index) => (
             <TouchableOpacity
+            key={element}
+            style={[
+              styles.dateButton,
+              element === currentDate ? styles.currentDayButton : null,
+              { marginRight: 10 },
+              {
+                backgroundColor: element === currentDate ? 'black' : 'white',
+              },
+            ]}
+          >
+            <Text
               key={element}
               style={[
-                styles.dateButton,
-                element == currentDate ? styles.currentDayButton : null,
+                styles.dateText,
+                element === currentDate
+                  ? { color: "white" }
+                  : { color: "black" },
               ]}
             >
-              <Text key={element} style={styles.dateText}>
-                {element}
-              </Text>
-              <Text style={{ color: "white" }}>
-                {monthList[sevenDayMonth[index]]}
-              </Text>
-            </TouchableOpacity>
+              {element}
+            </Text>
+            <Text
+              style={[
+                { color: "black" },
+                element === currentDate ? { color: "white" } : null,
+              ]}
+            >
+              {monthList[sevenDayMonth[index]]}
+            </Text>
+          </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
@@ -173,23 +197,23 @@ function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
     <>
       <View style={styles.weekContainer}>
         <ScrollView
-          horizon
-          horizontal
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentOffset={{ x: initialScrollX, y: 0 }}
         >
-          {Array.from({ length: Number(daysInMonths) }).map((_, index) => (
+          {Array.from({ length: Number(daysInMonths )}).map((_, index) => (
             <TouchableOpacity
               key={index}
               style={[
                 styles.dateButton,
-                index + 1 == currentDate ? styles.currentDayButton : null,
+                index + 1 === currentDate ? styles.currentDayButton : null,
               ]}
             >
               <Text key={index} style={styles.dateText}>
                 {index + 1}
               </Text>
-              <Text style={{ color: "white" }}>{monthList[currentMonth]}</Text>
+              <Text style={{ color: "white" }}>{monthList[currentMonth]}
+              </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -198,10 +222,12 @@ function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
   );
 }
 
+
+
 function DateTasks() {
   // Add your logic to fetch and display today's tasks
   const todayTasks = [
-    "Task 1",
+    "Review 1",
     "Task 2",
     "Task 3",
     // Add more tasks for today
@@ -212,12 +238,16 @@ function DateTasks() {
       <Text style={styles.categoryText}>Today's Tasks</Text>
       {todayTasks.map((task, index) => (
         <TouchableOpacity key={index} style={styles.taskButton}>
-          <Text style={styles.taskText}>{task}</Text>
+          <View>
+            <Text style={styles.taskText}>{task}</Text>
+            <Text style={styles.secondLineText}> 16:00:00 - 18:00:00</Text>
+          </View>
         </TouchableOpacity>
       ))}
     </View>
   );
 }
+
 
 function CircleButton({ navigation }) {
   return (
@@ -225,7 +255,7 @@ function CircleButton({ navigation }) {
       style={styles.circleButton}
       onPress={() => navigation.navigate("createTaskScreen")}
     >
-      <Icon name="plus" size={30} color="black" />
+      <Icon name="plus" size={30} color="white" />
     </TouchableOpacity>
   );
 }
@@ -249,7 +279,7 @@ const CalendarScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "#D5D5D5",
     padding: 16,
   },
   header: {
@@ -258,7 +288,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 40,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   content: {
     flex: 1,
@@ -269,20 +299,18 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 25,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   weekContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   dateButton: {
-    width: 54,
-    height: 54,
+    width: 44,
+    height: 64,
     borderRadius: 27,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 3,
-    borderColor: "#0466C8",
     backgroundColor: "black",
   },
   dateText: {
@@ -290,30 +318,38 @@ const styles = StyleSheet.create({
     color: "white",
   },
   currentDayButton: {
-    backgroundColor: "#0466C8",
-  },
+    backgroundColor: "white",
+  },  
   taskButton: {
     width: 385,
-    height: 80,
-    backgroundColor: "#0466C8",
+    height: 100,
+    backgroundColor: "black",
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 14,
     marginBottom: 8,
+    borderColor: "white",
+    borderWidth: 6,
+    marginTop: 5,
   },
   taskText: {
     fontSize: 20,
-    color: "black",
+    color: "white",
+  },
+  secondLineText: {
+    fontSize: 13, 
+    color: "white",
+    top: 20,
   },
   circleButton: {
     width: 60,
     height: 60,
-    backgroundColor: "#0466C8",
+    backgroundColor: "black",
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
     bottom: 20,
-    right: 20,
+    right: 5,
   },
 });
 
