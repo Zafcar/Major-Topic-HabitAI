@@ -229,8 +229,8 @@ function DateTasks() {
   // Add your logic to fetch and display today's tasks
   const todayTasks = [
     "Review 1",
-    "Task 2",
-    "Task 3",
+    "Gym",
+    "Reply to E-mails",
     // Add more tasks for today
   ];
 
@@ -241,7 +241,7 @@ function DateTasks() {
         <TouchableOpacity key={index} style={styles.taskButton}>
           <View>
             <Text style={styles.taskText}>{task}</Text>
-            <Text style={styles.secondLineText}> 16:00:00 - 18:00:00</Text>
+            <Text style={styles.secondLineText}>16:00:00 - 18:00:00</Text>
           </View>
         </TouchableOpacity>
       ))}
@@ -329,11 +329,21 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderColor: "white",
     borderWidth: 6,
-    marginTop: 5, // shadow
+    marginTop: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+    elevation: 10,
   },
+  
   taskText: {
     fontSize: 20,
     color: "black",
+    fontWeight: "bold"
   },
   secondLineText: {
     fontSize: 13,
@@ -350,6 +360,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+    elevation: 10,
   },
 });
 
