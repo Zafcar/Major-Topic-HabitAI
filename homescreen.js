@@ -12,6 +12,8 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 import CalendarScreen from "./Calendarscreen";
 import TodoList from "./Createtaskscreen";
+import NotificationScreen from "./Notificationscreen";
+import RewardsScreen from "./Rewardsscreen";
 
 function HomeLayout() {
   return (
@@ -41,8 +43,16 @@ function CompletedTasks() {
       <Text style={[styles.categoryText, { color: "black", marginLeft: 5 }]}>
         Completed Tasks
       </Text>
-      <Text style={{ color: "#6357F4", fontSize: 16, position: "absolute", right: 20, bottom: 179 }}>
-          See all
+      <Text
+        style={{
+          color: "#6357F4",
+          fontSize: 16,
+          position: "absolute",
+          right: 20,
+          bottom: 179,
+        }}
+      >
+        See all
       </Text>
       <ScrollView
         horizontal
@@ -61,15 +71,55 @@ function CompletedTask({ count }) {
   return (
     <View style={[styles.completedButton, { borderRadius: 14 }]}>
       <View style={{ flex: 1 }}>
-        <Text style={[styles.buttonText, { fontWeight: "bold", color: "white", marginTop: 15, marginLeft: -65 }]}>
+        <Text
+          style={[
+            styles.buttonText,
+            {
+              fontWeight: "bold",
+              color: "white",
+              marginTop: 15,
+              marginLeft: -65,
+            },
+          ]}
+        >
           Task {count + 1}
         </Text>
       </View>
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8 }}>
-        <Text style={{ flex: 1, color: "white", fontSize: 14, marginLeft: 10, fontWeight: 'bold' }}>Completed</Text>
-        <Text style={{ color: "white", fontSize: 15, marginRight: 10, fontWeight: 'bold' }}>100%</Text>
+      <View
+        style={{ flexDirection: "row", alignItems: "center", marginTop: 8 }}
+      >
+        <Text
+          style={{
+            flex: 1,
+            color: "white",
+            fontSize: 14,
+            marginLeft: 10,
+            fontWeight: "bold",
+          }}
+        >
+          Completed
+        </Text>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 15,
+            marginRight: 10,
+            fontWeight: "bold",
+          }}
+        >
+          100%
+        </Text>
       </View>
-      <View style={{ height: 6, width: 135, backgroundColor: "#42F975", marginTop: 10, marginBottom: 20, borderRadius: 5 }}></View>
+      <View
+        style={{
+          height: 6,
+          width: 135,
+          backgroundColor: "#42F975",
+          marginTop: 10,
+          marginBottom: 20,
+          borderRadius: 5,
+        }}
+      ></View>
     </View>
   );
 }
@@ -77,11 +127,24 @@ function CompletedTask({ count }) {
 function OngoingTasks() {
   return (
     <View style={styles.categoriesContainer}>
-      <Text style={[styles.categoryText, { color: "black", marginTop: 20, marginLeft: 5 }]}>
+      <Text
+        style={[
+          styles.categoryText,
+          { color: "black", marginTop: 20, marginLeft: 5 },
+        ]}
+      >
         Ongoing Tasks
       </Text>
-      <Text style={{ color: "#6357F4", fontSize: 16, position: "absolute", right: 20, top: 25 }}>
-          See all
+      <Text
+        style={{
+          color: "#6357F4",
+          fontSize: 16,
+          position: "absolute",
+          right: 20,
+          top: 25,
+        }}
+      >
+        See all
       </Text>
       <ScrollView
         contentContainerStyle={{}}
@@ -101,14 +164,45 @@ function OngoingTask({ count }) {
     <View style={styles.ongoingButtonContainer}>
       <View style={[styles.ongoingButton, { borderRadius: 14 }]}>
         <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
-          <Text style={[styles.buttonText, { fontWeight: "bold", color: "white", marginLeft: 10, marginTop: -45 }]}>
+          <Text
+            style={[
+              styles.buttonText,
+              {
+                fontWeight: "bold",
+                color: "white",
+                marginLeft: 10,
+                marginTop: -45,
+              },
+            ]}
+          >
             Task {count + 1}
           </Text>
         </View>
-        <Text style={{ color: "white", fontSize: 13, marginLeft: 10, position: "absolute", bottom: 12 }}>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 13,
+            marginLeft: 10,
+            position: "absolute",
+            bottom: 12,
+          }}
+        >
           Due on: xx-xx-xxxx
         </Text>
-        <View style={{ position: "absolute", top: 35, right: 4, bottom: 4, width: "25%", height: "40%", backgroundColor: "white", justifyContent: "center", alignItems: "center", borderRadius: 15 }}>
+        <View
+          style={{
+            position: "absolute",
+            top: 35,
+            right: 4,
+            bottom: 4,
+            width: "25%",
+            height: "40%",
+            backgroundColor: "white",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 15,
+          }}
+        >
           <Text style={{ color: "black", fontSize: 18 }}>X 🏆/🔥</Text>
         </View>
       </View>
@@ -121,7 +215,7 @@ function BottonTools() {
   return (
     <View style={styles.buttonBar}>
       <UtilTool page="HomeScreen" icon="home" size={15} />
-      <UtilTool page="SomeScreen" icon="trophy" size={15} />
+      <UtilTool page="rewardsScreen" icon="trophy" size={15} />
       <TouchableOpacity
         style={styles.middleButton}
         onPress={() => navigation.navigate("createTaskScreen")}
@@ -131,12 +225,12 @@ function BottonTools() {
         </View>
       </TouchableOpacity>
       <UtilTool page="calendarScreen" icon="calendar" size={15} />
-      <UtilTool page="NotificationsScreen" icon="bell" size={15} />
+      <UtilTool page="notificationScreen" icon="bell" size={15} />
     </View>
   );
 }
 
-function UtilTool({ page, icon, name }) {
+function UtilTool({ page, icon }) {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -159,8 +253,13 @@ const HomeScreen = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="homeLayout" component={HomeLayout} />
-        <Stack.Screen name="calendarScreen" component={CalendarScreen} />
+        <Stack.Screen name="rewardsScreen" component={RewardsScreen} />
         <Stack.Screen name="createTaskScreen" component={TodoList} />
+        <Stack.Screen name="calendarScreen" component={CalendarScreen} />
+        <Stack.Screen
+          name="notificationScreen"
+          component={NotificationScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
