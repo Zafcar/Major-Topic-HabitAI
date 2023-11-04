@@ -5,11 +5,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Button,
 } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/FontAwesome";
+
+import TopPageDisplay from "./Topdisplaybar";
 
 import HomeScreen from "./homescreen";
 import TodoList from "./Createtaskscreen";
@@ -18,32 +19,7 @@ function CalendarLayout() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingBottom: 50,
-        }}
-      >
-        <View style={{ flex: 0 }}>
-          <TouchableOpacity
-            style={([styles.backButton], { paddingTop: 40, flex: 0 })}
-            onPress={() => navigation.navigate("homeScreen")}
-          >
-            <Icon name="arrow-left" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={[
-            styles.header,
-            { flex: 1, alignItems: "center", justifyContent: "center" },
-          ]}
-        >
-          <Text style={{ fontSize: 24, fontWeight: "bold", paddingRight: 20 }}>
-            Schedule
-          </Text>
-        </View>
-      </View>
+      <TopPageDisplay navigation={navigation} title={"Schedule"} />
       <View style={styles.content}>
         <CalendarDates />
         <DateTasks />
