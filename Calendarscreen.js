@@ -323,21 +323,21 @@ const styles = StyleSheet.create({
   taskButton: {
     width: 385,
     height: 100,
-    backgroundColor: "black",
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 14,
     marginBottom: 8,
     borderColor: "white",
     borderWidth: 6,
-    marginTop: 5,
+    marginTop: 5, // shadow
   },
   taskText: {
     fontSize: 20,
-    color: "white",
+    color: "black",
   },
   secondLineText: {
     fontSize: 13,
-    color: "white",
+    color: "black",
     top: 20,
   },
   circleButton: {

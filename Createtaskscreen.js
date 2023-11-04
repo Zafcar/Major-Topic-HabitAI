@@ -1,89 +1,207 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; 
 
-
-
-export default function TodoList() {
-  const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState('');
-
-  const addTodo = () => {
-    if (newTodo.trim() !== '') {
-      setTodos([...todos, { text: newTodo, id: Date.now() }]);
-      setNewTodo('');
-    }
-  };
-
-  const updateTodo = (id, newText) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, text: newText } : todo
-    );
-    setTodos(updatedTodos);
-  };
-
-  const deleteTodo = (id) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(updatedTodos);
-  };
-  
+const CreateTaskPage = () => {
+  const [taskTitle, setTaskTitle] = useState('   text....');
+  const [taskDetails, setTaskDetails] = useState('  description....');
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tasks</Text>
+      <Text style={styles.heading}>Task Title</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Add a new task"
-        value={newTodo}
-        onChangeText={(text) => setNewTodo(text)}
+        style={[styles.input, styles.commonInput]}
+        value={taskTitle}
+        onChangeText={(text) => setTaskTitle(text)}
       />
-      <Button title="Add" onPress={addTodo} />
-      <FlatList
-        data={todos}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.todoItem}>
-            <TextInput
-              style={styles.todoText}
-              value={item.text}
-              onChangeText={(text) => updateTodo(item.id, text)}
-            />
-            <Button title="Delete" onPress={() => deleteTodo(item.id)} />
+
+      <Text style={styles.heading}>Task Details</Text>
+      <TextInput
+        style={[styles.textarea, styles.commonTextArea]}
+        value={taskDetails}
+        onChangeText={(text) => setTaskDetails(text)}
+        multiline={true}
+        numberOfLines={4}
+      />
+
+      <Text style={styles.heading}>Time & Date</Text>
+
+      <View style={styles.dateContainer}>
+        <View style={styles.iconBox}>
+          <FontAwesome5 name="clock" size={16} color="white" style={styles.icon} />
+        </View>
+        <View style={styles.textBox}>
+          <TextInput
+            style={styles.timeTextBox}
+            value="xx:xx:xx"
+            editable={false}
+          />
+        </View>
+        <View style={styles.iconBox}>
+          <FontAwesome5 name="calendar" size={16} color="white" style={styles.icon} />
+        </View>
+        <View style={styles.textBox}>
+          <TextInput
+            style={styles.timeTextBox}
+            value="xx-xx-xxxx"
+            editable={false}
+          />
+        </View>
+      </View>
+      <Text style={styles.subTaskHeading}>Add Sub Tasks</Text>
+      <ScrollView style={styles.scrollContainer}>
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <View key={i} style={styles.subTaskRow}>
+            <TouchableOpacity
+              style={styles.subTaskButton}
+              onPress={() => {}}
+            >
+              <Text style={styles.subTaskButtonText}>{`Sub task ${i}`}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.plusButton}>
+              <FontAwesome5 name="plus" size={14} color="white" />
+            </TouchableOpacity>
           </View>
-        )}
-      />
+        ))}
+      </ScrollView>
+
+      <TouchableOpacity style={styles.lastButton}>
+        <Text style={styles.lastButtonText}>Create</Text>
+      </TouchableOpacity>
     </View>
   );
-}
-
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#D5D5D5",
     padding: 16,
   },
-  title: {
-    fontSize: 24,
+  heading: {
     fontWeight: 'bold',
-    marginBottom: 12,
+    fontSize: 20,
+    marginTop: 40,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    width: 370,
+    height: 60,
+    backgroundColor: "white",
+    borderColor: 'white',
     borderWidth: 1,
-    marginBottom: 8,
-    padding: 8,
+    borderRadius: 14,
+    marginTop: 10,
+    fontSize: 16,
+    color: 'grey',
   },
-  todoItem: {
+  textarea: {
+    width: 370,
+    height: 100,
+    backgroundColor: "white",
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 14,
+    marginTop: 10,
+    fontSize: 16,
+    color: 'grey',
+  },
+  commonInput: {
+    height: 60,
+  },
+  commonTextArea: {
+    height: 100,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  iconBox: {
+    backgroundColor: "black",
+    borderRadius: 14,
+    width: 48,
+    height: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 1,
+  },
+  textBox: {
+    width: 135,
+    height: 41,
+    borderColor: 'white',
+    backgroundColor: "white",
+    borderWidth: 1,
+    paddingLeft: 10,
+    borderRadius: 14,
+    fontSize: 14,
+    color: 'black',
+  },
+  icon: {
+    color: 'white',
+  },
+  timeTextBox: {
+    width: 115,
+    height: 41,
+    borderColor: 'white',
+    backgroundColor: "white",
+    borderWidth: 1,
+    paddingLeft: 10,
+    borderRadius: 14,
+    fontSize: 14,
+    color: 'black',
+  },
+  subTaskHeading: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: 20,
+  },
+  scrollContainer: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  subTaskRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
-  todoText: {
-    flex: 1,
+  subTaskButton: {
+    width: 370,
+    height: 60,
+    backgroundColor: 'white',
+    borderRadius: 14,
+    justifyContent: 'center',
+  },
+  subTaskButtonText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 16,
+    paddingLeft: 16,
+  },
+  plusButton: {
+    width: 40, 
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    padding: 8,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute', 
+    right: 25,
+    borderRadius: 14,
+  },
+  lastButton: {
+    width: 380,
+    height: 67,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    borderRadius: 14,
+  },
+  lastButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
+
+export default CreateTaskPage;
