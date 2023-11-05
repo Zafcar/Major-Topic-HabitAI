@@ -6,16 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
 
-import CalendarScreen from "./Calendarscreen";
-import TodoList from "./Createtaskscreen";
-import NotificationScreen from "./Notificationscreen";
-import RewardsScreen from "./Rewardsscreen";
+import { BottonTools } from "./Toolbars";
 
-function HomeLayout() {
+function HomeScreen() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <UserDisplay />
@@ -23,7 +19,7 @@ function HomeLayout() {
       <View style={{ flex: 1 }}>
         <OngoingTasks />
       </View>
-      <BottonTools />
+      <BottonTools navigation={navigation} currentpage={"homeScreen"} />
     </View>
   );
 }
@@ -210,60 +206,7 @@ function OngoingTask({ count }) {
   );
 }
 
-function BottonTools() {
-  const navigation = useNavigation();
-  return (
-    <View style={styles.buttonBar}>
-      <UtilTool page="HomeScreen" icon="home" size={15} />
-      <UtilTool page="rewardsScreen" icon="trophy" size={15} />
-      <TouchableOpacity
-        style={styles.middleButton}
-        onPress={() => navigation.navigate("createTaskScreen")}
-      >
-        <View style={styles.middleButtonContent}>
-          <Icon name="plus" size={24} color="white" style={styles.plusIcon} />
-        </View>
-      </TouchableOpacity>
-      <UtilTool page="calendarScreen" icon="calendar" size={15} />
-      <UtilTool page="notificationScreen" icon="bell" size={15} />
-    </View>
-  );
-}
-
-function UtilTool({ page, icon }) {
-  const navigation = useNavigation();
-  return (
-    <TouchableOpacity
-      style={styles.bottomButton}
-      onPress={() => navigation.navigate(page)}
-    >
-      <View style={styles.buttonContent}>
-        <Icon name={icon} size={30} color="black" />
-      </View>
-    </TouchableOpacity>
-  );
-}
-
-const HomeScreen = () => {
-  const Stack = createStackNavigator();
-  return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator
-        initialRouteName="homeLayout"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="homeLayout" component={HomeLayout} />
-        <Stack.Screen name="rewardsScreen" component={RewardsScreen} />
-        <Stack.Screen name="createTaskScreen" component={TodoList} />
-        <Stack.Screen name="calendarScreen" component={CalendarScreen} />
-        <Stack.Screen
-          name="notificationScreen"
-          component={NotificationScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -313,44 +256,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  buttonBar: {
-    height: 55,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "white",
-    padding: 5,
-    position: "absolute",
-    bottom: 10,
-    left: 5,
-    right: 5,
-    borderRadius: 14,
-    elevation: 20,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  bottomButton: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  middleButton: {
-    backgroundColor: "black",
-    width: 50, // Increased width to make it a circle
-    height: 50, // Increased height to make it a circle
-    borderRadius: 25, // Added borderRadius to make it a circle
-    overflow: "hidden",
-    marginBottom: 1,
-  },
-  middleButtonContent: {
-    alignItems: "center",
-  },
-  plusIcon: {
-    fontSize: 24, // Reduce the thickness
-    marginTop: 12, // Adjust the vertical alignment
-  },
 });
-
-export default HomeScreen;
