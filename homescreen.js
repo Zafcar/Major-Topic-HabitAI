@@ -15,9 +15,9 @@ function HomeScreen() {
   return (
     <View style={styles.container}>
       <UserDisplay />
-      <CompletedTasks />
+      <CompletedTasks navigation={navigation} />
       <View style={{ flex: 1 }}>
-        <OngoingTasks />
+        <OngoingTasks navigation={navigation} />
       </View>
       <BottonTools navigation={navigation} currentpage={"homeScreen"} />
     </View>
@@ -33,7 +33,7 @@ function UserDisplay() {
   );
 }
 
-function CompletedTasks() {
+function CompletedTasks({ navigation }) {
   return (
     <View style={styles.categoriesContainer}>
       <Text style={[styles.categoryText, { color: "black", marginLeft: 5 }]}>
@@ -56,16 +56,19 @@ function CompletedTasks() {
         contentContainerStyle={styles.buttonContainer}
       >
         {Array.from({ length: 6 }).map((_, index) => (
-          <CompletedTask key={index} count={index} />
+          <CompletedTask key={index} count={index} navigation={navigation} />
         ))}
       </ScrollView>
     </View>
   );
 }
 
-function CompletedTask({ count }) {
+function CompletedTask({ count, navigation }) {
   return (
-    <View style={[styles.completedButton, { borderRadius: 14 }]}>
+    <TouchableOpacity
+      style={[styles.completedButton, { borderRadius: 14 }]}
+      onPress={() => navigation.navigate("taskDetailsScreen")}
+    >
       <View style={{ flex: 1 }}>
         <Text
           style={[
@@ -116,11 +119,11 @@ function CompletedTask({ count }) {
           borderRadius: 5,
         }}
       ></View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
-function OngoingTasks() {
+function OngoingTasks({ navigation }) {
   return (
     <View style={styles.categoriesContainer}>
       <Text
@@ -148,16 +151,19 @@ function OngoingTasks() {
         snapToEnd={false}
       >
         {Array.from({ length: 7 }).map((_, index) => (
-          <OngoingTask key={index} count={index} />
+          <OngoingTask key={index} count={index} navigation={navigation} />
         ))}
       </ScrollView>
     </View>
   );
 }
 
-function OngoingTask({ count }) {
+function OngoingTask({ count, navigation }) {
   return (
-    <View style={styles.ongoingButtonContainer}>
+    <TouchableOpacity
+      style={styles.ongoingButtonContainer}
+      onPress={() => navigation.navigate("taskDetailsScreen")}
+    >
       <View style={[styles.ongoingButton, { borderRadius: 14 }]}>
         <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
           <Text
@@ -202,7 +208,7 @@ function OngoingTask({ count }) {
           <Text style={{ color: "black", fontSize: 18 }}>X 🏆/🔥</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
