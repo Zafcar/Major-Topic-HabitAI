@@ -1,23 +1,25 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-import HomeLayout from './homescreen.js';
-
-const Stack = createStackNavigator();
+import HomeScreen from "./homescreen";
+import CalendarScreen from "./Calendarscreen";
+import TodoList from "./Createtaskscreen";
+import NotificationScreen from "./Notificationscreen";
+import RewardsScreen from "./Rewardsscreen";
 
 const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={[styles.mainText, { color: 'black' }]}>HabitAI</Text>
+      <Text style={[styles.mainText, { color: "black" }]}>HabitAI</Text>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonWrapper}>
           <TouchableOpacity
             style={styles.customButton}
             onPress={() => {
-              navigation.navigate('HomeLayout');
+              navigation.navigate("HomeScreen");
             }}
           >
             <Text style={styles.customButtonText}>Enter</Text>
@@ -29,11 +31,22 @@ const MainScreen = ({ navigation }) => {
 };
 
 const App = () => {
+  const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        initialRouteName="Main"
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="HomeLayout" component={HomeLayout} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="rewardsScreen" component={RewardsScreen} />
+        <Stack.Screen name="createTaskScreen" component={TodoList} />
+        <Stack.Screen name="calendarScreen" component={CalendarScreen} />
+        <Stack.Screen
+          name="notificationScreen"
+          component={NotificationScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -42,16 +55,16 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#D5D5D5',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#D5D5D5",
   },
   mainText: {
     fontSize: 50,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   buttonContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 70,
   },
   buttonWrapper: {
@@ -61,14 +74,14 @@ const styles = StyleSheet.create({
   customButton: {
     height: 60,
     borderRadius: 14,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
     elevation: 14, // Add elevation for the drop shadow
   },
   customButtonText: {
     fontSize: 20,
-    color: 'white',
+    color: "white",
   },
 });
 
