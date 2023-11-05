@@ -4,12 +4,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import HomeScreen from "./homescreen";
-import CalendarScreen from "./Calendarscreen";
-import TodoList from "./Createtaskscreen";
-import NotificationScreen from "./Notificationscreen";
-import RewardsScreen from "./Rewardsscreen";
-import TaskDetailsScreen from "./TaskDetails";
+import HomeScreen from "./HomeScreen";
+import CalendarScreen from "./CalendarScreen";
+import TodoList from "./CreateTaskScreen";
+import NotificationScreen from "./NotificationScreen";
+import RewardsScreen from "./RewardsScreen";
+import OngoingTaskDetails from "./OngoingTaskDetails";
+import CompletedTaskDetails from "./CompletedTaskDetails";
 
 const MainScreen = ({ navigation }) => {
   return (
@@ -20,7 +21,7 @@ const MainScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.customButton}
             onPress={() => {
-              navigation.navigate("HomeScreen");
+              navigation.navigate("homeScreen");
             }}
           >
             <Text style={styles.customButtonText}>Enter</Text>
@@ -40,7 +41,7 @@ const App = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="homeScreen" component={HomeScreen} />
         <Stack.Screen name="rewardsScreen" component={RewardsScreen} />
         <Stack.Screen name="createTaskScreen" component={TodoList} />
         <Stack.Screen name="calendarScreen" component={CalendarScreen} />
@@ -48,7 +49,14 @@ const App = () => {
           name="notificationScreen"
           component={NotificationScreen}
         />
-        <Stack.Screen name="taskDetailsScreen" component={TaskDetailsScreen} />
+        <Stack.Screen
+          name="ongoingTaskDetails"
+          component={OngoingTaskDetails}
+        />
+        <Stack.Screen
+          name="completedTaskDetails"
+          component={CompletedTaskDetails}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
