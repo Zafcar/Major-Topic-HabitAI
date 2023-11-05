@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; 
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { useNavigation } from "@react-navigation/native";
+
+import { TopScreenDisplay } from "./Toolbars";
 
 const CreateTaskPage = () => {
-  const [taskTitle, setTaskTitle] = useState('   text....');
-  const [taskDetails, setTaskDetails] = useState('  description....');
+  const navigation = useNavigation();
+  const [taskTitle, setTaskTitle] = useState("   text....");
+  const [taskDetails, setTaskDetails] = useState("  description....");
 
   return (
     <View style={styles.container}>
+      <TopScreenDisplay navigation={navigation} title={"Create New Task"} />
       <Text style={styles.heading}>Task Title</Text>
       <TextInput
         style={[styles.input, styles.commonInput]}
@@ -28,7 +40,12 @@ const CreateTaskPage = () => {
 
       <View style={styles.dateContainer}>
         <View style={styles.iconBox}>
-          <FontAwesome5 name="clock" size={16} color="white" style={styles.icon} />
+          <FontAwesome5
+            name="clock"
+            size={16}
+            color="white"
+            style={styles.icon}
+          />
         </View>
         <View style={styles.textBox}>
           <TextInput
@@ -38,7 +55,12 @@ const CreateTaskPage = () => {
           />
         </View>
         <View style={styles.iconBox}>
-          <FontAwesome5 name="calendar" size={16} color="white" style={styles.icon} />
+          <FontAwesome5
+            name="calendar"
+            size={16}
+            color="white"
+            style={styles.icon}
+          />
         </View>
         <View style={styles.textBox}>
           <TextInput
@@ -52,10 +74,7 @@ const CreateTaskPage = () => {
       <ScrollView style={styles.scrollContainer}>
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <View key={i} style={styles.subTaskRow}>
-            <TouchableOpacity
-              style={styles.subTaskButton}
-              onPress={() => {}}
-            >
+            <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
               <Text style={styles.subTaskButtonText}>{`Sub task ${i}`}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.plusButton}>
@@ -79,7 +98,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   heading: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 20,
     marginTop: 40,
   },
@@ -87,23 +106,23 @@ const styles = StyleSheet.create({
     width: 370,
     height: 60,
     backgroundColor: "white",
-    borderColor: 'white',
+    borderColor: "white",
     borderWidth: 1,
     borderRadius: 14,
     marginTop: 10,
     fontSize: 16,
-    color: 'grey',
+    color: "grey",
   },
   textarea: {
     width: 370,
     height: 100,
     backgroundColor: "white",
-    borderColor: 'white',
+    borderColor: "white",
     borderWidth: 1,
     borderRadius: 14,
     marginTop: 10,
     fontSize: 16,
-    color: 'grey',
+    color: "grey",
   },
   commonInput: {
     height: 60,
@@ -112,8 +131,8 @@ const styles = StyleSheet.create({
     height: 100,
   },
   dateContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
   iconBox: {
@@ -121,37 +140,37 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     width: 48,
     height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginHorizontal: 1,
   },
   textBox: {
     width: 135,
     height: 41,
-    borderColor: 'white',
+    borderColor: "white",
     backgroundColor: "white",
     borderWidth: 1,
     paddingLeft: 10,
     borderRadius: 14,
     fontSize: 14,
-    color: 'black',
+    color: "black",
   },
   icon: {
-    color: 'white',
+    color: "white",
   },
   timeTextBox: {
     width: 115,
     height: 41,
-    borderColor: 'white',
+    borderColor: "white",
     backgroundColor: "white",
     borderWidth: 1,
     paddingLeft: 10,
     borderRadius: 14,
     fontSize: 14,
-    color: 'black',
+    color: "black",
   },
   subTaskHeading: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 20,
     marginTop: 20,
   },
@@ -160,46 +179,46 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subTaskRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 10,
   },
   subTaskButton: {
     width: 370,
     height: 60,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 14,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   subTaskButtonText: {
-    color: 'black',
-    fontWeight: 'bold',
+    color: "black",
+    fontWeight: "bold",
     fontSize: 16,
     paddingLeft: 16,
   },
   plusButton: {
-    width: 40, 
+    width: 40,
     height: 40,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute', 
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
     right: 25,
     borderRadius: 14,
   },
   lastButton: {
     width: 380,
     height: 67,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 10,
     borderRadius: 14,
   },
   lastButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
     fontSize: 16,
   },
 });
