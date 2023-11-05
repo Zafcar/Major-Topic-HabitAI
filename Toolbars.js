@@ -36,11 +36,10 @@ function TopScreenDisplay({ navigation, title }) {
 function UtilTool({ page, icon, navigation, currentPage }) {
   return (
     <View
-      style={
-        currentPage
-          ? { backgroundColor: "black", padding: 10, borderRadius: 14 }
-          : null
-      }
+      style={[
+        { padding: 10 },
+        currentPage ? { backgroundColor: "black", borderRadius: 14 } : null,
+      ]}
     >
       <TouchableOpacity
         style={styles.bottomButton}
