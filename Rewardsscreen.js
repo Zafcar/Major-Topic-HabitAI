@@ -6,24 +6,20 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
+import { TopScreenDisplay, BottonTools } from "./Toolbars";
 
-import TopPageDisplay from "./Topdisplaybar";
-
-function RewardsLayout() {
+function RewardsScreen() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TopPageDisplay navigation={navigation} title={"Rewards"} />
+      <TopScreenDisplay navigation={navigation} title={"Rewards"} />
+      <BottonTools navigation={navigation} currentpage={"rewardsScreen"} />
     </View>
   );
 }
 
-function RewardsScreen() {}
-
-export default RewardsLayout;
+export default RewardsScreen;
 
 const styles = StyleSheet.create({
   container: {

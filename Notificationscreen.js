@@ -6,24 +6,21 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
 
-import TopPageDisplay from "./Topdisplaybar";
+import { TopScreenDisplay, BottonTools } from "./Toolbars";
 
-function NotificationLayout() {
+function NotificationScreen() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TopPageDisplay navigation={navigation} title={"Notifications"} />
+      <TopScreenDisplay navigation={navigation} title={"Notifications"} />
+      <BottonTools navigation={navigation} currentpage={"notificationScreen"} />
     </View>
   );
 }
 
-function NotificationScreen() {}
-
-export default NotificationLayout;
+export default NotificationScreen;
 
 const styles = StyleSheet.create({
   container: {
