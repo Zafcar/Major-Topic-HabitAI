@@ -6,20 +6,19 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-import TopPageDisplay from "./Topdisplaybar";
+import { TopScreenDisplay } from "./Toolbars";
 
 import HomeScreen from "./homescreen";
 import TodoList from "./Createtaskscreen";
 
-function CalendarLayout() {
+function CalendarScreen() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TopPageDisplay navigation={navigation} title={"Schedule"} />
+      <TopScreenDisplay navigation={navigation} title={"Schedule"} />
       <View style={styles.content}>
         <CalendarDates />
         <DateTasks />
@@ -259,22 +258,6 @@ function CircleButton({ navigation }) {
     </TouchableOpacity>
   );
 }
-
-const CalendarScreen = () => {
-  const Stack = createStackNavigator();
-  return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator
-        initialRouteName="calendarLayout"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="calendarLayout" component={CalendarLayout} />
-        <Stack.Screen name="homeScreen" component={HomeScreen} />
-        <Stack.Screen name="createTaskScreen" component={TodoList} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {
