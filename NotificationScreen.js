@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { TopScreenDisplay, BottonTools } from "./Toolbars";
+import { TopScreenDisplay, BottonTools } from "./ToolBars";
 
 function NotificationScreen() {
   const navigation = useNavigation();

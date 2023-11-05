@@ -10,7 +10,7 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
 
-import { TopScreenDisplay } from "./Toolbars";
+import { TopScreenDisplay } from "./ToolBars";
 
 function TaskTitle() {
   const [taskTitle, setTaskTitle] = useState("   text....");
@@ -126,6 +126,8 @@ const CreateTaskPage = () => {
     </View>
   );
 };
+
+export default CreateTaskPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -258,5 +260,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default CreateTaskPage;

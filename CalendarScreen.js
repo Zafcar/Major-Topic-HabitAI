@@ -9,10 +9,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-import { TopScreenDisplay } from "./Toolbars";
-
-import HomeScreen from "./homescreen";
-import TodoList from "./Createtaskscreen";
+import { TopScreenDisplay } from "./ToolBars";
 
 function CalendarScreen() {
   const navigation = useNavigation();

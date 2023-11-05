@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { BottonTools } from "./Toolbars";
+import { BottonTools } from "./ToolBars";
 
 function HomeScreen() {
   const navigation = useNavigation();
@@ -67,7 +67,7 @@ function CompletedTask({ count, navigation }) {
   return (
     <TouchableOpacity
       style={[styles.completedButton, { borderRadius: 14 }]}
-      onPress={() => navigation.navigate("taskDetailsScreen")}
+      onPress={() => navigation.navigate("completedTaskDetails")}
     >
       <View style={{ flex: 1 }}>
         <Text
@@ -162,7 +162,7 @@ function OngoingTask({ count, navigation }) {
   return (
     <TouchableOpacity
       style={styles.ongoingButtonContainer}
-      onPress={() => navigation.navigate("taskDetailsScreen")}
+      onPress={() => navigation.navigate("ongoingTaskDetails")}
     >
       <View style={[styles.ongoingButton, { borderRadius: 14 }]}>
         <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>

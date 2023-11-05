@@ -14,7 +14,7 @@ function TopScreenDisplay({ navigation, title }) {
       <View style={{ flex: 0, paddingTop: 7 }}>
         <TouchableOpacity
           style={([styles.backButton], { flex: 0 })}
-          onPress={() => navigation.navigate("HomeScreen")}
+          onPress={() => navigation.navigate("homeScreen")}
         >
           <Icon name="arrow-left" size={24} color="black" />
         </TouchableOpacity>
@@ -57,7 +57,7 @@ function BottonTools({ navigation, currentpage }) {
   return (
     <View style={styles.buttonBar}>
       <UtilTool
-        page="HomeScreen"
+        page="homeScreen"
         icon="home"
         size={15}
         navigation={navigation}

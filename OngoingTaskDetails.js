@@ -1,9 +1,15 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { TopScreenDisplay } from "./Toolbars";
+import { TopScreenDisplay } from "./ToolBars";
 
 function TaskDetailsScreen() {
   const navigation = useNavigation();
@@ -26,9 +32,7 @@ function TaskDetailsScreen() {
 
       <Text style={styles.heading}>Details</Text>
       <View style={styles.projectDetails}>
-        <Text style={styles.projectText}>
-          Task Details.
-        </Text>
+        <Text style={styles.projectText}>Task Details.</Text>
       </View>
 
       <View style={styles.progressContainer}>
@@ -37,12 +41,11 @@ function TaskDetailsScreen() {
       </View>
 
       <View style={styles.subTaskHeader}>
-      <Text style={styles.subTaskHeading}>Sub Tasks</Text>
-      <TouchableOpacity style={styles.plusButton}>
-        <FontAwesome5 name="plus" size={24} color="black" />
-      </TouchableOpacity>
+        <Text style={styles.subTaskHeading}>Sub Tasks</Text>
+        <TouchableOpacity style={styles.plusButton}>
+          <FontAwesome5 name="plus" size={24} color="black" />
+        </TouchableOpacity>
       </View>
-
 
       <ScrollView style={styles.scrollContainer}>
         {[1, 2, 3, 4, 5].map((i) => (
@@ -83,10 +86,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   iconBackground: {
-    backgroundColor: "black", 
+    backgroundColor: "black",
     borderRadius: 14,
-    width: 60, 
-    height: 60, 
+    width: 60,
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     width: 370,
     height: 100,
     fontSize: 16,
-    backgroundColor: "white", 
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 14,
   },
