@@ -12,21 +12,24 @@ import { useNavigation } from "@react-navigation/native";
 
 import { TopScreenDisplay } from "./Toolbars";
 
-const CreateTaskPage = () => {
-  const navigation = useNavigation();
+function TaskTitle() {
   const [taskTitle, setTaskTitle] = useState("   text....");
-  const [taskDetails, setTaskDetails] = useState("  description....");
-
   return (
-    <View style={styles.container}>
-      <TopScreenDisplay navigation={navigation} title={"Create New Task"} />
+    <>
       <Text style={styles.heading}>Task Title</Text>
       <TextInput
         style={[styles.input, styles.commonInput]}
         value={taskTitle}
         onChangeText={(text) => setTaskTitle(text)}
       />
+    </>
+  );
+}
 
+function TaskDescription() {
+  const [taskDetails, setTaskDetails] = useState("  description....");
+  return (
+    <>
       <Text style={styles.heading}>Task Details</Text>
       <TextInput
         style={[styles.textarea, styles.commonTextArea]}
@@ -35,7 +38,14 @@ const CreateTaskPage = () => {
         multiline={true}
         numberOfLines={4}
       />
+    </>
+  );
+}
 
+// TODO: Need to Refactor this
+function TimeAndDate() {
+  return (
+    <>
       <Text style={styles.heading}>Time & Date</Text>
 
       <View style={styles.dateContainer}>
@@ -70,6 +80,14 @@ const CreateTaskPage = () => {
           />
         </View>
       </View>
+    </>
+  );
+}
+
+// TODO: Need to Refactor this
+function SubFunctions() {
+  return (
+    <>
       <Text style={styles.subTaskHeading}>Add Sub Tasks</Text>
       <ScrollView style={styles.scrollContainer}>
         {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -83,10 +101,28 @@ const CreateTaskPage = () => {
           </View>
         ))}
       </ScrollView>
+    </>
+  );
+}
 
-      <TouchableOpacity style={styles.lastButton}>
-        <Text style={styles.lastButtonText}>Create</Text>
-      </TouchableOpacity>
+function CreateButton() {
+  return (
+    <TouchableOpacity style={styles.lastButton}>
+      <Text style={styles.lastButtonText}>Create</Text>
+    </TouchableOpacity>
+  );
+}
+
+const CreateTaskPage = () => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.container}>
+      <TopScreenDisplay navigation={navigation} title={"Create New Task"} />
+      <TaskTitle />
+      <TaskDescription />
+      <TimeAndDate />
+      <SubFunctions />
+      <CreateButton />
     </View>
   );
 };
