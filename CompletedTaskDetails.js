@@ -14,11 +14,21 @@ import { TopScreenDisplay } from "./ToolBars";
 function TaskDetailsScreen() {
   const navigation = useNavigation();
   return (
-    <TopScreenDisplay
-      navigation={navigation}
-      title={"Completed Task Details"}
-    />
+    <View style={styles.container}>
+      <TopScreenDisplay
+        navigation={navigation}
+        title={"Completed Task Details"}
+      />
+    </View>
   );
 }
 
 export default TaskDetailsScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#D5D5D5",
+    padding: 16,
+  },
+});
