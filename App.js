@@ -9,6 +9,7 @@ import CalendarScreen from "./Calendarscreen";
 import TodoList from "./Createtaskscreen";
 import NotificationScreen from "./Notificationscreen";
 import RewardsScreen from "./Rewardsscreen";
+import TaskDetailsScreen from "./TaskDetails";
 
 const MainScreen = ({ navigation }) => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
           name="notificationScreen"
           component={NotificationScreen}
         />
+        <Stack.Screen name="taskDetailsScreen" component={TaskDetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
