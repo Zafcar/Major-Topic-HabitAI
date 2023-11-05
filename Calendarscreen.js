@@ -194,7 +194,7 @@ function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
           contentOffset={{ x: initialScrollX, y: 0 }}
         >
           {Array.from({ length: Number(daysInMonths) }).map((_, index) => (
-            <View style={{ paddingRight: 10 }}>
+            <View key={index} style={{ paddingRight: 10 }}>
               <TouchableOpacity
                 key={index}
                 style={[
@@ -339,11 +339,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 10,
   },
-  
+
   taskText: {
     fontSize: 20,
     color: "black",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   secondLineText: {
     fontSize: 13,
