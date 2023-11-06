@@ -12,17 +12,47 @@ import { BottonTools } from "./ToolBars";
 
 function HomeScreen() {
   const navigation = useNavigation();
-  const completedTaskTexts = ["Clean the house", "Yoga Class", "ADAS Assignment", "Task 4", "Task 5", "Task 6"];
-  const ongoingTaskTexts = ["Review-1", "Week Gym", "Aero Assignnment", "Ongoing Task 4", "Ongoing Task 5", "Ongoing Task 6", "Ongoing Task 7"];
+  const completedTaskTexts = [
+    "Clean the house",
+    "Yoga Class",
+    "ADAS Assignment",
+    "Task 4",
+    "Task 5",
+    "Task 6",
+  ];
+  const ongoingTaskTexts = [
+    "Review-1",
+    "Week Gym",
+    "Aero Assignnment",
+    "Ongoing Task 4",
+    "Ongoing Task 5",
+    "Ongoing Task 6",
+    "Ongoing Task 7",
+  ];
 
-  const dueDates = ["07-11-2023, 11AM - 1PM", "Daily, 5PM - 7PM", "12-11-2023", "aa-aa-aaaa", "bb-bb-bbbb", "cc-cc-cccc", "dd-dd-dddd"];
+  const dueDates = [
+    "07-11-2023, 11AM - 1PM",
+    "Daily, 5PM - 7PM",
+    "12-11-2023",
+    "aa-aa-aaaa",
+    "bb-bb-bbbb",
+    "cc-cc-cccc",
+    "dd-dd-dddd",
+  ];
 
   return (
     <View style={styles.container}>
       <UserDisplay />
-      <CompletedTasks navigation={navigation} completedTaskTexts={completedTaskTexts} />
+      <CompletedTasks
+        navigation={navigation}
+        completedTaskTexts={completedTaskTexts}
+      />
       <View style={{ flex: 1 }}>
-        <OngoingTasks navigation={navigation} ongoingTaskTexts={ongoingTaskTexts} dueDates={dueDates} />
+        <OngoingTasks
+          navigation={navigation}
+          ongoingTaskTexts={ongoingTaskTexts}
+          dueDates={dueDates}
+        />
       </View>
       <BottonTools navigation={navigation} currentpage={"homeScreen"} />
     </View>
@@ -61,27 +91,28 @@ function CompletedTasks({ navigation, completedTaskTexts }) {
         contentContainerStyle={styles.buttonContainer}
       >
         {completedTaskTexts.map((text, index) => (
-          <CompletedTask key={index} text={text} navigation={navigation} />
+          <CompletedTask
+            key={index}
+            text={text}
+            navigation={navigation}
+            index={index}
+          />
         ))}
       </ScrollView>
     </View>
   );
 }
 
-function CompletedTask({ text, navigation }) {
+function CompletedTask({ text, navigation, index }) {
   return (
     <TouchableOpacity
       style={[styles.completedButton, { borderRadius: 14 }]}
-      onPress={() => navigation.navigate("completedTaskDetails")}
+      onPress={
+        index == 0 ? () => navigation.navigate("ongoingTaskDetails") : null
+      }
     >
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text
-          style={[
-            styles.completedButtonText,
-          ]}
-        >
-          {text}
-        </Text>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={[styles.completedButtonText]}>{text}</Text>
       </View>
       <View
         style={{ flexDirection: "row", alignItems: "center", marginTop: 8 }}
@@ -149,28 +180,30 @@ function OngoingTasks({ navigation, ongoingTaskTexts, dueDates }) {
         snapToEnd={false}
       >
         {ongoingTaskTexts.map((text, index) => (
-          <OngoingTask key={index} text={text} dueDate={dueDates[index]} navigation={navigation} />
+          <OngoingTask
+            key={index}
+            text={text}
+            dueDate={dueDates[index]}
+            navigation={navigation}
+            index={index}
+          />
         ))}
       </ScrollView>
     </View>
   );
 }
 
-function OngoingTask({ text, dueDate, navigation }) {
+function OngoingTask({ text, dueDate, navigation, index }) {
   return (
     <TouchableOpacity
       style={styles.ongoingButtonContainer}
-      onPress={() => navigation.navigate("ongoingTaskDetails")}
+      onPress={
+        index == 0 ? () => navigation.navigate("ongoingTaskDetails") : null
+      }
     >
       <View style={[styles.ongoingButton, { borderRadius: 14 }]}>
         <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
-          <Text
-            style={[
-              styles.ongoingButtonText,
-            ]}
-          >
-            {text}
-          </Text>
+          <Text style={[styles.ongoingButtonText]}>{text}</Text>
         </View>
         <Text
           style={{
@@ -243,7 +276,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     margin: 8,
     justifyContent: "center",
-    alignItems: "flex-start", 
+    alignItems: "flex-start",
   },
   buttonText: {
     color: "#0466C8",
@@ -266,4 +299,3 @@ const styles = StyleSheet.create({
     // Add any additional styles if needed for the container
   },
 });
-
