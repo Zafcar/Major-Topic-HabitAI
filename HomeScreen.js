@@ -108,7 +108,7 @@ function CompletedTask({ text, navigation, index }) {
     <TouchableOpacity
       style={[styles.completedButton, { borderRadius: 14 }]}
       onPress={
-        index == 0 ? () => navigation.navigate("ongoingTaskDetails") : null
+        index == 0 ? () => navigation.navigate("completedTaskDetails") : null
       }
     >
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
