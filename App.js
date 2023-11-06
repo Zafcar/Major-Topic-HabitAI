@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 14, // Add elevation for the drop shadow
+    elevation: 14, 
   },
   customButtonText: {
     fontSize: 20,

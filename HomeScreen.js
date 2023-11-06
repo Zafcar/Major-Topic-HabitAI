@@ -22,8 +22,8 @@ function HomeScreen() {
   ];
   const ongoingTaskTexts = [
     "Review-1",
-    "Week Gym",
-    "Aero Assignnment",
+    "Gym",
+    "Practice Company Tests",
     "Ongoing Task 4",
     "Ongoing Task 5",
     "Ongoing Task 6",
@@ -33,7 +33,7 @@ function HomeScreen() {
   const dueDates = [
     "07-11-2023, 11AM - 1PM",
     "Daily, 5PM - 7PM",
-    "12-11-2023",
+    "Daily, 8PM-12AM",
     "aa-aa-aaaa",
     "bb-bb-bbbb",
     "cc-cc-cccc",
@@ -60,10 +60,11 @@ function HomeScreen() {
 }
 
 function UserDisplay() {
-  const name = "Amogh Iyengar";
+  const name = "User!!";
   return (
-    <Text style={[styles.welcomeText, { color: "black", marginTop: 40 }]}>
-      Welcome {name}!!
+    <Text style={{ color: "black", marginTop: 40, marginLeft: 7, marginBottom: 15 }}>
+      <Text style={{ fontSize: 15, fontWeight: "bold", color: "#6357F4" }}>Welcome back</Text>{"\n"}
+      <Text style={{ fontSize: 20, fontWeight: "bold" }}>{name}</Text>
     </Text>
   );
 }
@@ -79,8 +80,9 @@ function CompletedTasks({ navigation, completedTaskTexts }) {
           color: "#6357F4",
           fontSize: 16,
           position: "absolute",
-          right: 20,
-          bottom: 179,
+          right: 22,
+          bottom: 173,
+          fontWeight: "bold",
         }}
       >
         See all
@@ -169,8 +171,9 @@ function OngoingTasks({ navigation, ongoingTaskTexts, dueDates }) {
           color: "#6357F4",
           fontSize: 16,
           position: "absolute",
-          right: 20,
+          right: 22,
           top: 25,
+          fontWeight: "bold",
         }}
       >
         See all
@@ -220,7 +223,7 @@ function OngoingTask({ text, dueDate, navigation, index }) {
           style={{
             position: "absolute",
             top: 35,
-            right: 4,
+            right: 15,
             bottom: 4,
             width: "25%",
             height: "40%",
@@ -245,18 +248,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#D5D5D5",
     padding: 5,
   },
-  welcomeText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginTop: 10,
-    marginBottom: 40,
-  },
   categoriesContainer: {},
   categoryText: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     color: "white",
-    marginBottom: 10,
+    marginBottom: 1,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -287,15 +284,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
-    marginLeft: 5,
+    marginLeft: 12,
     marginBottom: 50,
   },
   completedButtonText: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
-  },
-  ongoingButtonContainer: {
-    // Add any additional styles if needed for the container
   },
 });

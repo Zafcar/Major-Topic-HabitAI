@@ -60,7 +60,7 @@ function TimeAndDate() {
         <View style={styles.textBox}>
           <TextInput
             style={styles.timeTextBox}
-            value="xx:xx:xx"
+            value="HH:MM:SS"
             editable={false}
           />
         </View>
@@ -75,7 +75,7 @@ function TimeAndDate() {
         <View style={styles.textBox}>
           <TextInput
             style={styles.timeTextBox}
-            value="xx-xx-xxxx"
+            value="DD-MM-YYYY"
             editable={false}
           />
         </View>
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   heading: {
     fontWeight: "bold",
     fontSize: 20,
-    marginTop: 40,
+    marginTop: 10,
   },
   input: {
     width: 370,
@@ -258,5 +258,13 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+    elevation: 10,
   },
 });

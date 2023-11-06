@@ -11,7 +11,7 @@ function NotificationScreen() {
   const notifications = [
     {
       id: 1,
-      text: "Notification 1",
+      text: "Review 1",
       timeSent: "30 minutes ago",
     },
     {
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   notification: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 5,
   },
   iconBackground: {
     height: 48,
@@ -111,13 +111,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 15,
-    marginTop: 20,
+    marginTop: 15,
   },
   iconSize: 48 * iconSizeFactor,
   notificationText: {
     fontSize: 18,
     marginLeft: 10,
-    marginTop: 10,
+    marginTop: 12,
     fontWeight: "bold",
   },
   timeSentText: {

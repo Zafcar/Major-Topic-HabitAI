@@ -226,7 +226,7 @@ function DateTasks() {
   const todayTasks = [
     "Review 1",
     "Gym",
-    "Reply to E-mails",
+    "Practice Company Tests",
     // Add more tasks for today
   ];
 
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   headerText: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
     color: "black",
   },

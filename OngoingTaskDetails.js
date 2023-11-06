@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   heading: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: "bold",
-    marginTop: 25,
+    marginTop: 10,
   },
   dueDateContainer: {
     flexDirection: "row",
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
   iconBackground: {
     backgroundColor: "black",
     borderRadius: 14,
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -108,10 +108,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   dueDateText: {
-    fontSize: 18,
+    fontSize: 16,
   },
   dueDate: {
     fontSize: 18,
+    fontWeight: "bold",
   },
   projectDetails: {
     marginTop: 20,
@@ -128,23 +129,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 5,
   },
   progressHeading: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: "bold",
     marginTop: 15,
   },
   progressText: {
     fontSize: 18,
     marginTop: 15,
-    marginRight: 15,
+    marginRight: 18,
   },
   subTaskHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
   subTaskHeading: {
     fontWeight: "bold",
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
   },
   subtaskadd: {
     fontSize: 16,
-    color: "purple",
+    color: "black",
   },
   scrollContainer: {
     marginTop: 10,
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 14,
-    marginRight: 25,
+    marginRight: 20,
   },
   checkButton: {
     width: 40,
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    right: 25,
+    right: 22,
     borderRadius: 14,
   },
   circleButton: {
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    right: 25,
+    right: 22,
     borderRadius: 14,
   },  
   lastButton: {
@@ -218,6 +219,6 @@ const styles = StyleSheet.create({
   lastButtonText: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 20,
   },
 });
