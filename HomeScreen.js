@@ -12,12 +12,17 @@ import { BottonTools } from "./ToolBars";
 
 function HomeScreen() {
   const navigation = useNavigation();
+  const completedTaskTexts = ["Clean the house", "Yoga Class", "ADAS Assignment", "Task 4", "Task 5", "Task 6"];
+  const ongoingTaskTexts = ["Review-1", "Week Gym", "Aero Assignnment", "Ongoing Task 4", "Ongoing Task 5", "Ongoing Task 6", "Ongoing Task 7"];
+
+  const dueDates = ["07-11-2023, 11AM - 1PM", "Daily, 5PM - 7PM", "12-11-2023", "aa-aa-aaaa", "bb-bb-bbbb", "cc-cc-cccc", "dd-dd-dddd"];
+
   return (
     <View style={styles.container}>
       <UserDisplay />
-      <CompletedTasks navigation={navigation} />
+      <CompletedTasks navigation={navigation} completedTaskTexts={completedTaskTexts} />
       <View style={{ flex: 1 }}>
-        <OngoingTasks navigation={navigation} />
+        <OngoingTasks navigation={navigation} ongoingTaskTexts={ongoingTaskTexts} dueDates={dueDates} />
       </View>
       <BottonTools navigation={navigation} currentpage={"homeScreen"} />
     </View>
@@ -25,7 +30,7 @@ function HomeScreen() {
 }
 
 function UserDisplay() {
-  const name = "Amogh Iyengar"; //Name changed here later on
+  const name = "Amogh Iyengar";
   return (
     <Text style={[styles.welcomeText, { color: "black", marginTop: 40 }]}>
       Welcome {name}!!
@@ -33,7 +38,7 @@ function UserDisplay() {
   );
 }
 
-function CompletedTasks({ navigation }) {
+function CompletedTasks({ navigation, completedTaskTexts }) {
   return (
     <View style={styles.categoriesContainer}>
       <Text style={[styles.categoryText, { color: "black", marginLeft: 5 }]}>
@@ -55,33 +60,27 @@ function CompletedTasks({ navigation }) {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.buttonContainer}
       >
-        {Array.from({ length: 6 }).map((_, index) => (
-          <CompletedTask key={index} count={index} navigation={navigation} />
+        {completedTaskTexts.map((text, index) => (
+          <CompletedTask key={index} text={text} navigation={navigation} />
         ))}
       </ScrollView>
     </View>
   );
 }
 
-function CompletedTask({ count, navigation }) {
+function CompletedTask({ text, navigation }) {
   return (
     <TouchableOpacity
       style={[styles.completedButton, { borderRadius: 14 }]}
       onPress={() => navigation.navigate("completedTaskDetails")}
     >
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text
           style={[
-            styles.buttonText,
-            {
-              fontWeight: "bold",
-              color: "white",
-              marginTop: 15,
-              marginLeft: -65,
-            },
+            styles.completedButtonText,
           ]}
         >
-          Task {count + 1}
+          {text}
         </Text>
       </View>
       <View
@@ -123,7 +122,7 @@ function CompletedTask({ count, navigation }) {
   );
 }
 
-function OngoingTasks({ navigation }) {
+function OngoingTasks({ navigation, ongoingTaskTexts, dueDates }) {
   return (
     <View style={styles.categoriesContainer}>
       <Text
@@ -146,19 +145,18 @@ function OngoingTasks({ navigation }) {
         See all
       </Text>
       <ScrollView
-        contentContainerStyle={{}}
-        style={styles.buttonContainer}
+        contentContainerStyle={styles.buttonContainer}
         snapToEnd={false}
       >
-        {Array.from({ length: 7 }).map((_, index) => (
-          <OngoingTask key={index} count={index} navigation={navigation} />
+        {ongoingTaskTexts.map((text, index) => (
+          <OngoingTask key={index} text={text} dueDate={dueDates[index]} navigation={navigation} />
         ))}
       </ScrollView>
     </View>
   );
 }
 
-function OngoingTask({ count, navigation }) {
+function OngoingTask({ text, dueDate, navigation }) {
   return (
     <TouchableOpacity
       style={styles.ongoingButtonContainer}
@@ -168,16 +166,10 @@ function OngoingTask({ count, navigation }) {
         <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
           <Text
             style={[
-              styles.buttonText,
-              {
-                fontWeight: "bold",
-                color: "white",
-                marginLeft: 10,
-                marginTop: -45,
-              },
+              styles.ongoingButtonText,
             ]}
           >
-            Task {count + 1}
+            {text}
           </Text>
         </View>
         <Text
@@ -189,7 +181,7 @@ function OngoingTask({ count, navigation }) {
             bottom: 12,
           }}
         >
-          Due on: xx-xx-xxxx
+          Due on: {dueDate}
         </Text>
         <View
           style={{
@@ -205,7 +197,7 @@ function OngoingTask({ count, navigation }) {
             borderRadius: 15,
           }}
         >
-          <Text style={{ color: "black", fontSize: 18 }}>X 🏆/🔥</Text>
+          <Text style={{ color: "black", fontSize: 18 }}>X 🔥/🏆</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -227,10 +219,6 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   categoriesContainer: {},
-  categoryContainer: {
-    marginBottom: 15,
-    flex: 1,
-  },
   categoryText: {
     fontSize: 20,
     fontWeight: "bold",
@@ -255,11 +243,27 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     margin: 8,
     justifyContent: "center",
-    alignItems: "left",
+    alignItems: "flex-start", 
   },
   buttonText: {
     color: "#0466C8",
     fontSize: 20,
     fontWeight: "bold",
   },
+  ongoingButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 5,
+    marginBottom: 50,
+  },
+  completedButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  ongoingButtonContainer: {
+    // Add any additional styles if needed for the container
+  },
 });
+

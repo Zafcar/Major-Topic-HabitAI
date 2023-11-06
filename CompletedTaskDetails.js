@@ -13,12 +13,14 @@ import { TopScreenDisplay } from "./ToolBars";
 
 function TaskDetailsScreen() {
   const navigation = useNavigation();
+  const subtaskTexts = ["Kitchen", "Bedroom 1", "Bedroom 2", "Bedroom 3", "Living Room"];
+
 
   return (
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Completed Task Details"} />
 
-      <Text style={styles.heading}>Task name</Text>
+      <Text style={styles.heading}>Clean the house</Text>
 
       <View style={styles.dueDateContainer}>
         <View style={styles.iconBackground}>
@@ -26,15 +28,15 @@ function TaskDetailsScreen() {
         </View>
         <View style={styles.dueDateTextContainer}>
           <Text style={styles.dueDateText}>Due Date</Text>
-          <Text style={styles.dueDate}>xx-xx-xxxx</Text>
+          <Text style={styles.dueDate}>06-11-2023</Text>
         </View>
       </View>
 
       <Text style={styles.heading}>Details</Text>
       <View style={styles.projectDetails}>
-        <Text style={styles.projectText}>Task Details.</Text>
+        <Text style={styles.projectText}>Complete cleaning of the house including first floor rooms. </Text>
       </View>
-
+        
       <View style={styles.progressContainer}>
         <Text style={styles.progressHeading}>Progress</Text>
         <Text style={styles.progressText}>100%</Text>
@@ -48,17 +50,18 @@ function TaskDetailsScreen() {
       </View>
 
       <ScrollView style={styles.scrollContainer}>
-        {[1, 2, 3, 4, 5].map((i) => (
-          <View key={i} style={styles.subTaskRow}>
-            <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
-              <Text style={styles.subTaskButtonText}>{`Sub task ${i}`}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.checkButton}>
-              <FontAwesome5 name="check" size={14} color="white" />
-            </TouchableOpacity>
-          </View>
-        ))}
+      {subtaskTexts.map((text, index) => (
+      <View key={index} style={styles.subTaskRow}>
+      <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
+        <Text style={styles.subTaskButtonText}>{text}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.checkButton}>
+        <FontAwesome5 name="check" size={14} color="white" />
+      </TouchableOpacity>
+       </View>
+      ))}
       </ScrollView>
+
 
       <TouchableOpacity style={styles.lastButton}>
         <Text style={styles.lastButtonText}>Edit task</Text>
