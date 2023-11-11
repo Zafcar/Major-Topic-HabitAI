@@ -10,8 +10,10 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
 
-import { TopScreenDisplay } from "./ToolBars";
+import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
+// TODO: complete realignment of toolbar, title and container.
+// TODO: fix the function naming convention.
 function TaskTitle() {
   const [taskTitle, setTaskTitle] = useState("   text....");
   return (

@@ -9,8 +9,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-import { TopScreenDisplay } from "./ToolBars";
+import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
+// TODO: complete realignment of title and container.
 function CalendarScreen() {
   const navigation = useNavigation();
   return (

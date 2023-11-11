@@ -7,8 +7,9 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { TopScreenDisplay, BottonTools } from "./ToolBars";
+import { TopScreenDisplay, BottonTools } from "../CommonFunctions/ToolBars";
 
+// TODO: complete realignment of toolbar, title and container.
 function RewardsScreen() {
   const navigation = useNavigation();
   return (

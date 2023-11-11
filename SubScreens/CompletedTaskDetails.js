@@ -9,18 +9,27 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { TopScreenDisplay } from "./ToolBars";
+import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
+// TODO: complete realignment of toolbar, title and container.
 function TaskDetailsScreen() {
   const navigation = useNavigation();
-  const subtaskrow = ["Make the ppt", "Ensure functioning of Front End", "Enter Project Timeline Details", "Presentation to Panel", "Post Review Discussion with Guide"];
-
+  const subtaskTexts = [
+    "Kitchen",
+    "Bedroom 1",
+    "Bedroom 2",
+    "Bedroom 3",
+    "Living Room",
+  ];
 
   return (
     <View style={styles.container}>
-      <TopScreenDisplay navigation={navigation} title={"Task Details"} />
+      <TopScreenDisplay
+        navigation={navigation}
+        title={"Completed Task Details"}
+      />
 
-      <Text style={styles.heading}>Review 1</Text>
+      <Text style={styles.heading}>Clean the house</Text>
 
       <View style={styles.dueDateContainer}>
         <View style={styles.iconBackground}>
@@ -28,18 +37,20 @@ function TaskDetailsScreen() {
         </View>
         <View style={styles.dueDateTextContainer}>
           <Text style={styles.dueDateText}>Due Date</Text>
-          <Text style={styles.dueDate}>07-11-2023</Text>
+          <Text style={styles.dueDate}>06-11-2023</Text>
         </View>
       </View>
 
       <Text style={styles.heading}>Details</Text>
       <View style={styles.projectDetails}>
-        <Text style={styles.projectText}>Ensure smooth presentation of the app and our future planned work for the same.</Text>
+        <Text style={styles.projectText}>
+          Complete cleaning of the house including first floor rooms.{" "}
+        </Text>
       </View>
 
       <View style={styles.progressContainer}>
         <Text style={styles.progressHeading}>Progress</Text>
-        <Text style={styles.progressText}>60%</Text>
+        <Text style={styles.progressText}>100%</Text>
       </View>
 
       <View style={styles.subTaskHeader}>
@@ -50,25 +61,17 @@ function TaskDetailsScreen() {
       </View>
 
       <ScrollView style={styles.scrollContainer}>
-      {subtaskrow.map((text, index) => (
-      <View key={index} style={styles.subTaskRow}>
-        <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
-         <Text style={styles.subTaskButtonText}>{text}</Text>
-        </TouchableOpacity>
-        {index >= subtaskrow.length - 2 ? (
-        <TouchableOpacity style={styles.circleButton}>
-          <FontAwesome5 name="circle" size={14} color="white" />
-        </TouchableOpacity>
-        ) : (
-        <TouchableOpacity style={styles.checkButton}>
-          <FontAwesome5 name="check" size={14} color="white" />
-        </TouchableOpacity>
-        )}
-      </View>
-      ))}
+        {subtaskTexts.map((text, index) => (
+          <View key={index} style={styles.subTaskRow}>
+            <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
+              <Text style={styles.subTaskButtonText}>{text}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.checkButton}>
+              <FontAwesome5 name="check" size={14} color="white" />
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
-
-
 
       <TouchableOpacity style={styles.lastButton}>
         <Text style={styles.lastButtonText}>Edit task</Text>
@@ -98,8 +101,8 @@ const styles = StyleSheet.create({
   iconBackground: {
     backgroundColor: "black",
     borderRadius: 14,
-    width: 50,
-    height: 50,
+    width: 55,
+    height: 55,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -115,7 +118,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   projectDetails: {
-    marginTop: 20,
+    marginTop: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+    elevation: 10,
   },
   projectText: {
     width: 370,
@@ -139,7 +150,7 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 18,
     marginTop: 15,
-    marginRight: 18,
+    marginRight: 15,
   },
   subTaskHeader: {
     flexDirection: "row",
@@ -184,8 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#D5D5D5",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 14,
-    marginRight: 20,
+    marginRight: 15,
   },
   checkButton: {
     width: 40,
@@ -194,19 +204,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    right: 22,
+    right: 20,
     borderRadius: 14,
   },
-  circleButton: {
-    width: 40,
-    height: 40,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    right: 22,
-    borderRadius: 14,
-  },  
   lastButton: {
     width: 380,
     height: 67,

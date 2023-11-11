@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/FontAwesome5"; 
+import Icon from "react-native-vector-icons/FontAwesome5";
 
-import { TopScreenDisplay, BottonTools } from "./ToolBars";
+import { TopScreenDisplay, BottonTools } from "../CommonFunctions/ToolBars";
 
+// TODO: complete realignment of toolbar, title and container.
+// TODO: Need to align the container and the text
 function NotificationScreen() {
   const navigation = useNavigation();
 
@@ -52,7 +61,12 @@ function NotificationScreen() {
   const renderNotification = ({ item }) => (
     <View style={styles.notification}>
       <View style={styles.iconBackground}>
-        <Icon name="bell" size={styles.iconSize} color="white" style={styles.icon} />
+        <Icon
+          name="bell"
+          size={styles.iconSize}
+          color="white"
+          style={styles.icon}
+        />
       </View>
       <View>
         <Text style={styles.notificationText}>{item.text}</Text>

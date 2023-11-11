@@ -1,3 +1,5 @@
+// TODO: complete realignment of toolbar, title and container.
+
 import React from "react";
 import {
   View,
@@ -8,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { BottonTools } from "./ToolBars";
+import { BottonTools } from "../CommonFunctions/ToolBars";
 
 function HomeScreen() {
   const navigation = useNavigation();
@@ -62,8 +64,13 @@ function HomeScreen() {
 function UserDisplay() {
   const name = "User!!";
   return (
-    <Text style={{ color: "black", marginTop: 40, marginLeft: 7, marginBottom: 15 }}>
-      <Text style={{ fontSize: 15, fontWeight: "bold", color: "#6357F4" }}>Welcome back</Text>{"\n"}
+    <Text
+      style={{ color: "black", marginTop: 40, marginLeft: 7, marginBottom: 15 }}
+    >
+      <Text style={{ fontSize: 15, fontWeight: "bold", color: "#6357F4" }}>
+        Welcome back
+      </Text>
+      {"\n"}
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>{name}</Text>
     </Text>
   );

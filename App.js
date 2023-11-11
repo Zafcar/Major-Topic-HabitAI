@@ -4,13 +4,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import HomeScreen from "./HomeScreen";
-import CalendarScreen from "./CalendarScreen";
-import TodoList from "./CreateTaskScreen";
-import NotificationScreen from "./NotificationScreen";
-import RewardsScreen from "./RewardsScreen";
-import OngoingTaskDetails from "./OngoingTaskDetails";
-import CompletedTaskDetails from "./CompletedTaskDetails";
+import HomeScreen from "./MainIntialScreens/HomeScreen";
+import CalendarScreen from "./MainIntialScreens/CalendarScreen";
+import TodoList from "./MainIntialScreens/CreateTaskScreen";
+import NotificationScreen from "./MainIntialScreens/NotificationScreen";
+import RewardsScreen from "./SubScreens/CompletedTaskDetails";
+import OngoingTaskDetails from "./SubScreens/OngoingTaskDetails";
+import CompletedTaskDetails from "./SubScreens/CompletedTaskDetails";
 
 const MainScreen = ({ navigation }) => {
   return (
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 14, 
+    elevation: 14,
   },
   customButtonText: {
     fontSize: 20,
