@@ -6,96 +6,93 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
+  SectionList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 import { TopScreenDisplay, BottonTools } from "../CommonFunctions/ToolBars";
 
-// TODO: complete realignment of toolbar, title and container.
-// TODO: Need to align the container and the text
+const notifications = [
+  {
+    text: "Review 1",
+    timeSent: "30 minutes ago",
+  },
+  {
+    text: "Notification 2",
+    timeSent: "44 minutes ago",
+  },
+  {
+    text: "Notification 3",
+    timeSent: "1 hour ago",
+  },
+  {
+    text: "Notification 4",
+    timeSent: "1 hour 22 minutes ago",
+  },
+];
+
+const moreNotifications = [
+  {
+    text: "Notification 5",
+    timeSent: "4 hours ago",
+  },
+  {
+    text: "Notification 6",
+    timeSent: "4 hours 24 minutes ago",
+  },
+  {
+    text: "Notification 7",
+    timeSent: "7 hours ago",
+  },
+];
+
+function RenderNotification() {
+  return (
+    <SectionList
+      sections={[
+        { title: "New", data: notifications },
+        {
+          title: "Earlier",
+          data: moreNotifications,
+        },
+      ]}
+      renderSectionHeader={({ section }) => (
+        <View style={styles.headingContainer}>
+          <Text style={styles.notificationHeadingText}>{section.title}</Text>
+        </View>
+      )}
+      renderItem={({ item }) => (
+        <View style={{ paddingLeft: 10 }}>
+          <View style={styles.notification}>
+            <View style={styles.iconBackground}>
+              <Icon
+                name="bell"
+                size={styles.iconSize}
+                color="white"
+                style={styles.icon}
+              />
+            </View>
+            <View>
+              <Text style={styles.notificationText}>{item.text}</Text>
+              <Text style={styles.timeSentText}>{item.timeSent}</Text>
+            </View>
+          </View>
+        </View>
+      )}
+      keyExtractor={(item) => `basicListEntry-${item.text}`}
+    />
+  );
+}
+
 function NotificationScreen() {
   const navigation = useNavigation();
-
-  const notifications = [
-    {
-      id: 1,
-      text: "Review 1",
-      timeSent: "30 minutes ago",
-    },
-    {
-      id: 2,
-      text: "Notification 2",
-      timeSent: "44 minutes ago",
-    },
-    {
-      id: 3,
-      text: "Notification 3",
-      timeSent: "1 hour ago",
-    },
-    {
-      id: 4,
-      text: "Notification 4",
-      timeSent: "1 hour 22 minutes ago",
-    },
-  ];
-
-  const moreNotifications = [
-    {
-      id: 5,
-      text: "Notification 5",
-      timeSent: "4 hours ago",
-    },
-    {
-      id: 6,
-      text: "Notification 6",
-      timeSent: "4 hours 24 minutes ago",
-    },
-    {
-      id: 7,
-      text: "Notification 7",
-      timeSent: "7 hours ago",
-    },
-  ];
-
-  const renderNotification = ({ item }) => (
-    <View style={styles.notification}>
-      <View style={styles.iconBackground}>
-        <Icon
-          name="bell"
-          size={styles.iconSize}
-          color="white"
-          style={styles.icon}
-        />
-      </View>
-      <View>
-        <Text style={styles.notificationText}>{item.text}</Text>
-        <Text style={styles.timeSentText}>{item.timeSent}</Text>
-      </View>
-    </View>
-  );
 
   return (
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Notifications"} />
 
-      <View style={styles.headingContainer}>
-        <Text style={styles.newHeadingText}>New</Text>
-      </View>
-      <FlatList
-        data={notifications}
-        renderItem={renderNotification}
-        keyExtractor={(item) => item.id.toString()}
-      />
-
-      <View style={styles.headingContainer}>
-        <Text style={styles.earlierHeadingText}>Earlier</Text>
-      </View>
-      <FlatList
-        data={moreNotifications}
-        renderItem={renderNotification}
-        keyExtractor={(item) => item.id.toString()}
-      />
+      <RenderNotification />
 
       <BottonTools navigation={navigation} currentpage={"notificationScreen"} />
     </View>
@@ -104,16 +101,15 @@ function NotificationScreen() {
 
 export default NotificationScreen;
 
-const iconSizeFactor = 0.6;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#D5D5D5",
+    padding: 16,
   },
   notification: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: 5,
   },
   iconBackground: {
@@ -127,7 +123,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 15,
   },
-  iconSize: 48 * iconSizeFactor,
+  iconSize: 28.8,
   notificationText: {
     fontSize: 18,
     marginLeft: 10,
@@ -145,11 +141,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginVertical: 0,
   },
-  newHeadingText: {
-    fontSize: 25,
-    fontWeight: "bold",
-  },
-  earlierHeadingText: {
+  notificationHeadingText: {
     fontSize: 25,
     fontWeight: "bold",
   },
