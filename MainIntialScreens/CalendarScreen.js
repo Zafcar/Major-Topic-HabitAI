@@ -11,7 +11,6 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
-// TODO: complete realignment of title and container.
 function CalendarScreen() {
   const navigation = useNavigation();
   return (
@@ -138,7 +137,7 @@ function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        contentOffset={{ x: (currentDate - 4) * 60, y: 0 }}
+        contentOffset={{ x: 0, y: 0 }}
       >
         {sevenDayList.map((element, index) => (
           <TouchableOpacity
@@ -181,7 +180,7 @@ function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
 function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
   const currentYear = new Date().getFullYear();
   const daysInMonths = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const initialScrollX = (currentDate - 1) * 53;
+  const initialScrollX = (currentDate - 1) * 53.5;
   return (
     <>
       <View style={styles.weekContainer}>
@@ -223,13 +222,7 @@ function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
 }
 
 function DateTasks() {
-  // Add your logic to fetch and display today's tasks
-  const todayTasks = [
-    "Review 1",
-    "Gym",
-    "Practice Company Tests",
-    // Add more tasks for today
-  ];
+  const todayTasks = ["Review 1", "Gym", "Practice Company Tests"];
 
   return (
     <View style={styles.categoryContainer}>
