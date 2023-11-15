@@ -44,6 +44,29 @@ function TaskDescription() {
   );
 }
 
+function TimeAndDateSelector({ icon, textValue }) {
+  return (
+    <View style={{ flexDirection: "row" }}>
+      <View style={styles.iconBox}>
+        <FontAwesome5 name={icon} size={16} color="white" style={styles.icon} />
+      </View>
+      <View
+        style={{
+          paddingLeft: 5,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <TextInput
+          style={styles.timeTextBox}
+          value={textValue}
+          editable={false}
+        />
+      </View>
+    </View>
+  );
+}
+
 // TODO: Need to Refactor this
 function TimeAndDate() {
   return (
@@ -51,36 +74,8 @@ function TimeAndDate() {
       <Text style={styles.heading}>Time & Date</Text>
 
       <View style={styles.dateContainer}>
-        <View style={styles.iconBox}>
-          <FontAwesome5
-            name="clock"
-            size={16}
-            color="white"
-            style={styles.icon}
-          />
-        </View>
-        <View style={styles.textBox}>
-          <TextInput
-            style={styles.timeTextBox}
-            value="HH:MM:SS"
-            editable={false}
-          />
-        </View>
-        <View style={styles.iconBox}>
-          <FontAwesome5
-            name="calendar"
-            size={16}
-            color="white"
-            style={styles.icon}
-          />
-        </View>
-        <View style={styles.textBox}>
-          <TextInput
-            style={styles.timeTextBox}
-            value="DD-MM-YYYY"
-            editable={false}
-          />
-        </View>
+        <TimeAndDateSelector icon="clock" textValue="HH:MM:SS" />
+        <TimeAndDateSelector icon="calendar" textValue="DD-MM-YYYY" />
       </View>
     </>
   );
@@ -115,7 +110,7 @@ function CreateButton() {
   );
 }
 
-const CreateTaskPage = () => {
+function CreateTaskScreen() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -127,9 +122,9 @@ const CreateTaskPage = () => {
       <CreateButton />
     </View>
   );
-};
+}
 
-export default CreateTaskPage;
+export default CreateTaskScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -143,7 +138,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   input: {
-    width: 370,
     height: 60,
     backgroundColor: "white",
     borderColor: "white",
@@ -154,7 +148,6 @@ const styles = StyleSheet.create({
     color: "grey",
   },
   textarea: {
-    width: 370,
     height: 100,
     backgroundColor: "white",
     borderColor: "white",
@@ -172,6 +165,8 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     flexDirection: "row",
+
+    justifyContent: "space-between",
     alignItems: "center",
     marginTop: 10,
   },
@@ -180,30 +175,24 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     width: 48,
     height: 48,
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
+
     marginHorizontal: 1,
+    padding: 10,
   },
-  textBox: {
-    width: 135,
-    height: 41,
-    borderColor: "white",
-    backgroundColor: "white",
-    borderWidth: 1,
-    paddingLeft: 10,
-    borderRadius: 14,
-    fontSize: 14,
-    color: "black",
-  },
+
   icon: {
     color: "white",
   },
   timeTextBox: {
     width: 115,
-    height: 41,
+    height: 48,
     borderColor: "white",
     backgroundColor: "white",
+
     borderWidth: 1,
+
     paddingLeft: 10,
     borderRadius: 14,
     fontSize: 14,
