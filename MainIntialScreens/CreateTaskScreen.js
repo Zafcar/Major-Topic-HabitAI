@@ -12,33 +12,27 @@ import { useNavigation } from "@react-navigation/native";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
-// TODO: complete realignment of toolbar, title and container.
-// TODO: fix the function naming convention.
 function TaskTitle() {
-  const [taskTitle, setTaskTitle] = useState("   text....");
   return (
     <>
       <Text style={styles.heading}>Task Title</Text>
       <TextInput
         style={[styles.input, styles.commonInput]}
-        value={taskTitle}
-        onChangeText={(text) => setTaskTitle(text)}
+        placeholder="text...."
       />
     </>
   );
 }
 
 function TaskDescription() {
-  const [taskDetails, setTaskDetails] = useState("  description....");
   return (
     <>
       <Text style={styles.heading}>Task Details</Text>
       <TextInput
         style={[styles.textarea, styles.commonTextArea]}
-        value={taskDetails}
-        onChangeText={(text) => setTaskDetails(text)}
         multiline={true}
         numberOfLines={4}
+        placeholder="description...."
       />
     </>
   );
@@ -58,6 +52,7 @@ function TimeAndDateSelector({ icon, textValue }) {
         }}
       >
         <TextInput
+          textAlign={"center"}
           style={styles.timeTextBox}
           value={textValue}
           editable={false}
@@ -67,7 +62,6 @@ function TimeAndDateSelector({ icon, textValue }) {
   );
 }
 
-// TODO: Need to Refactor this
 function TimeAndDate() {
   return (
     <>
@@ -81,21 +75,26 @@ function TimeAndDate() {
   );
 }
 
-// TODO: Need to Refactor this
-function SubFunctions() {
+function SubFunction({ index }) {
+  return (
+    <View style={[styles.subTaskRow, styles.subTaskButton]}>
+      <Text style={styles.subTaskButtonText}>{`Sub task ${index}`}</Text>
+      <View style={{ paddingRight: 10 }}>
+        <TouchableOpacity style={styles.plusButton}>
+          <FontAwesome5 name="plus" size={14} color="white" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+function SubFunctionsList() {
   return (
     <>
       <Text style={styles.subTaskHeading}>Add Sub Tasks</Text>
       <ScrollView style={styles.scrollContainer}>
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <View key={i} style={styles.subTaskRow}>
-            <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
-              <Text style={styles.subTaskButtonText}>{`Sub task ${i}`}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.plusButton}>
-              <FontAwesome5 name="plus" size={14} color="white" />
-            </TouchableOpacity>
-          </View>
+          <SubFunction key={i} index={i} />
         ))}
       </ScrollView>
     </>
@@ -118,7 +117,7 @@ function CreateTaskScreen() {
       <TaskTitle />
       <TaskDescription />
       <TimeAndDate />
-      <SubFunctions />
+      <SubFunctionsList />
       <CreateButton />
     </View>
   );
@@ -145,6 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginTop: 10,
     fontSize: 16,
+    padding: 10,
     color: "grey",
   },
   textarea: {
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginTop: 10,
     fontSize: 16,
+    padding: 10,
     color: "grey",
   },
   commonInput: {
@@ -193,7 +194,6 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
 
-    paddingLeft: 10,
     borderRadius: 14,
     fontSize: 14,
     color: "black",
@@ -214,11 +214,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subTaskButton: {
-    width: 370,
+    flex: 1,
     height: 60,
     backgroundColor: "white",
     borderRadius: 14,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   subTaskButtonText: {
     color: "black",
@@ -232,8 +232,8 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    position: "absolute",
-    right: 25,
+    // paddingLeft: 5,
+
     borderRadius: 14,
   },
   lastButton: {
