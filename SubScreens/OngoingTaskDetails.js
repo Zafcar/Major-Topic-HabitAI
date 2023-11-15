@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,75 +11,115 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
-// TODO: complete realignment of toolbar, title and container.
-function TaskDetailsScreen() {
-  const navigation = useNavigation();
-  const subtaskrow = [
-    "Make the ppt",
-    "Ensure functioning of Front End",
-    "Enter Project Timeline Details",
-    "Presentation to Panel",
-    "Post Review Discussion with Guide",
-  ];
+const subtaskrow = [
+  "Make the ppt",
+  "Ensure functioning of Front End",
+  "Enter Project Timeline Details",
+  "Presentation to Panel",
+  "Post Review Discussion with Guide",
+];
 
+// TODO: Need to add time.
+// TODO: Need to make the date and time dynamic and editable.
+function MainTaskDetails({ title, dueDateString }) {
   return (
-    <View style={styles.container}>
-      <TopScreenDisplay navigation={navigation} title={"Task Details"} />
-
-      <Text style={styles.heading}>Review 1</Text>
+    <>
+      <Text style={styles.heading}>{title}</Text>
 
       <View style={styles.dueDateContainer}>
         <View style={styles.iconBackground}>
           <FontAwesome5 name="calendar" size={20} color="white" />
         </View>
         <View style={styles.dueDateTextContainer}>
+          {/* // ! Make sure that due date displays as the on show in figma */}
           <Text style={styles.dueDateText}>Due Date</Text>
-          <Text style={styles.dueDate}>07-11-2023</Text>
+          <Text style={styles.dueDate}>{dueDateString}</Text>
         </View>
       </View>
+    </>
+  );
+}
 
-      <Text style={styles.heading}>Details</Text>
+function TaskDescription({ description }) {
+  return (
+    <>
+      <Text style={styles.heading}>Description</Text>
       <View style={styles.projectDetails}>
-        <Text style={styles.projectText}>
-          Ensure smooth presentation of the app and our future planned work for
-          the same.
-        </Text>
+        <Text style={styles.projectText}>{description}</Text>
       </View>
+    </>
+  );
+}
 
-      <View style={styles.progressContainer}>
-        <Text style={styles.progressHeading}>Progress</Text>
-        <Text style={styles.progressText}>60%</Text>
-      </View>
+// TODO: Add a circular progress bar.
+// TODO: Make sure that the progress bar is dynamic based on the number of subtasks completed.
+function ProgressStatus() {
+  return (
+    <View style={styles.progressContainer}>
+      <Text style={styles.progressHeading}>Progress</Text>
+      <Text style={styles.progressText}>60%</Text>
+    </View>
+  );
+}
 
+// TODO: Ability to tick and untick tasks.
+function Subtask({ text, index }) {
+  const [tick, setTick] = useState(false);
+
+  return (
+    <View key={index} style={styles.subTaskRow}>
+      <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
+        <Text style={styles.subTaskButtonText}>{text}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.circleButton}
+        onPress={() => {
+          setTick(!tick);
+        }}
+      >
+        <FontAwesome5
+          name={tick ? "check" : "circle"}
+          size={14}
+          color="white"
+        />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+// TODO: Ability add new subtasks.
+// TODO: Ability to delete and change subtasks when long pressed.
+function SubTasks() {
+  return (
+    <>
       <View style={styles.subTaskHeader}>
         <Text style={styles.subTaskHeading}>Sub Tasks</Text>
         <TouchableOpacity style={styles.plusButton}>
           <FontAwesome5 name="plus" size={24} color="black" />
         </TouchableOpacity>
       </View>
-
       <ScrollView style={styles.scrollContainer}>
         {subtaskrow.map((text, index) => (
-          <View key={index} style={styles.subTaskRow}>
-            <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
-              <Text style={styles.subTaskButtonText}>{text}</Text>
-            </TouchableOpacity>
-            {index >= subtaskrow.length - 2 ? (
-              <TouchableOpacity style={styles.circleButton}>
-                <FontAwesome5 name="circle" size={14} color="white" />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity style={styles.checkButton}>
-                <FontAwesome5 name="check" size={14} color="white" />
-              </TouchableOpacity>
-            )}
-          </View>
+          <Subtask text={text} index={index} />
         ))}
       </ScrollView>
+    </>
+  );
+}
 
-      <TouchableOpacity style={styles.lastButton}>
-        <Text style={styles.lastButtonText}>Edit task</Text>
-      </TouchableOpacity>
+// TODO: complete realignment of toolbar, title and container.
+function TaskDetailsScreen() {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.container}>
+      <TopScreenDisplay navigation={navigation} title={"Task Details"} />
+      {/* // ! Make sure the date formate is proper while passing the value. */}
+      <MainTaskDetails title="Review 1" dueDateString="7/11/2023" />
+      <TaskDescription description="Ensure smooth presentation of the app and our future planned work for the same." />
+      <ProgressStatus />
+      <SubTasks />
     </View>
   );
 }
@@ -125,7 +165,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   projectText: {
-    width: 370,
     height: 100,
     fontSize: 16,
     backgroundColor: "white",
@@ -167,16 +206,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subTaskRow: {
+    backgroundColor: "white",
+    borderRadius: 14,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 10,
+    flex: 2,
   },
   subTaskButton: {
-    width: 370,
+    // width: 370,
     height: 60,
-    backgroundColor: "white",
-    borderRadius: 14,
+
     justifyContent: "center",
   },
   subTaskButtonText: {
@@ -194,24 +235,14 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginRight: 20,
   },
-  checkButton: {
-    width: 40,
-    height: 40,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    right: 22,
-    borderRadius: 14,
-  },
+
   circleButton: {
     width: 40,
     height: 40,
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    position: "absolute",
-    right: 22,
+    marginRight: 10,
     borderRadius: 14,
   },
   lastButton: {
