@@ -79,11 +79,9 @@ function SubFunction({ index }) {
   return (
     <View style={[styles.subTaskRow, styles.subTaskButton]}>
       <Text style={styles.subTaskButtonText}>{`Sub task ${index}`}</Text>
-      <View style={{ paddingRight: 10 }}>
-        <TouchableOpacity style={styles.plusButton}>
-          <FontAwesome5 name="plus" size={14} color="white" />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.plusButton}>
+        <FontAwesome5 name="plus" size={14} color="white" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -232,8 +230,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    // paddingLeft: 5,
-
+    marginRight: 10,
     borderRadius: 14,
   },
   lastButton: {
