@@ -10,6 +10,9 @@ import { useNavigation } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
+import { TextInput } from "react-native-gesture-handler";
+
+import CircularProgress from "react-native-circular-progress-indicator";
 
 const subtaskrow = [
   "Make the ppt",
@@ -31,7 +34,7 @@ function MainTaskDetails({ title, dueDateString }) {
           <FontAwesome5 name="calendar" size={20} color="white" />
         </View>
         <View style={styles.dueDateTextContainer}>
-          {/* // ! Make sure that due date displays as the on show in figma */}
+          {/* // ! Make sure that due date displays as the one in figma */}
           <Text style={styles.dueDateText}>Due Date</Text>
           <Text style={styles.dueDate}>{dueDateString}</Text>
         </View>
@@ -40,12 +43,18 @@ function MainTaskDetails({ title, dueDateString }) {
   );
 }
 
-function TaskDescription({ description }) {
+function TaskDescription({ description, setDescription }) {
   return (
     <>
       <Text style={styles.heading}>Description</Text>
       <View style={styles.projectDetails}>
-        <Text style={styles.projectText}>{description}</Text>
+        <TextInput
+          style={styles.projectText}
+          multiline
+          onChangeText={(text) => setDescription(text)}
+        >
+          {description}
+        </TextInput>
       </View>
     </>
   );
@@ -53,29 +62,40 @@ function TaskDescription({ description }) {
 
 // TODO: Add a circular progress bar.
 // TODO: Make sure that the progress bar is dynamic based on the number of subtasks completed.
-function ProgressStatus() {
+function ProgressStatus({ progress }) {
   return (
     <View style={styles.progressContainer}>
       <Text style={styles.progressHeading}>Progress</Text>
-      <Text style={styles.progressText}>60%</Text>
+
+      <CircularProgress
+        value={(progress / subtaskrow.length) * 100}
+        radius={30}
+        duration={500}
+        progressValueColor={"black"}
+        maxValue={200}
+        titleColor={"black"}
+      />
+      {/* <Text style={styles.progressText}>
+        {(progress / subtaskrow.length) * 100}%
+      </Text> */}
     </View>
   );
 }
 
-// TODO: Ability to tick and untick tasks.
-function Subtask({ text, index }) {
+function Subtask({ text, index, progress, updateProgress }) {
   const [tick, setTick] = useState(false);
+  const [edited, setEdited] = useState(false);
 
   return (
-    <View key={index} style={styles.subTaskRow}>
-      <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
-        <Text style={styles.subTaskButtonText}>{text}</Text>
-      </TouchableOpacity>
-
+    <TouchableOpacity style={[styles.subTaskRow]}>
+      <Text style={styles.subTaskButtonText}>{text}</Text>
       <TouchableOpacity
         style={styles.circleButton}
         onPress={() => {
-          setTick(!tick);
+          [
+            setTick(!tick),
+            tick ? updateProgress(progress, -1) : updateProgress(progress, +1),
+          ];
         }}
       >
         <FontAwesome5
@@ -84,13 +104,13 @@ function Subtask({ text, index }) {
           color="white"
         />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 // TODO: Ability add new subtasks.
 // TODO: Ability to delete and change subtasks when long pressed.
-function SubTasks() {
+function SubTasks({ progress, updateProgress }) {
   return (
     <>
       <View style={styles.subTaskHeader}>
@@ -101,7 +121,13 @@ function SubTasks() {
       </View>
       <ScrollView style={styles.scrollContainer}>
         {subtaskrow.map((text, index) => (
-          <Subtask text={text} index={index} />
+          <Subtask
+            text={text}
+            index={index}
+            key={index}
+            progress={progress}
+            updateProgress={updateProgress}
+          />
         ))}
       </ScrollView>
     </>
@@ -111,15 +137,27 @@ function SubTasks() {
 // TODO: complete realignment of toolbar, title and container.
 function TaskDetailsScreen() {
   const navigation = useNavigation();
+  const [description, setDescription] = useState(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  );
+
+  const [progress, setProgress] = useState(0);
+  const updateProgress = (progress, value) => {
+    setProgress(progress + value);
+  };
 
   return (
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Task Details"} />
       {/* // ! Make sure the date formate is proper while passing the value. */}
       <MainTaskDetails title="Review 1" dueDateString="7/11/2023" />
-      <TaskDescription description="Ensure smooth presentation of the app and our future planned work for the same." />
-      <ProgressStatus />
-      <SubTasks />
+      <TaskDescription
+        description={description}
+        setDescription={setDescription}
+      />
+
+      <ProgressStatus progress={progress} />
+      <SubTasks progress={progress} updateProgress={updateProgress} />
     </View>
   );
 }
@@ -161,21 +199,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  projectDetails: {
-    marginTop: 20,
-  },
   projectText: {
     height: 100,
     fontSize: 16,
     backgroundColor: "white",
-    padding: 10,
     borderRadius: 14,
+    padding: 5,
   },
   progressContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 5,
+    padding: 5,
   },
   progressHeading: {
     fontSize: 22,
@@ -209,16 +245,11 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 14,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 10,
     flex: 2,
-  },
-  subTaskButton: {
-    // width: 370,
     height: 60,
-
-    justifyContent: "center",
   },
   subTaskButtonText: {
     color: "black",
