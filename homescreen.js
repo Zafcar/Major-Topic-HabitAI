@@ -27,11 +27,7 @@ function HomeLayout() {
 
 function UserDisplay() {
   const name = "Amogh Iyengar"; //Name changed here later on
-  return (
-    <Text style={[styles.welcomeText, { color: "white", marginTop: 40 }]}>
-      Welcome {name}
-    </Text>
-  );
+  return <Text className="mt-2 text-lg text-white">Welcome {name}</Text>;
 }
 
 function CompletedTasks() {
