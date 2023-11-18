@@ -71,33 +71,44 @@ function ProgressStatus({ progress, totalSubTasks }) {
   );
 }
 
+// TODO: Ability to delete and change subtasks when long pressed.
 function Subtask({ text, progress, updateProgress }) {
   const [tick, setTick] = useState(false);
   const [edited, setEdited] = useState(false);
 
   return (
-    <TouchableOpacity style={[styles.subTaskRow]}>
-      <Text style={styles.subTaskButtonText}>{text}</Text>
-      <TouchableOpacity
-        style={styles.circleButton}
-        onPress={() => {
-          [
-            setTick(!tick),
-            tick ? updateProgress(progress, -1) : updateProgress(progress, +1),
-          ];
-        }}
-      >
-        <FontAwesome5
-          name={tick ? "check" : "circle"}
-          size={14}
-          color="white"
-        />
-      </TouchableOpacity>
+    <TouchableOpacity
+      style={[styles.subTaskRow]}
+      onLongPress={() => {
+        setEdited(!edited);
+      }}
+    >
+      {edited ? null : (
+        <>
+          <Text style={styles.subTaskButtonText}>{text}</Text>
+          <TouchableOpacity
+            style={styles.circleButton}
+            onPress={() => {
+              [
+                setTick(!tick),
+                tick
+                  ? updateProgress(progress, -1)
+                  : updateProgress(progress, +1),
+              ];
+            }}
+          >
+            <FontAwesome5
+              name={tick ? "check" : "circle"}
+              size={14}
+              color="white"
+            />
+          </TouchableOpacity>
+        </>
+      )}
     </TouchableOpacity>
   );
 }
 
-// TODO: Ability to delete and change subtasks when long pressed.
 function SubTasks({
   progress,
   updateProgress,
@@ -122,6 +133,7 @@ function SubTasks({
         </TouchableOpacity>
       </View>
 
+      {/* // TODO: Need to add styles to inputText tag */}
       {click ? (
         <TextInput
           autoFocus={true}
