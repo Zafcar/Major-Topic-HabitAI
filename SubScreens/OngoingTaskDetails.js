@@ -13,14 +13,7 @@ import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 import { TextInput } from "react-native-gesture-handler";
 
 import CircularProgress from "react-native-circular-progress-indicator";
-
-const subtaskrow = [
-  "Make the ppt",
-  "Ensure functioning of Front End",
-  "Enter Project Timeline Details",
-  "Presentation to Panel",
-  "Post Review Discussion with Guide",
-];
+import { disableErrorHandling } from "expo";
 
 // TODO: Need to add time.
 // TODO: Need to make the date and time dynamic and editable.
@@ -60,29 +53,25 @@ function TaskDescription({ description, setDescription }) {
   );
 }
 
-// TODO: Add a circular progress bar.
-// TODO: Make sure that the progress bar is dynamic based on the number of subtasks completed.
-function ProgressStatus({ progress }) {
+function ProgressStatus({ progress, totalSubTasks }) {
   return (
     <View style={styles.progressContainer}>
       <Text style={styles.progressHeading}>Progress</Text>
 
       <CircularProgress
-        value={(progress / subtaskrow.length) * 100}
+        value={(progress / totalSubTasks) * 100}
         radius={30}
         duration={500}
         progressValueColor={"black"}
-        maxValue={200}
+        maxValue={100}
+        valueSuffix={"%"}
         titleColor={"black"}
       />
-      {/* <Text style={styles.progressText}>
-        {(progress / subtaskrow.length) * 100}%
-      </Text> */}
     </View>
   );
 }
 
-function Subtask({ text, index, progress, updateProgress }) {
+function Subtask({ text, progress, updateProgress }) {
   const [tick, setTick] = useState(false);
   const [edited, setEdited] = useState(false);
 
@@ -108,22 +97,45 @@ function Subtask({ text, index, progress, updateProgress }) {
   );
 }
 
-// TODO: Ability add new subtasks.
 // TODO: Ability to delete and change subtasks when long pressed.
-function SubTasks({ progress, updateProgress }) {
+function SubTasks({
+  progress,
+  updateProgress,
+  subTasks,
+  updateSubTask,
+  click,
+  updateClick,
+}) {
   return (
     <>
       <View style={styles.subTaskHeader}>
         <Text style={styles.subTaskHeading}>Sub Tasks</Text>
-        <TouchableOpacity style={styles.plusButton}>
+        <TouchableOpacity
+          style={styles.plusButton}
+          onPress={() => updateClick(click)}
+          onChangeText={(text) => {
+            updateSubTask(subTasks, text);
+            updateClick(click);
+          }}
+        >
           <FontAwesome5 name="plus" size={24} color="black" />
         </TouchableOpacity>
       </View>
+
+      {click ? (
+        <TextInput
+          autoFocus={true}
+          onSubmitEditing={(value) => {
+            updateSubTask(subTasks, value.nativeEvent.text);
+            updateClick(click);
+          }}
+        ></TextInput>
+      ) : null}
+
       <ScrollView style={styles.scrollContainer}>
-        {subtaskrow.map((text, index) => (
+        {subTasks.map((text, index) => (
           <Subtask
             text={text}
-            index={index}
             key={index}
             progress={progress}
             updateProgress={updateProgress}
@@ -134,17 +146,41 @@ function SubTasks({ progress, updateProgress }) {
   );
 }
 
-// TODO: complete realignment of toolbar, title and container.
 function TaskDetailsScreen() {
   const navigation = useNavigation();
   const [description, setDescription] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
   );
 
+  const [subTasks, setSubTasks] = useState([
+    "Make the ppt",
+    "Ensure functioning of Front End",
+    "Enter Project Timeline Details",
+    "Presentation to Panel",
+    "Post Review Discussion with Guide",
+  ]);
+  const updateSubTask = (subTasks, newSubTask) => {
+    setSubTasks([...subTasks, newSubTask]);
+  };
+
   const [progress, setProgress] = useState(0);
   const updateProgress = (progress, value) => {
     setProgress(progress + value);
   };
+
+  const [click, setClick] = useState(false);
+  const updateClick = (click) => {
+    setClick(!click);
+  };
+
+  React.useEffect(
+    () =>
+      navigation.addListener("beforeRemove", (e) => {
+        e.preventDefault();
+        setClick(false);
+      }),
+    [navigation]
+  );
 
   return (
     <View style={styles.container}>
@@ -156,8 +192,15 @@ function TaskDetailsScreen() {
         setDescription={setDescription}
       />
 
-      <ProgressStatus progress={progress} />
-      <SubTasks progress={progress} updateProgress={updateProgress} />
+      <ProgressStatus progress={progress} totalSubTasks={subTasks.length} />
+      <SubTasks
+        progress={progress}
+        updateProgress={updateProgress}
+        subTasks={subTasks}
+        updateSubTask={updateSubTask}
+        click={click}
+        updateClick={updateClick}
+      />
     </View>
   );
 }
@@ -211,7 +254,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 5,
-    padding: 5,
   },
   progressHeading: {
     fontSize: 22,
@@ -250,6 +292,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 2,
     height: 60,
+    fontSize: 22,
   },
   subTaskButtonText: {
     color: "black",
@@ -264,7 +307,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 14,
-    marginRight: 20,
   },
 
   circleButton: {
