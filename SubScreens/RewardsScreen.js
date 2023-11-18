@@ -9,7 +9,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { TopScreenDisplay, BottonTools } from "../CommonFunctions/ToolBars";
 
-// TODO: complete realignment of toolbar, title and container.
+// TODO: complete realignment of toolbar, title and container once completed.
 function RewardsScreen() {
   const navigation = useNavigation();
   return (
