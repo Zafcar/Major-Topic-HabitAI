@@ -27,7 +27,7 @@ function HomeLayout() {
 
 function UserDisplay() {
   const name = "Amogh Iyengar"; //Name changed here later on
-  return <Text className="mt-2 text-lg text-white">Welcome {name}</Text>;
+  return <Text className="text-color">Welcome {name}</Text>;
 }
 
 function CompletedTasks() {
@@ -62,12 +62,12 @@ function CompletedTask({ count }) {
 function OngoingTasks() {
   return (
     <View style={styles.categoriesContainer}>
-      <Text style={[styles.categoryText, { color: "white" }]}>
+      <Text className="text-stone-500 font-bold text-2xl mb-4">
         Ongoing Tasks
       </Text>
       <ScrollView
         contentContainerStyle={{}}
-        style={styles.buttonContainer}
+        className="flex flex-row flex-wrap"
         snapToEnd={false}
       >
         {Array.from({ length: 10 }).map((_, index) => (
@@ -81,7 +81,7 @@ function OngoingTasks() {
 function OngoingTask({ count }) {
   return (
     <View key={count} style={styles.ongoingButton}>
-      <Text style={[styles.buttonText, { fontWeight: "bold", color: "black" }]}>
+      <Text className= "font-bold text-white">
         Task {count + 1}
       </Text>
     </View>
@@ -90,13 +90,14 @@ function OngoingTask({ count }) {
 
 function BottonTools() {
   return (
-    <View style={styles.buttonBar}>
+    <View className="flex justify-between items-center bg-gray-900 p-4 fixed bottom-0 left-0 right-0" >
       <UtilTool page="HomeScreen" icon="home" name="Home" />
       <UtilTool page="SomeScreen" icon="cog" name="Settings" />
-      <TouchableOpacity style={[styles.bottomButton, styles.middleButton]}>
-        <View style={styles.buttonContent}>
+      <TouchableOpacity style={[ styles.middleButton]} className="flex flex-wrap justify-center item-center" >
+        <View style={styles.buttonContent}> 
+        {/* here  */}
           <Icon name="plus" size={20} color="black" />
-          <Text style={styles.buttonText}>Create</Text>
+          <Text className="text-blue-500 text-xl font-bold">Create</Text>
         </View>
       </TouchableOpacity>
       <UtilTool page="calenderScreen" icon="calendar" name="Calendar" />
@@ -111,10 +112,10 @@ function UtilTool({ page, icon, name }) {
     navigation.navigate(page);
   };
   return (
-    <TouchableOpacity key={name} style={styles.bottomButton} onPress={onPress}>
-      <View style={[styles.buttonContent]}>
+    <TouchableOpacity key={name} className="flex justify-center item-center" onPress={onPress}>
+      <View className="items-center">
         <Icon name={icon} size={30} color="#5c5bfb" />
-        <Text style={[styles.bottombuttonText, { color: "white" }]}>
+        <Text className=" text-xs text-white ">
           {name}
         </Text>
       </View>
