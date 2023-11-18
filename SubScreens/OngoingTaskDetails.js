@@ -13,7 +13,6 @@ import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 import { TextInput } from "react-native-gesture-handler";
 
 import CircularProgress from "react-native-circular-progress-indicator";
-import { disableErrorHandling } from "expo";
 
 // TODO: Need to add time.
 // TODO: Need to make the date and time dynamic and editable.
@@ -83,7 +82,27 @@ function Subtask({ text, progress, updateProgress }) {
         setEdited(!edited);
       }}
     >
-      {edited ? null : (
+      {edited ? (
+        <>
+          <TextInput
+            style={styles.subTaskButtonText}
+            autoFocus={true}
+          ></TextInput>
+          <TouchableOpacity
+            style={styles.circleButton}
+            onPress={() => {
+              [
+                setTick(!tick),
+                tick
+                  ? updateProgress(progress, -1)
+                  : updateProgress(progress, +1),
+              ];
+            }}
+          >
+            <FontAwesome5 name={"trash"} size={14} color="white" />
+          </TouchableOpacity>
+        </>
+      ) : (
         <>
           <Text style={styles.subTaskButtonText}>{text}</Text>
           <TouchableOpacity
@@ -158,6 +177,7 @@ function SubTasks({
   );
 }
 
+// TODO: Need to fix home screen navigation.
 function TaskDetailsScreen() {
   const navigation = useNavigation();
   const [description, setDescription] = useState(
