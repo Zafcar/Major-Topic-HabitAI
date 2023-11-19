@@ -70,8 +70,15 @@ function ProgressStatus({ progress, totalSubTasks }) {
   );
 }
 
-// TODO: Ability to delete and change subtasks when long pressed.
-function Subtask({ text, index, updateSubTask, progress, updateProgress }) {
+// TODO: Need to refactor this.
+function Subtask({
+  text,
+  index,
+  updateSubTask,
+  removeSubTask,
+  progress,
+  updateProgress,
+}) {
   const [tick, setTick] = useState(false);
   const [edited, setEdited] = useState(false);
 
@@ -96,12 +103,8 @@ function Subtask({ text, index, updateSubTask, progress, updateProgress }) {
           <TouchableOpacity
             style={styles.circleButton}
             onPress={() => {
-              [
-                setTick(!tick),
-                tick
-                  ? updateProgress(progress, -1)
-                  : updateProgress(progress, +1),
-              ];
+              removeSubTask(index);
+              setEdited(!edited);
             }}
           >
             <FontAwesome5 name={"trash"} size={14} color="white" />
@@ -139,6 +142,7 @@ function SubTasks({
   subTasks,
   addingSubTask,
   updateSubTask,
+  removeSubTask,
   click,
   updateClick,
 }) {
@@ -171,6 +175,7 @@ function SubTasks({
             text={text}
             index={index}
             updateSubTask={updateSubTask}
+            removeSubTask={removeSubTask}
             progress={progress}
             updateProgress={updateProgress}
             key={index}
@@ -201,6 +206,10 @@ function TaskDetailsScreen() {
   const updatingSubTask = (updatedSubTask, index) => {
     const tempArray = [...subTasks];
     tempArray[index] = updatedSubTask;
+    setSubTasks(tempArray);
+  };
+  const removeSubTask = (index) => {
+    const tempArray = subTasks.filter((_, i) => i !== index);
     setSubTasks(tempArray);
   };
 
@@ -240,6 +249,7 @@ function TaskDetailsScreen() {
         subTasks={subTasks}
         addingSubTask={addingSubTask}
         updateSubTask={updatingSubTask}
+        removeSubTask={removeSubTask}
         click={click}
         updateClick={updateClick}
       />
