@@ -58,7 +58,7 @@ function ProgressStatus({ progress, totalSubTasks }) {
       <Text style={styles.progressHeading}>Progress</Text>
 
       <CircularProgress
-        value={(progress / totalSubTasks) * 100}
+        value={totalSubTasks == 0 ? 0 : (progress / totalSubTasks) * 100}
         radius={30}
         duration={500}
         progressValueColor={"black"}
@@ -70,7 +70,60 @@ function ProgressStatus({ progress, totalSubTasks }) {
   );
 }
 
-// TODO: Need to refactor this.
+function EditSubTask({
+  text,
+  index,
+  updateEdited,
+  updateSubTask,
+  removeSubTask,
+}) {
+  return (
+    <>
+      <TextInput
+        style={styles.subTaskButtonText}
+        defaultValue={text}
+        autoFocus={true}
+        onSubmitEditing={(value) => {
+          updateSubTask(value.nativeEvent.text, index);
+          updateEdited();
+        }}
+      ></TextInput>
+      <TouchableOpacity
+        style={styles.circleButton}
+        onPress={() => {
+          removeSubTask(index);
+          updateEdited();
+        }}
+      >
+        <FontAwesome5 name={"trash"} size={14} color="white" />
+      </TouchableOpacity>
+    </>
+  );
+}
+
+function DisplaySubTask({ text, tick, updateTick, progress, updateProgress }) {
+  return (
+    <>
+      <Text style={styles.subTaskButtonText}>{text}</Text>
+      <TouchableOpacity
+        style={styles.circleButton}
+        onPress={() => {
+          [
+            updateTick(),
+            tick ? updateProgress(progress, -1) : updateProgress(progress, +1),
+          ];
+        }}
+      >
+        <FontAwesome5
+          name={tick ? "check" : "circle"}
+          size={14}
+          color="white"
+        />
+      </TouchableOpacity>
+    </>
+  );
+}
+
 function Subtask({
   text,
   index,
@@ -80,57 +133,38 @@ function Subtask({
   updateProgress,
 }) {
   const [tick, setTick] = useState(false);
+  const updateTick = () => {
+    setTick(!tick);
+  };
+
   const [edited, setEdited] = useState(false);
+  const updateEdited = () => {
+    setEdited(!edited);
+  };
 
   return (
     <TouchableOpacity
       style={[styles.subTaskRow]}
       onLongPress={() => {
-        setEdited(!edited);
+        updateEdited();
       }}
     >
       {edited ? (
-        <>
-          <TextInput
-            style={styles.subTaskButtonText}
-            defaultValue={text}
-            autoFocus={true}
-            onSubmitEditing={(value) => {
-              updateSubTask(value.nativeEvent.text, index);
-              setEdited(!edited);
-            }}
-          ></TextInput>
-          <TouchableOpacity
-            style={styles.circleButton}
-            onPress={() => {
-              removeSubTask(index);
-              setEdited(!edited);
-            }}
-          >
-            <FontAwesome5 name={"trash"} size={14} color="white" />
-          </TouchableOpacity>
-        </>
+        <EditSubTask
+          text={text}
+          index={index}
+          updateEdited={updateEdited}
+          updateSubTask={updateSubTask}
+          removeSubTask={removeSubTask}
+        />
       ) : (
-        <>
-          <Text style={styles.subTaskButtonText}>{text}</Text>
-          <TouchableOpacity
-            style={styles.circleButton}
-            onPress={() => {
-              [
-                setTick(!tick),
-                tick
-                  ? updateProgress(progress, -1)
-                  : updateProgress(progress, +1),
-              ];
-            }}
-          >
-            <FontAwesome5
-              name={tick ? "check" : "circle"}
-              size={14}
-              color="white"
-            />
-          </TouchableOpacity>
-        </>
+        <DisplaySubTask
+          text={text}
+          tick={tick}
+          updateTick={updateTick}
+          progress={progress}
+          updateProgress={updateProgress}
+        />
       )}
     </TouchableOpacity>
   );
@@ -187,6 +221,7 @@ function SubTasks({
 }
 
 // TODO: Need to fix home screen navigation.
+// TODO: Need to add comments.
 function TaskDetailsScreen() {
   const navigation = useNavigation();
   const [description, setDescription] = useState(
