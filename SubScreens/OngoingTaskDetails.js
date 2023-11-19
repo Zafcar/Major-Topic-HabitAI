@@ -71,7 +71,7 @@ function ProgressStatus({ progress, totalSubTasks }) {
 }
 
 // TODO: Ability to delete and change subtasks when long pressed.
-function Subtask({ text, progress, updateProgress }) {
+function Subtask({ text, index, updateSubTask, progress, updateProgress }) {
   const [tick, setTick] = useState(false);
   const [edited, setEdited] = useState(false);
 
@@ -86,7 +86,12 @@ function Subtask({ text, progress, updateProgress }) {
         <>
           <TextInput
             style={styles.subTaskButtonText}
+            defaultValue={text}
             autoFocus={true}
+            onSubmitEditing={(value) => {
+              updateSubTask(value.nativeEvent.text, index);
+              setEdited(!edited);
+            }}
           ></TextInput>
           <TouchableOpacity
             style={styles.circleButton}
@@ -132,6 +137,7 @@ function SubTasks({
   progress,
   updateProgress,
   subTasks,
+  addingSubTask,
   updateSubTask,
   click,
   updateClick,
@@ -143,10 +149,6 @@ function SubTasks({
         <TouchableOpacity
           style={styles.plusButton}
           onPress={() => updateClick(click)}
-          onChangeText={(text) => {
-            updateSubTask(subTasks, text);
-            updateClick(click);
-          }}
         >
           <FontAwesome5 name="plus" size={24} color="black" />
         </TouchableOpacity>
@@ -157,7 +159,7 @@ function SubTasks({
         <TextInput
           autoFocus={true}
           onSubmitEditing={(value) => {
-            updateSubTask(subTasks, value.nativeEvent.text);
+            addingSubTask(value.nativeEvent.text);
             updateClick(click);
           }}
         ></TextInput>
@@ -167,9 +169,11 @@ function SubTasks({
         {subTasks.map((text, index) => (
           <Subtask
             text={text}
-            key={index}
+            index={index}
+            updateSubTask={updateSubTask}
             progress={progress}
             updateProgress={updateProgress}
+            key={index}
           />
         ))}
       </ScrollView>
@@ -191,8 +195,13 @@ function TaskDetailsScreen() {
     "Presentation to Panel",
     "Post Review Discussion with Guide",
   ]);
-  const updateSubTask = (subTasks, newSubTask) => {
+  const addingSubTask = (newSubTask) => {
     setSubTasks([...subTasks, newSubTask]);
+  };
+  const updatingSubTask = (updatedSubTask, index) => {
+    const tempArray = [...subTasks];
+    tempArray[index] = updatedSubTask;
+    setSubTasks(tempArray);
   };
 
   const [progress, setProgress] = useState(0);
@@ -229,7 +238,8 @@ function TaskDetailsScreen() {
         progress={progress}
         updateProgress={updateProgress}
         subTasks={subTasks}
-        updateSubTask={updateSubTask}
+        addingSubTask={addingSubTask}
+        updateSubTask={updatingSubTask}
         click={click}
         updateClick={updateClick}
       />
