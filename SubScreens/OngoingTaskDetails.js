@@ -192,18 +192,45 @@ function SubTasks({
         </TouchableOpacity>
       </View>
 
-      {/* // TODO: Need to add styles to inputText tag */}
       {click ? (
-        <TextInput
-          autoFocus={true}
-          onSubmitEditing={(value) => {
-            addingSubTask(value.nativeEvent.text);
-            updateClick(click);
+        <View
+          style={{
+            backgroundColor: "white",
+            borderRadius: 14,
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            height: 60,
           }}
-        ></TextInput>
+        >
+          <TextInput
+            style={{
+              color: "black",
+              fontWeight: "bold",
+              fontSize: 16,
+              paddingLeft: 16,
+            }}
+            autoFocus={true}
+            onSubmitEditing={(value) => {
+              addingSubTask(value.nativeEvent.text);
+              updateClick(click);
+            }}
+          ></TextInput>
+          <TouchableOpacity
+            style={styles.circleButton}
+            onPress={() => {
+              updateClick(click);
+            }}
+          >
+            <FontAwesome5 name={"trash"} size={14} color="white" />
+          </TouchableOpacity>
+        </View>
       ) : null}
 
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         {subTasks.map((text, index) => (
           <Subtask
             text={text}
@@ -220,7 +247,6 @@ function SubTasks({
   );
 }
 
-// TODO: Need to fix home screen navigation.
 // TODO: Need to add comments.
 function TaskDetailsScreen() {
   const navigation = useNavigation();
@@ -257,15 +283,6 @@ function TaskDetailsScreen() {
   const updateClick = (click) => {
     setClick(!click);
   };
-
-  React.useEffect(
-    () =>
-      navigation.addListener("beforeRemove", (e) => {
-        e.preventDefault();
-        setClick(false);
-      }),
-    [navigation]
-  );
 
   return (
     <View style={styles.container}>
@@ -377,7 +394,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 10,
-    flex: 2,
     height: 60,
     fontSize: 22,
   },
