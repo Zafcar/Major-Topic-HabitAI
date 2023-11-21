@@ -72,10 +72,12 @@ function ProgressStatus({ progress, totalSubTasks }) {
 
 function EditSubTask({
   text,
+  tick,
   index,
   updateEdited,
   updateSubTask,
   removeSubTask,
+  updateProgress,
 }) {
   return (
     <>
@@ -93,6 +95,7 @@ function EditSubTask({
         onPress={() => {
           removeSubTask(index);
           updateEdited();
+          tick ? updateProgress(-1) : updateProgress(0);
         }}
       >
         <FontAwesome5 name={"trash"} size={14} color="white" />
@@ -101,17 +104,14 @@ function EditSubTask({
   );
 }
 
-function DisplaySubTask({ text, tick, updateTick, progress, updateProgress }) {
+function DisplaySubTask({ text, tick, updateTick, updateProgress }) {
   return (
     <>
       <Text style={styles.subTaskButtonText}>{text}</Text>
       <TouchableOpacity
         style={styles.circleButton}
         onPress={() => {
-          [
-            updateTick(),
-            tick ? updateProgress(progress, -1) : updateProgress(progress, +1),
-          ];
+          [updateTick(), tick ? updateProgress(-1) : updateProgress(+1)];
         }}
       >
         <FontAwesome5
@@ -152,10 +152,12 @@ function Subtask({
       {edited ? (
         <EditSubTask
           text={text}
+          tick={tick}
           index={index}
           updateEdited={updateEdited}
           updateSubTask={updateSubTask}
           removeSubTask={removeSubTask}
+          updateProgress={updateProgress}
         />
       ) : (
         <DisplaySubTask
@@ -275,7 +277,7 @@ function TaskDetailsScreen() {
   };
 
   const [progress, setProgress] = useState(0);
-  const updateProgress = (progress, value) => {
+  const updateProgress = (value) => {
     setProgress(progress + value);
   };
 
