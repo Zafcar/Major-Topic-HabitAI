@@ -72,9 +72,8 @@ function ProgressStatus({ progress, totalSubTasks }) {
 
 function EditSubTask({
   text,
-  index,
   tick,
-  updateTick,
+  index,
   updateEdited,
   updateSubTask,
   removeSubTask,
@@ -96,7 +95,7 @@ function EditSubTask({
         onPress={() => {
           removeSubTask(index);
           updateEdited();
-          tick ? [updateProgress(-1), updateTick()] : updateProgress(0);
+          tick ? updateProgress(-1) : updateProgress(0);
         }}
       >
         <FontAwesome5 name={"trash"} size={14} color="white" />
@@ -153,9 +152,8 @@ function Subtask({
       {edited ? (
         <EditSubTask
           text={text}
-          index={index}
           tick={tick}
-          updateTick={updateTick}
+          index={index}
           updateEdited={updateEdited}
           updateSubTask={updateSubTask}
           removeSubTask={removeSubTask}
