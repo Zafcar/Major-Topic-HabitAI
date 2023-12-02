@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
 import { useNavigation } from "@react-navigation/native";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
@@ -38,7 +40,21 @@ function TaskDescription() {
   );
 }
 
-function TimeAndDateSelector({ icon, textValue }) {
+function TimeAndDateSelector({ icon, mode }) {
+  // DateTimePickerAndroid.open(params: AndroidNativeProps)
+  // DateTimePickerAndroid.dismiss(mode: AndroidNativeProps['mode'])
+
+  const [display, setDisplay] = useState(
+    mode == "time"
+      ? new Date().getHours() + ":" + new Date().getMinutes()
+      : new Date().getDate() +
+          "/" +
+          new Date().getMonth() +
+          "/" +
+          new Date().getFullYear()
+  );
+  const [tick, setTick] = useState(false);
+
   return (
     <View style={{ flexDirection: "row" }}>
       <View style={styles.iconBox}>
@@ -51,12 +67,35 @@ function TimeAndDateSelector({ icon, textValue }) {
           justifyContent: "center",
         }}
       >
-        <TextInput
+        <TouchableOpacity
           textAlign={"center"}
           style={styles.timeTextBox}
-          value={textValue}
-          editable={false}
-        />
+          onPress={() => {
+            setTick(!tick);
+          }}
+        >
+          <Text>{display}</Text>
+        </TouchableOpacity>
+        {tick ? (
+          <DateTimePicker
+            mode={mode}
+            value={new Date()}
+            onChange={(event, value) => {
+              [
+                mode == "time"
+                  ? setDisplay(value.getHours() + ":" + value.getMinutes())
+                  : setDisplay(
+                      value.getDate() +
+                        "/" +
+                        value.getMonth() +
+                        "/" +
+                        value.getFullYear()
+                    ),
+              ];
+              Platform.OS === "android" ? setTick(false) : null;
+            }}
+          />
+        ) : null}
       </View>
     </View>
   );
@@ -68,14 +107,14 @@ function TimeAndDate() {
       <Text style={styles.heading}>Time & Date</Text>
 
       <View style={styles.dateContainer}>
-        <TimeAndDateSelector icon="clock" textValue="HH:MM:SS" />
-        <TimeAndDateSelector icon="calendar" textValue="DD-MM-YYYY" />
+        <TimeAndDateSelector icon="clock" mode="time" />
+        <TimeAndDateSelector icon="calendar" mode="date" />
       </View>
     </>
   );
 }
 
-function SubFunction({ index }) {
+function SubTask({ index }) {
   return (
     <View style={[styles.subTaskRow, styles.subTaskButton]}>
       <Text style={styles.subTaskButtonText}>{`Sub task ${index}`}</Text>
@@ -86,13 +125,13 @@ function SubFunction({ index }) {
   );
 }
 
-function SubFunctionsList() {
+function SubTasks() {
   return (
     <>
       <Text style={styles.subTaskHeading}>Add Sub Tasks</Text>
       <ScrollView style={styles.scrollContainer}>
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <SubFunction key={i} index={i} />
+          <SubTask key={i} index={i} />
         ))}
       </ScrollView>
     </>
@@ -109,13 +148,28 @@ function CreateButton() {
 
 function CreateTaskScreen() {
   const navigation = useNavigation();
+
+  const [subTasks, setSubTasks] = useState([]);
+  const addingSubTask = (newSubTask) => {
+    setSubTasks([...subTasks, newSubTask]);
+  };
+  const updatingSubTask = (updatedSubTask, index) => {
+    const tempArray = [...subTasks];
+    tempArray[index] = updatedSubTask;
+    setSubTasks(tempArray);
+  };
+  const removeSubTask = (index) => {
+    const tempArray = subTasks.filter((_, i) => i !== index);
+    setSubTasks(tempArray);
+  };
+
   return (
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Create New Task"} />
       <TaskTitle />
       <TaskDescription />
       <TimeAndDate />
-      <SubFunctionsList />
+      <SubTasks />
       <CreateButton />
     </View>
   );
