@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,8 +6,11 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
 import { useNavigation } from "@react-navigation/native";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
@@ -38,11 +41,26 @@ function TaskDescription() {
   );
 }
 
-function TimeAndDateSelector({ icon, textValue }) {
+function DateSelector() {
+  const [display, setDisplay] = useState(
+    new Date().getDate() +
+      "/" +
+      new Date().getMonth() +
+      "/" +
+      new Date().getFullYear()
+  );
+
+  const [tick, setTick] = useState(false);
+
   return (
     <View style={{ flexDirection: "row" }}>
       <View style={styles.iconBox}>
-        <FontAwesome5 name={icon} size={16} color="white" style={styles.icon} />
+        <FontAwesome5
+          name="calendar"
+          size={16}
+          color="white"
+          style={styles.icon}
+        />
       </View>
       <View
         style={{
@@ -51,12 +69,79 @@ function TimeAndDateSelector({ icon, textValue }) {
           justifyContent: "center",
         }}
       >
-        <TextInput
+        <TouchableOpacity
           textAlign={"center"}
           style={styles.timeTextBox}
-          value={textValue}
-          editable={false}
+          onPress={() => {
+            setTick(!tick);
+          }}
+        >
+          <Text style={{ fontSize: 17 }}>{display}</Text>
+        </TouchableOpacity>
+        {tick ? (
+          <DateTimePicker
+            mode="date"
+            value={new Date()}
+            onChange={(event, value) => {
+              [
+                setDisplay(
+                  value.getDate() +
+                    "/" +
+                    value.getMonth() +
+                    "/" +
+                    value.getFullYear()
+                ),
+              ];
+              Platform.OS === "android" ? setTick(false) : null;
+            }}
+          />
+        ) : null}
+      </View>
+    </View>
+  );
+}
+
+function TimeSelector() {
+  const [display, setDisplay] = useState(
+    new Date().getHours() + ":" + new Date().getMinutes()
+  );
+  const [tick, setTick] = useState(false);
+
+  return (
+    <View style={{ flexDirection: "row" }}>
+      <View style={styles.iconBox}>
+        <FontAwesome5
+          name="clock"
+          size={16}
+          color="white"
+          style={styles.icon}
         />
+      </View>
+      <View
+        style={{
+          paddingLeft: 5,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <TouchableOpacity
+          style={[styles.timeTextBox]}
+          onPress={() => {
+            setTick(!tick);
+          }}
+        >
+          <Text style={{ fontSize: 25 }}>{display}</Text>
+        </TouchableOpacity>
+        {tick ? (
+          <DateTimePicker
+            mode="time"
+            value={new Date()}
+            onChange={(event, value) => {
+              [setDisplay(value.getHours() + ":" + value.getMinutes())];
+              Platform.OS === "android" ? setTick(false) : null;
+            }}
+          />
+        ) : null}
       </View>
     </View>
   );
@@ -68,33 +153,100 @@ function TimeAndDate() {
       <Text style={styles.heading}>Time & Date</Text>
 
       <View style={styles.dateContainer}>
-        <TimeAndDateSelector icon="clock" textValue="HH:MM:SS" />
-        <TimeAndDateSelector icon="calendar" textValue="DD-MM-YYYY" />
+        <TimeSelector />
+        <DateSelector />
       </View>
     </>
   );
 }
 
-function SubFunction({ index }) {
+function DisplaySubTask({ text, index, removeSubTask }) {
   return (
-    <View style={[styles.subTaskRow, styles.subTaskButton]}>
-      <Text style={styles.subTaskButtonText}>{`Sub task ${index}`}</Text>
-      <TouchableOpacity style={styles.plusButton}>
+    <View
+      style={[
+        styles.input,
+        styles.commonInput,
+        {
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexDirection: "row",
+        },
+      ]}
+    >
+      <Text style={styles.subTaskButtonText}>{text}</Text>
+      <TouchableOpacity
+        style={styles.plusButton}
+        onPress={() => {
+          removeSubTask(index);
+        }}
+      >
+        <FontAwesome5 name="trash" size={14} color="white" />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function AddSubTask({ addSubTask }) {
+  const [tempInput, setTempInput] = useState();
+  return (
+    <View
+      style={[
+        styles.input,
+        styles.commonInput,
+        {
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexDirection: "row",
+        },
+      ]}
+    >
+      <TextInput
+        style={{
+          color: "black",
+          fontWeight: "bold",
+          fontSize: 16,
+          paddingLeft: 16,
+        }}
+        placeholder="text...."
+        value={tempInput}
+        onChange={(value) => setTempInput(value.nativeEvent.text)}
+      />
+      <TouchableOpacity
+        style={styles.plusButton}
+        onPress={() => {
+          [addSubTask(tempInput), setTempInput()];
+        }}
+      >
         <FontAwesome5 name="plus" size={14} color="white" />
       </TouchableOpacity>
     </View>
   );
 }
 
-function SubFunctionsList() {
+function SubTasks({ subTasks, addSubTask, removeSubTask }) {
   return (
     <>
       <Text style={styles.subTaskHeading}>Add Sub Tasks</Text>
-      <ScrollView style={styles.scrollContainer}>
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <SubFunction key={i} index={i} />
-        ))}
-      </ScrollView>
+
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          style={styles.scrollContainer}
+          keyboardShouldPersistTaps="always"
+        >
+          {subTasks.map((text, index) => (
+            <DisplaySubTask
+              key={index}
+              text={text}
+              index={index}
+              removeSubTask={removeSubTask}
+            />
+          ))}
+          <AddSubTask addSubTask={addSubTask} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }
@@ -109,13 +261,32 @@ function CreateButton() {
 
 function CreateTaskScreen() {
   const navigation = useNavigation();
+
+  const [subTasks, setSubTasks] = useState([]);
+  const addSubTask = (newSubTask) => {
+    setSubTasks([...subTasks, newSubTask]);
+  };
+  const updateSubTask = (updatedSubTask, index) => {
+    const tempArray = [...subTasks];
+    tempArray[index] = updatedSubTask;
+    setSubTasks(tempArray);
+  };
+  const removeSubTask = (index) => {
+    const tempArray = subTasks.filter((_, i) => i !== index);
+    setSubTasks(tempArray);
+  };
+
   return (
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Create New Task"} />
       <TaskTitle />
       <TaskDescription />
       <TimeAndDate />
-      <SubFunctionsList />
+      <SubTasks
+        subTasks={subTasks}
+        addSubTask={addSubTask}
+        removeSubTask={removeSubTask}
+      />
       <CreateButton />
     </View>
   );
@@ -189,6 +360,8 @@ const styles = StyleSheet.create({
     height: 48,
     borderColor: "white",
     backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
 
     borderWidth: 1,
 
@@ -204,6 +377,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     marginTop: 10,
     marginBottom: 10,
+    flex: 1,
   },
   subTaskRow: {
     flexDirection: "row",
@@ -230,11 +404,10 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10,
+
     borderRadius: 14,
   },
   lastButton: {
-    width: 380,
     height: 67,
     backgroundColor: "black",
     justifyContent: "center",
