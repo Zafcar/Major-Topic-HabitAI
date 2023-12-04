@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -40,25 +41,26 @@ function TaskDescription() {
   );
 }
 
-function TimeAndDateSelector({ icon, mode }) {
-  // DateTimePickerAndroid.open(params: AndroidNativeProps)
-  // DateTimePickerAndroid.dismiss(mode: AndroidNativeProps['mode'])
-
+function DateSelector() {
   const [display, setDisplay] = useState(
-    mode == "time"
-      ? new Date().getHours() + ":" + new Date().getMinutes()
-      : new Date().getDate() +
-          "/" +
-          new Date().getMonth() +
-          "/" +
-          new Date().getFullYear()
+    new Date().getDate() +
+      "/" +
+      new Date().getMonth() +
+      "/" +
+      new Date().getFullYear()
   );
+
   const [tick, setTick] = useState(false);
 
   return (
     <View style={{ flexDirection: "row" }}>
       <View style={styles.iconBox}>
-        <FontAwesome5 name={icon} size={16} color="white" style={styles.icon} />
+        <FontAwesome5
+          name="calendar"
+          size={16}
+          color="white"
+          style={styles.icon}
+        />
       </View>
       <View
         style={{
@@ -78,19 +80,17 @@ function TimeAndDateSelector({ icon, mode }) {
         </TouchableOpacity>
         {tick ? (
           <DateTimePicker
-            mode={mode}
+            mode="date"
             value={new Date()}
             onChange={(event, value) => {
               [
-                mode == "time"
-                  ? setDisplay(value.getHours() + ":" + value.getMinutes())
-                  : setDisplay(
-                      value.getDate() +
-                        "/" +
-                        value.getMonth() +
-                        "/" +
-                        value.getFullYear()
-                    ),
+                setDisplay(
+                  value.getDate() +
+                    "/" +
+                    value.getMonth() +
+                    "/" +
+                    value.getFullYear()
+                ),
               ];
               Platform.OS === "android" ? setTick(false) : null;
             }}
@@ -101,39 +101,154 @@ function TimeAndDateSelector({ icon, mode }) {
   );
 }
 
+function TimeSelector() {
+  const [display, setDisplay] = useState(
+    new Date().getHours() + ":" + new Date().getMinutes()
+  );
+  const [tick, setTick] = useState(false);
+
+  return (
+    <View style={{ flexDirection: "row" }}>
+      <View style={styles.iconBox}>
+        <FontAwesome5
+          name="clock"
+          size={16}
+          color="white"
+          style={styles.icon}
+        />
+      </View>
+      <View
+        style={{
+          paddingLeft: 5,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <TouchableOpacity
+          textAlign={"center"}
+          style={styles.timeTextBox}
+          onPress={() => {
+            setTick(!tick);
+          }}
+        >
+          <Text>{display}</Text>
+        </TouchableOpacity>
+        {tick ? (
+          <DateTimePicker
+            mode="time"
+            value={new Date()}
+            onChange={(event, value) => {
+              [setDisplay(value.getHours() + ":" + value.getMinutes())];
+              Platform.OS === "android" ? setTick(false) : null;
+            }}
+          />
+        ) : null}
+      </View>
+    </View>
+  );
+}
+
+// TODO: Align text to center
 function TimeAndDate() {
   return (
     <>
       <Text style={styles.heading}>Time & Date</Text>
 
       <View style={styles.dateContainer}>
-        <TimeAndDateSelector icon="clock" mode="time" />
-        <TimeAndDateSelector icon="calendar" mode="date" />
+        <TimeSelector />
+        <DateSelector />
       </View>
     </>
   );
 }
 
-function SubTask({ index }) {
+function DisplaySubTask({ text, index, removeSubTask }) {
   return (
-    <View style={[styles.subTaskRow, styles.subTaskButton]}>
-      <Text style={styles.subTaskButtonText}>{`Sub task ${index}`}</Text>
-      <TouchableOpacity style={styles.plusButton}>
+    <View
+      style={[
+        styles.input,
+        styles.commonInput,
+        {
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexDirection: "row",
+        },
+      ]}
+    >
+      <Text style={styles.subTaskButtonText}>{text}</Text>
+      <TouchableOpacity
+        style={styles.plusButton}
+        onPress={() => {
+          removeSubTask(index);
+        }}
+      >
+        <FontAwesome5 name="trash" size={14} color="white" />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function AddSubTask({ addSubTask }) {
+  const [tempInput, setTempInput] = useState();
+  return (
+    <View
+      style={[
+        styles.input,
+        styles.commonInput,
+        {
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexDirection: "row",
+        },
+      ]}
+    >
+      <TextInput
+        style={{
+          color: "black",
+          fontWeight: "bold",
+          fontSize: 16,
+          paddingLeft: 16,
+        }}
+        placeholder="text...."
+        value={tempInput}
+        onChange={(value) => setTempInput(value.nativeEvent.text)}
+      />
+      <TouchableOpacity
+        style={styles.plusButton}
+        onPress={() => {
+          [addSubTask(tempInput), setTempInput()];
+        }}
+      >
         <FontAwesome5 name="plus" size={14} color="white" />
       </TouchableOpacity>
     </View>
   );
 }
 
-function SubTasks() {
+function SubTasks({ subTasks, addSubTask, removeSubTask }) {
   return (
     <>
       <Text style={styles.subTaskHeading}>Add Sub Tasks</Text>
-      <ScrollView style={styles.scrollContainer}>
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <SubTask key={i} index={i} />
-        ))}
-      </ScrollView>
+
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          style={styles.scrollContainer}
+          keyboardShouldPersistTaps="always"
+        >
+          {subTasks.map((text, index) => (
+            <DisplaySubTask
+              key={index}
+              text={text}
+              index={index}
+              removeSubTask={removeSubTask}
+            />
+          ))}
+          <AddSubTask addSubTask={addSubTask} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }
@@ -150,10 +265,10 @@ function CreateTaskScreen() {
   const navigation = useNavigation();
 
   const [subTasks, setSubTasks] = useState([]);
-  const addingSubTask = (newSubTask) => {
+  const addSubTask = (newSubTask) => {
     setSubTasks([...subTasks, newSubTask]);
   };
-  const updatingSubTask = (updatedSubTask, index) => {
+  const updateSubTask = (updatedSubTask, index) => {
     const tempArray = [...subTasks];
     tempArray[index] = updatedSubTask;
     setSubTasks(tempArray);
@@ -169,7 +284,11 @@ function CreateTaskScreen() {
       <TaskTitle />
       <TaskDescription />
       <TimeAndDate />
-      <SubTasks />
+      <SubTasks
+        subTasks={subTasks}
+        addSubTask={addSubTask}
+        removeSubTask={removeSubTask}
+      />
       <CreateButton />
     </View>
   );
@@ -258,6 +377,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     marginTop: 10,
     marginBottom: 10,
+    flex: 1,
   },
   subTaskRow: {
     flexDirection: "row",
@@ -284,11 +404,10 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10,
+
     borderRadius: 14,
   },
   lastButton: {
-    width: 380,
     height: 67,
     backgroundColor: "black",
     justifyContent: "center",
