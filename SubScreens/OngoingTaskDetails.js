@@ -90,7 +90,7 @@ function EditSubTask({
           updateSubTask(value.nativeEvent.text, index);
           updateEdited();
         }}
-      ></TextInput>
+      />
       <TouchableOpacity
         style={styles.circleButton}
         onPress={() => {
@@ -178,7 +178,7 @@ function SubTasks({
   progress,
   updateProgress,
   subTasks,
-  addingSubTask,
+  addSubTask,
   updateSubTask,
   removeSubTask,
   click,
@@ -216,10 +216,10 @@ function SubTasks({
             }}
             autoFocus={true}
             onSubmitEditing={(value) => {
-              addingSubTask(value.nativeEvent.text);
+              addSubTask(value.nativeEvent.text);
               updateClick(click);
             }}
-          ></TextInput>
+          />
           <TouchableOpacity
             style={styles.circleButton}
             onPress={() => {
@@ -259,16 +259,16 @@ function TaskDetailsScreen() {
   );
 
   const [subTasks, setSubTasks] = useState([
-    "Make the ppt",
-    "Ensure functioning of Front End",
-    "Enter Project Timeline Details",
-    "Presentation to Panel",
-    "Post Review Discussion with Guide",
+    // "Make the ppt",
+    // "Ensure functioning of Front End",
+    // "Enter Project Timeline Details",
+    // "Presentation to Panel",
+    // "Post Review Discussion with Guide",
   ]);
-  const addingSubTask = (newSubTask) => {
+  const addSubTask = (newSubTask) => {
     setSubTasks([...subTasks, newSubTask]);
   };
-  const updatingSubTask = (updatedSubTask, index) => {
+  const updateSubTask = (updatedSubTask, index) => {
     const tempArray = [...subTasks];
     tempArray[index] = updatedSubTask;
     setSubTasks(tempArray);
@@ -303,8 +303,8 @@ function TaskDetailsScreen() {
         progress={progress}
         updateProgress={updateProgress}
         subTasks={subTasks}
-        addingSubTask={addingSubTask}
-        updateSubTask={updatingSubTask}
+        addSubTask={addSubTask}
+        updateSubTask={updateSubTask}
         removeSubTask={removeSubTask}
         click={click}
         updateClick={updateClick}
