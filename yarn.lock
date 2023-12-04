@@ -5938,7 +5938,7 @@ nanoid@^3.1.23, nanoid@^3.3.6:
 
 nativewind@^2.0.11:
   version "2.0.11"
-  resolved "https://registry.npmjs.org/nativewind/-/nativewind-2.0.11.tgz"
+  resolved "https://registry.yarnpkg.com/nativewind/-/nativewind-2.0.11.tgz#aaa80a65b663a49856b26bd4f3153161f70299d7"
   integrity sha512-qCEXUwKW21RYJ33KRAJl3zXq2bCq82WoI564fI21D/TiqhfmstZOqPN53RF8qK1NDK6PGl56b2xaTxgObEePEg==
   dependencies:
     "@babel/generator" "^7.18.7"
