@@ -76,7 +76,7 @@ function DateSelector() {
             setTick(!tick);
           }}
         >
-          <Text>{display}</Text>
+          <Text style={{ fontSize: 17 }}>{display}</Text>
         </TouchableOpacity>
         {tick ? (
           <DateTimePicker
@@ -125,13 +125,12 @@ function TimeSelector() {
         }}
       >
         <TouchableOpacity
-          textAlign={"center"}
-          style={styles.timeTextBox}
+          style={[styles.timeTextBox]}
           onPress={() => {
             setTick(!tick);
           }}
         >
-          <Text>{display}</Text>
+          <Text style={{ fontSize: 25 }}>{display}</Text>
         </TouchableOpacity>
         {tick ? (
           <DateTimePicker
@@ -148,7 +147,6 @@ function TimeSelector() {
   );
 }
 
-// TODO: Align text to center
 function TimeAndDate() {
   return (
     <>
@@ -362,6 +360,8 @@ const styles = StyleSheet.create({
     height: 48,
     borderColor: "white",
     backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
 
     borderWidth: 1,
 
