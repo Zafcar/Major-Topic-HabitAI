@@ -11,10 +11,87 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
-// TODO: complete realignment of toolbar, title and container.
+import CircularProgress from "react-native-circular-progress-indicator";
+
+function MainTaskDetails({ title, dueDateString }) {
+  return (
+    <>
+      <Text style={styles.heading}>{title}</Text>
+
+      <View style={styles.dueDateContainer}>
+        <View style={styles.iconBackground}>
+          <FontAwesome5 name="calendar" size={20} color="white" />
+        </View>
+        <View style={styles.dueDateTextContainer}>
+          {/* // ! Make sure that due date displays as the one in figma */}
+          <Text style={styles.dueDateText}>Due Date</Text>
+          <Text style={styles.dueDate}>{dueDateString}</Text>
+        </View>
+      </View>
+    </>
+  );
+}
+
+function TaskDescription({ description }) {
+  return (
+    <>
+      <Text style={styles.heading}>Description</Text>
+      <View style={styles.projectDetails}>
+        <Text
+          style={styles.projectText}
+          multiline
+          onChangeText={(text) => setDescription(text)}
+        >
+          {description}
+        </Text>
+      </View>
+    </>
+  );
+}
+
+function ProgressStatus() {
+  return (
+    <View style={styles.progressContainer}>
+      <Text style={styles.progressHeading}>Progress</Text>
+
+      <CircularProgress
+        value={100}
+        radius={30}
+        duration={500}
+        progressValueColor={"black"}
+        maxValue={100}
+        valueSuffix={"%"}
+        titleColor={"black"}
+      />
+    </View>
+  );
+}
+
+function SubTasks({ subTaskTexts }) {
+  return (
+    <>
+      <View style={styles.subTaskHeader}>
+        <Text style={styles.subTaskHeading}>Sub Tasks</Text>
+      </View>
+
+      <ScrollView style={styles.scrollContainer}>
+        {subTaskTexts.map((text, index) => (
+          <View key={index} style={styles.subTaskRow}>
+            <Text style={styles.subTaskButtonText}>{text}</Text>
+
+            <View style={styles.checkButton}>
+              <FontAwesome5 name="check" size={14} color="white" />
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    </>
+  );
+}
+
 function TaskDetailsScreen() {
   const navigation = useNavigation();
-  const subtaskTexts = [
+  const subTaskTexts = [
     "Kitchen",
     "Bedroom 1",
     "Bedroom 2",
@@ -29,53 +106,17 @@ function TaskDetailsScreen() {
         title={"Completed Task Details"}
       />
 
-      <Text style={styles.heading}>Clean the house</Text>
+      <MainTaskDetails title="Clean the house" dueDateString="06-11-2023" />
 
-      <View style={styles.dueDateContainer}>
-        <View style={styles.iconBackground}>
-          <FontAwesome5 name="calendar" size={20} color="white" />
-        </View>
-        <View style={styles.dueDateTextContainer}>
-          <Text style={styles.dueDateText}>Due Date</Text>
-          <Text style={styles.dueDate}>06-11-2023</Text>
-        </View>
-      </View>
+      <TaskDescription
+        description={
+          "Complete cleaning of the house including first floor rooms."
+        }
+      />
 
-      <Text style={styles.heading}>Details</Text>
-      <View style={styles.projectDetails}>
-        <Text style={styles.projectText}>
-          Complete cleaning of the house including first floor rooms.{" "}
-        </Text>
-      </View>
+      <ProgressStatus />
 
-      <View style={styles.progressContainer}>
-        <Text style={styles.progressHeading}>Progress</Text>
-        <Text style={styles.progressText}>100%</Text>
-      </View>
-
-      <View style={styles.subTaskHeader}>
-        <Text style={styles.subTaskHeading}>Sub Tasks</Text>
-        <TouchableOpacity style={styles.plusButton}>
-          <FontAwesome5 name="plus" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView style={styles.scrollContainer}>
-        {subtaskTexts.map((text, index) => (
-          <View key={index} style={styles.subTaskRow}>
-            <TouchableOpacity style={styles.subTaskButton} onPress={() => {}}>
-              <Text style={styles.subTaskButtonText}>{text}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.checkButton}>
-              <FontAwesome5 name="check" size={14} color="white" />
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
-
-      <TouchableOpacity style={styles.lastButton}>
-        <Text style={styles.lastButtonText}>Edit task</Text>
-      </TouchableOpacity>
+      <SubTasks subTaskTexts={subTaskTexts} />
     </View>
   );
 }
@@ -129,8 +170,6 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   projectText: {
-    width: 370,
-    height: 100,
     fontSize: 16,
     backgroundColor: "white",
     padding: 10,
@@ -174,15 +213,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
-  },
-  subTaskButton: {
-    width: 370,
-    height: 60,
     backgroundColor: "white",
     borderRadius: 14,
-    justifyContent: "center",
+    marginBottom: 10,
+    height: 60,
   },
+
   subTaskButtonText: {
     color: "black",
     fontWeight: "bold",
@@ -195,7 +231,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#D5D5D5",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 15,
   },
   checkButton: {
     width: 40,
@@ -204,11 +239,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    right: 20,
+    right: 10,
     borderRadius: 14,
   },
   lastButton: {
-    width: 380,
     height: 67,
     backgroundColor: "black",
     justifyContent: "center",
