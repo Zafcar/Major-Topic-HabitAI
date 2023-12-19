@@ -174,7 +174,7 @@ function OngoingTasks({ navigation, ongoingTaskTexts, dueDates }) {
       >
         See all
       </Text>
-      <ScrollView contentContainerStyle={styles.buttonContainer}>
+      <ScrollView style={{ flexDirection: "column" }}>
         {ongoingTaskTexts.map((text, index) => (
           <OngoingTask
             key={index}
@@ -261,11 +261,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   ongoingButton: {
-    width: 384,
+    flex: 1,
     height: 120,
     backgroundColor: "black",
     margin: 8,
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "flex-start",
   },
   buttonText: {
