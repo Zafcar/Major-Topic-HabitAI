@@ -15,31 +15,20 @@ import { BottonTools } from "../CommonFunctions/ToolBars";
 function HomeScreen() {
   const navigation = useNavigation();
   const completedTaskTexts = [
-    "Clean the house",
-    "Yoga Class",
+    "Basic Leg Stretching Exercise",
+    "Finish Atomic Habits",
     "ADAS Assignment",
-    "Task 4",
-    "Task 5",
-    "Task 6",
   ];
   const ongoingTaskTexts = [
-    "Review-1",
-    "Gym",
-    "Practice Company Tests",
-    "Ongoing Task 4",
-    "Ongoing Task 5",
-    "Ongoing Task 6",
-    "Ongoing Task 7",
+    "Practice leetcode",
+    "Posture training",
+    "Brushing and Flossing",
   ];
 
   const dueDates = [
     "07-11-2023, 11AM - 1PM",
     "Daily, 5PM - 7PM",
     "Daily, 8PM-12AM",
-    "aa-aa-aaaa",
-    "bb-bb-bbbb",
-    "cc-cc-cccc",
-    "dd-dd-dddd",
   ];
 
   return (
@@ -185,10 +174,7 @@ function OngoingTasks({ navigation, ongoingTaskTexts, dueDates }) {
       >
         See all
       </Text>
-      <ScrollView
-        contentContainerStyle={styles.buttonContainer}
-        snapToEnd={false}
-      >
+      <ScrollView contentContainerStyle={styles.buttonContainer}>
         {ongoingTaskTexts.map((text, index) => (
           <OngoingTask
             key={index}

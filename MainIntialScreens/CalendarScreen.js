@@ -18,7 +18,7 @@ function CalendarScreen() {
       <TopScreenDisplay navigation={navigation} title={"Schedule"} />
       <View style={styles.content}>
         <CalendarDates />
-        <DateTasks />
+        <DateTasks navigation={navigation} />
         <CircleButton navigation={navigation} />
       </View>
     </View>
@@ -221,14 +221,22 @@ function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
   );
 }
 
-function DateTasks() {
-  const todayTasks = ["Review 1", "Gym", "Practice Company Tests"];
+function DateTasks({ navigation }) {
+  const todayTasks = [
+    "Basic leg Stretching Exercise",
+    "Finish Atoomic Habits",
+    "Practice Company Tests",
+  ];
 
   return (
     <View style={styles.categoryContainer}>
       <Text style={styles.categoryText}>Today's Tasks</Text>
       {todayTasks.map((task, index) => (
-        <TouchableOpacity key={index} style={styles.taskButton}>
+        <TouchableOpacity
+          key={index}
+          style={styles.taskButton}
+          onPress={() => navigation.navigate("ongoingTaskDetails")}
+        >
           <View>
             <Text style={styles.taskText}>{task}</Text>
             <Text style={styles.secondLineText}>16:00:00 - 18:00:00</Text>
@@ -295,7 +303,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   taskButton: {
-    width: 385,
+    // width: 385,
     height: 100,
     backgroundColor: "white",
     padding: 10,

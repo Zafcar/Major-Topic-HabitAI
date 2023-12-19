@@ -91,13 +91,7 @@ function SubTasks({ subTaskTexts }) {
 
 function TaskDetailsScreen() {
   const navigation = useNavigation();
-  const subTaskTexts = [
-    "Kitchen",
-    "Bedroom 1",
-    "Bedroom 2",
-    "Bedroom 3",
-    "Living Room",
-  ];
+  const subTaskTexts = ["Squat", "Sholder rotations"];
 
   return (
     <View style={styles.container}>
@@ -110,7 +104,7 @@ function TaskDetailsScreen() {
 
       <TaskDescription
         description={
-          "Complete cleaning of the house including first floor rooms."
+          "It's helpful to include stretching in your exercise plan. Stretching can increase flexibility and improve the range of motion in your joints, helping you move more freely. And the flexibility you gain from stretching might protect you from injury."
         }
       />
 
