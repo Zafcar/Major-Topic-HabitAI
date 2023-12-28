@@ -66,7 +66,7 @@ function BottonTools({ navigation, currentpage }) {
 
       <UtilTool
         page="rewardsScreen"
-        icon="trophy"
+        icon="line-chart"
         size={15}
         navigation={navigation}
         currentPage={"rewardsScreen" == currentpage}

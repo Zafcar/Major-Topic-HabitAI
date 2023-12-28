@@ -15,6 +15,10 @@ import CompletedTaskDetails from "./SubScreens/CompletedTaskDetails";
 const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      <Image
+        source={require('./assets/Josh.png')} // TODO: Image replaced later
+        style={{ width: 300, height: 200 }} 
+      />
       <Text style={[styles.mainText, { color: "black" }]}>HabitAI</Text>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonWrapper}>
