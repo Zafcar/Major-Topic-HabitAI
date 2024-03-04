@@ -100,7 +100,7 @@ function TaskDetailsScreen() {
         title={"Completed Task Details"}
       />
 
-      <MainTaskDetails title="Clean the house" dueDateString="06-11-2023" />
+      <MainTaskDetails title="Basic Leg Stretching Exercise" dueDateString="12-12-2023" />
 
       <TaskDescription
         description={

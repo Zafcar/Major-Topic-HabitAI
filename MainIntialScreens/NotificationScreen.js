@@ -15,11 +15,11 @@ import { TopScreenDisplay, BottonTools } from "../CommonFunctions/ToolBars";
 
 const notifications = [
   {
-    text: "Review 1",
+    text: "Brushing and Flossing",
     timeSent: "30 minutes ago",
   },
   {
-    text: "Notification 2",
+    text: "Basic Leg Stretching Exercise",
     timeSent: "44 minutes ago",
   },
   {

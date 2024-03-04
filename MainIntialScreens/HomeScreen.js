@@ -1,5 +1,3 @@
-// TODO: complete realignment of toolbar, title and container.
-
 import React from "react";
 import {
   View,
@@ -17,7 +15,7 @@ function HomeScreen() {
   const completedTaskTexts = [
     "Basic Leg Stretching Exercise",
     "Finish Atomic Habits",
-    "ADAS Assignment",
+    "Practice Japanese",
   ];
   const ongoingTaskTexts = [
     "Practice leetcode",
@@ -26,7 +24,7 @@ function HomeScreen() {
   ];
 
   const dueDates = [
-    "07-11-2023, 11AM - 1PM",
+    "24-12-2023, 11AM - 1PM",
     "Daily, 5PM - 7PM",
     "Daily, 8PM-12AM",
   ];

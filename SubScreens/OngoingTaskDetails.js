@@ -260,8 +260,8 @@ function TaskDetailsScreen() {
 
   const [subTasks, setSubTasks] = useState([
     "Practice leetcode",
-    "Posture training",
-    "Brushing and Flossing",
+    "Learn Trees and Graphs",
+    "Revise everything",
   ]);
   const addSubTask = (newSubTask) => {
     setSubTasks([...subTasks, newSubTask]);
@@ -290,7 +290,7 @@ function TaskDetailsScreen() {
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Task Details"} />
       {/* // ! Make sure the date formate is proper while passing the value. */}
-      <MainTaskDetails title="Review 1" dueDateString="7/11/2023" />
+      <MainTaskDetails title="Practice Leetcode" dueDateString="24/12/2023" />
       <TaskDescription
         description={description}
         setDescription={setDescription}
