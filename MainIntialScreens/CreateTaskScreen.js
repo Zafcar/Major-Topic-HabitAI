@@ -15,19 +15,30 @@ import { useNavigation } from "@react-navigation/native";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
-function TaskTitle() {
+const sendTask = async () => {
+  try {
+    const response = await fetch("https://reactnative.dev/movies.json");
+    const json = await response.json();
+    return json.movies;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+function TaskTitle({ setTaskTitle }) {
   return (
     <>
       <Text style={styles.heading}>Task Title</Text>
       <TextInput
         style={[styles.input, styles.commonInput]}
         placeholder="text...."
+        onChangeText={(text) => setTaskTitle(text)}
       />
     </>
   );
 }
 
-function TaskDescription() {
+function TaskDescription({ setTaskDescription }) {
   return (
     <>
       <Text style={styles.heading}>Task Details</Text>
@@ -36,20 +47,13 @@ function TaskDescription() {
         multiline={true}
         numberOfLines={4}
         placeholder="description...."
+        onChangeText={(text) => setTaskDescription(text)}
       />
     </>
   );
 }
 
-function DateSelector() {
-  const [display, setDisplay] = useState(
-    new Date().getDate() +
-      "/" +
-      new Date().getMonth() +
-      "/" +
-      new Date().getFullYear()
-  );
-
+function DateSelector({ displayDate, setDisplayDate }) {
   const [tick, setTick] = useState(false);
 
   return (
@@ -76,7 +80,7 @@ function DateSelector() {
             setTick(!tick);
           }}
         >
-          <Text style={{ fontSize: 17 }}>{display}</Text>
+          <Text style={{ fontSize: 17 }}>{displayDate}</Text>
         </TouchableOpacity>
         {tick ? (
           <DateTimePicker
@@ -84,7 +88,7 @@ function DateSelector() {
             value={new Date()}
             onChange={(event, value) => {
               [
-                setDisplay(
+                setDisplayDate(
                   value.getDate() +
                     "/" +
                     value.getMonth() +
@@ -101,10 +105,7 @@ function DateSelector() {
   );
 }
 
-function TimeSelector() {
-  const [display, setDisplay] = useState(
-    new Date().getHours() + ":" + new Date().getMinutes()
-  );
+function TimeSelector({ displayTime, setDisplayTime }) {
   const [tick, setTick] = useState(false);
 
   return (
@@ -130,14 +131,14 @@ function TimeSelector() {
             setTick(!tick);
           }}
         >
-          <Text style={{ fontSize: 25 }}>{display}</Text>
+          <Text style={{ fontSize: 25 }}>{displayTime}</Text>
         </TouchableOpacity>
         {tick ? (
           <DateTimePicker
             mode="time"
             value={new Date()}
             onChange={(event, value) => {
-              [setDisplay(value.getHours() + ":" + value.getMinutes())];
+              [setDisplayTime(value.getHours() + ":" + value.getMinutes())];
               Platform.OS === "android" ? setTick(false) : null;
             }}
           />
@@ -147,14 +148,25 @@ function TimeSelector() {
   );
 }
 
-function TimeAndDate() {
+function TimeAndDate({
+  displayTime,
+  setDisplayTime,
+  displayDate,
+  setDisplayDate,
+}) {
   return (
     <>
       <Text style={styles.heading}>Time & Date</Text>
 
       <View style={styles.dateContainer}>
-        <TimeSelector />
-        <DateSelector />
+        <TimeSelector
+          displayTime={displayTime}
+          setDisplayTime={setDisplayTime}
+        />
+        <DateSelector
+          displayDate={displayDate}
+          setDisplayDate={setDisplayDate}
+        />
       </View>
     </>
   );
@@ -251,9 +263,79 @@ function SubTasks({ subTasks, addSubTask, removeSubTask }) {
   );
 }
 
-function CreateButton() {
+const createTask = () => {
+  fetch("http://127.0.0.1:3000/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/vnd.api+json",
+    },
+    body: JSON.stringify({
+      data: {
+        attributes: {
+          name: "squats",
+          task_id: 3,
+        },
+        type: "sub_tasks",
+      },
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+const createSubTask = () => {
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+
+    fetch("http://127.0.0.1:3000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/vnd.api+json",
+      },
+      body: JSON.stringify({
+        data: {
+          attributes: {
+            name: "squats",
+            task_id: 3,
+          },
+          type: "sub_tasks",
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+};
+
+function CreateButton({
+  taskTitle,
+  taskDescription,
+  displayDate,
+  displayTime,
+  subTasks,
+}) {
   return (
-    <TouchableOpacity style={styles.lastButton}>
+    <TouchableOpacity
+      style={styles.lastButton}
+      onPress={
+        taskTitle != ""
+          ? [
+              createTask(taskTitle, taskDescription, displayDate, displayTime),
+              createSubTask(subTasks),
+            ]
+          : null
+      }
+    >
       <Text style={styles.lastButtonText}>Create</Text>
     </TouchableOpacity>
   );
@@ -262,7 +344,21 @@ function CreateButton() {
 function CreateTaskScreen() {
   const navigation = useNavigation();
 
+  const [taskTitle, setTaskTitle] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [displayTime, setDisplayTime] = useState(
+    new Date().getHours() + ":" + new Date().getMinutes()
+  );
+  const [displayDate, setDisplayDate] = useState(
+    new Date().getDate() +
+      "/" +
+      new Date().getMonth() +
+      "/" +
+      new Date().getFullYear()
+  );
+
   const [subTasks, setSubTasks] = useState([]);
+
   const addSubTask = (newSubTask) => {
     setSubTasks([...subTasks, newSubTask]);
   };
@@ -276,18 +372,35 @@ function CreateTaskScreen() {
     setSubTasks(tempArray);
   };
 
+  // console.log(taskTitle);
+  // console.log(taskDescription);
+  // console.log(displayTime);
+  // console.log(displayDate);
+  // console.log(subTasks);
+
   return (
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Create New Task"} />
-      <TaskTitle />
-      <TaskDescription />
-      <TimeAndDate />
+      <TaskTitle setTaskTitle={setTaskTitle} />
+      <TaskDescription setTaskDescription={setTaskDescription} />
+      <TimeAndDate
+        displayTime={displayTime}
+        setDisplayTime={setDisplayTime}
+        displayDate={displayDate}
+        setDisplayDate={setDisplayDate}
+      />
       <SubTasks
         subTasks={subTasks}
         addSubTask={addSubTask}
         removeSubTask={removeSubTask}
       />
-      <CreateButton />
+      <CreateButton
+        taskTitle={taskTitle}
+        taskDescription={taskDescription}
+        displayDate={displayDate}
+        displayTime={displayTime}
+        subTasks={subTasks}
+      />
     </View>
   );
 }
