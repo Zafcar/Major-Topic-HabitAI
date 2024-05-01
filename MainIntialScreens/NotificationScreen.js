@@ -1,148 +1,121 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-  SectionList,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import React from "react";
+import { Platform, StyleSheet, Text, View, TextInput } from "react-native";
+import Timer from "../components/pomodoro/Timer";
 
-import { TopScreenDisplay, BottonTools } from "../CommonFunctions/ToolBars";
+class PomodoroTimer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      workTime: 25,
+      breakTime: 5,
+      intervalType: "Working",
+    };
+  }
 
-const notifications = [
-  {
-    text: "Brushing and Flossing",
-    timeSent: "30 minutes ago",
-  },
-  {
-    text: "Basic Leg Stretching Exercise",
-    timeSent: "44 minutes ago",
-  },
-  {
-    text: "Notification 3",
-    timeSent: "1 hour ago",
-  },
-  {
-    text: "Notification 4",
-    timeSent: "1 hour 22 minutes ago",
-  },
-];
+  // handles completion of timer
+  handleTimerCompleted = () => {
+    if (this.state.intervalType === "Working") {
+      this.setState({
+        intervalType: "Break",
+      });
+    } else {
+      this.setState({
+        intervalType: "Working",
+      });
+    }
+  };
 
-const moreNotifications = [
-  {
-    text: "Notification 5",
-    timeSent: "4 hours ago",
-  },
-  {
-    text: "Notification 6",
-    timeSent: "4 hours 24 minutes ago",
-  },
-  {
-    text: "Notification 7",
-    timeSent: "7 hours ago",
-  },
-];
+  // gets triggered on change of worktimer text
+  handleWorkTime = (text) => {
+    if (text >= 0) {
+      this.setState({
+        workTime: text,
+      });
+    } else {
+      alert("Time invalid. Setting value to default. Please enter valid time");
+      this.setState({
+        workTime: 25,
+      });
+    }
+  };
 
-function RenderNotification() {
-  return (
-    <SectionList
-      sections={[
-        { title: "New", data: notifications },
-        {
-          title: "Earlier",
-          data: moreNotifications,
-        },
-      ]}
-      renderSectionHeader={({ section }) => (
-        <View style={styles.headingContainer}>
-          <Text style={styles.notificationHeadingText}>{section.title}</Text>
-        </View>
-      )}
-      renderItem={({ item }) => (
-        <View style={{ paddingLeft: 10 }}>
-          <View style={styles.notification}>
-            <View style={styles.iconBackground}>
-              <Icon
-                name="bell"
-                size={styles.iconSize}
-                color="white"
-                style={styles.icon}
-              />
-            </View>
-            <View>
-              <Text style={styles.notificationText}>{item.text}</Text>
-              <Text style={styles.timeSentText}>{item.timeSent}</Text>
-            </View>
+  // gets triggered on change of breaktimer text
+  handleBreakTime = (text) => {
+    if (text >= 0) {
+      this.setState({
+        breakTime: text,
+      });
+    } else {
+      alert("Time invalid. Setting value to default. Please enter valid time");
+      this.setState({
+        breakTime: 5,
+      });
+    }
+  };
+
+  // called to set the timer's time
+  handleTime = () => {
+    if (this.state.intervalType === "Working") {
+      return this.state.workTime;
+    } else {
+      return this.state.breakTime;
+    }
+  };
+
+  render() {
+    let time = this.handleTime();
+    return (
+      <View>
+        <View style={styles.row}>
+          <View style={styles.inputWrap}>
+            <Text style={styles.textStyle}>WorkTime</Text>
+            <TextInput
+              style={styles.textStyle}
+              keyboardType={"numeric"}
+              defaultValue={"" + this.state.workTime}
+              placeholder="workTime in mins"
+              onChangeText={this.handleWorkTime}
+            />
+          </View>
+          <View style={styles.inputWrap}>
+            <Text style={styles.textStyle}>BreakTime</Text>
+            <TextInput
+              style={styles.textStyle}
+              keyboardType={"numeric"}
+              defaultValue={"" + this.state.breakTime}
+              placeholder="breakTime in mins"
+              onChangeText={this.handleBreakTime}
+            />
           </View>
         </View>
-      )}
-      keyExtractor={(item) => `basicListEntry-${item.text}`}
-    />
-  );
+        <Timer
+          intervalType={this.state.intervalType}
+          Oncomplete={this.handleTimerCompleted}
+          period={time}
+        />
+      </View>
+    );
+  }
 }
-
-function NotificationScreen() {
-  const navigation = useNavigation();
-
-  return (
-    <View style={styles.container}>
-      <TopScreenDisplay navigation={navigation} title={"Notifications"} />
-
-      <RenderNotification />
-
-      <BottonTools navigation={navigation} currentpage={"notificationScreen"} />
-    </View>
-  );
-}
-
-export default NotificationScreen;
+export default PomodoroTimer;
 
 const styles = StyleSheet.create({
-  container: {
+  row: {
     flex: 1,
-    backgroundColor: "#D5D5D5",
-    padding: 16,
-  },
-  notification: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 5,
   },
-  iconBackground: {
-    height: 48,
-    width: 48,
-    backgroundColor: "black",
-    borderRadius: 14,
-    padding: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 15,
-    marginTop: 15,
+  inputWrap: {
+    flex: 1,
+    borderColor: "#cccccc",
+    borderBottomWidth: 1,
+    marginBottom: 10,
   },
-  iconSize: 28.8,
-  notificationText: {
-    fontSize: 18,
-    marginLeft: 10,
-    marginTop: 12,
-    fontWeight: "bold",
-  },
-  timeSentText: {
-    fontSize: 14,
-    marginLeft: 10,
-    color: "gray",
-  },
-  headingContainer: {
-    backgroundColor: "#D5D5D5",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginVertical: 0,
-  },
-  notificationHeadingText: {
+  textStyle: {
     fontSize: 25,
-    fontWeight: "bold",
+    fontWeight: "500",
+    letterSpacing: 1.5,
+    fontFamily: Platform.OS == "android" ? "notoserif" : "system",
+    marginTop: 40,
+    padding: 20,
   },
 });
