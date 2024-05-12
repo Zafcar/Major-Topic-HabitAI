@@ -1,34 +1,45 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
-import HomeScreen from "./MainIntialScreens/HomeScreen";
-import CalendarScreen from "./MainIntialScreens/CalendarScreen";
-import TodoList from "./MainIntialScreens/CreateTaskScreen";
-import NotificationScreen from "./MainIntialScreens/NotificationScreen";
-import RewardsScreen from "./SubScreens/CompletedTaskDetails";
-import OngoingTaskDetails from "./SubScreens/OngoingTaskDetails";
-import CompletedTaskDetails from "./SubScreens/CompletedTaskDetails";
+import SignInScreen from "./MainIntialScreens/SignInScreen"; 
+import SignUpScreen from "./MainIntialScreens/SignUpScreen";
+import HomeScreen from "./MainIntialScreens/HomeScreen"; 
 
 const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Image
-        source={require('./assets/Josh.png')} // TODO: Image replaced later
-        style={{ width: 300, height: 200 }} 
-      />
       <Text style={[styles.mainText, { color: "black" }]}>HabitAI</Text>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonWrapper}>
           <TouchableOpacity
             style={styles.customButton}
             onPress={() => {
-              navigation.navigate("homeScreen");
+              navigation.navigate("SignIn"); 
             }}
           >
-            <Text style={styles.customButtonText}>Enter</Text>
+            <Text style={styles.customButtonText}>Sign In</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonWrapper}>
+          <TouchableOpacity
+            style={styles.customButton}
+            onPress={() => {
+              navigation.navigate("SignUp");
+            }}
+          >
+            <Text style={styles.customButtonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonWrapper}>
+          <TouchableOpacity
+            style={styles.customButton}
+            onPress={() => {
+              navigation.navigate("TempHome");
+            }}
+          >
+            <Text style={styles.customButtonText}>Temp - Home</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -45,22 +56,9 @@ const App = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="homeScreen" component={HomeScreen} />
-        <Stack.Screen name="rewardsScreen" component={RewardsScreen} />
-        <Stack.Screen name="createTaskScreen" component={TodoList} />
-        <Stack.Screen name="calendarScreen" component={CalendarScreen} />
-        <Stack.Screen
-          name="notificationScreen"
-          component={NotificationScreen}
-        />
-        <Stack.Screen
-          name="ongoingTaskDetails"
-          component={OngoingTaskDetails}
-        />
-        <Stack.Screen
-          name="completedTaskDetails"
-          component={CompletedTaskDetails}
-        />
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen name="TempHome" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
