@@ -12,13 +12,57 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
 function CalendarScreen() {
+  const [task, setTask] = useState([]);
+
+  const [selectCurrentDate, setSelectCurrentDate] = useState(
+    new Date().getDate()
+  );
+  const currentDate = new Date().getDate();
+
+  const updateSelectCurrentDate = (Date) => {
+    setSelectCurrentDate(Date);
+  };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch("http://192.168.29.176:3000/tasks", {
+          headers: {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: `Bearer dpvvyGsgKXC_megsmcouoTLFaRpPUzxJu5-Lq-c8bxs_rhfjXWXfU6UYdsak`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        setTask(json);
+      } catch (error) {
+        console.error("Fetching tasks failed:", ercurrentDateror);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  // console.log(task);
+
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Schedule"} />
       <View style={styles.content}>
-        <CalendarDates />
-        <DateTasks navigation={navigation} />
+        <CalendarDates
+          currentDate={currentDate}
+          selectCurrentDate={selectCurrentDate}
+          updateSelectCurrentDate={updateSelectCurrentDate}
+        />
+        <DateTasks
+          navigation={navigation}
+          tasks={task}
+          selectCurrentDate={selectCurrentDate}
+        />
         <CircleButton navigation={navigation} />
       </View>
     </View>
@@ -60,8 +104,11 @@ function getSevenDayList(currentDay, currentMonth) {
   return [sevenDay, sevenMonth];
 }
 
-function CalendarDates() {
-  const currentDate = new Date().getDate();
+function CalendarDates({
+  currentDate,
+  selectCurrentDate,
+  updateSelectCurrentDate,
+}) {
   const currentMonth = new Date().getMonth();
 
   const monthList = [
@@ -111,6 +158,8 @@ function CalendarDates() {
       {!isComponentVisible && (
         <DisplaySevenDayCalendar
           currentDate={currentDate}
+          selectCurrentDate={selectCurrentDate}
+          updateSelectCurrentDate={updateSelectCurrentDate}
           currentMonth={currentMonth}
           monthList={monthList}
         />
@@ -118,6 +167,8 @@ function CalendarDates() {
       {isComponentVisible && (
         <DisplayMonthCalendar
           currentDate={currentDate}
+          selectCurrentDate={selectCurrentDate}
+          updateSelectCurrentDate={updateSelectCurrentDate}
           currentMonth={currentMonth}
           monthList={monthList}
         />
@@ -126,7 +177,13 @@ function CalendarDates() {
   );
 }
 
-function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
+function DisplaySevenDayCalendar({
+  currentDate,
+  selectCurrentDate,
+  updateSelectCurrentDate,
+  currentMonth,
+  monthList,
+}) {
   const [sevenDayList, sevenDayMonth] = getSevenDayList(
     currentDate,
     currentMonth
@@ -142,12 +199,16 @@ function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
         {sevenDayList.map((element, index) => (
           <TouchableOpacity
             key={element}
+            onPress={() => {
+              updateSelectCurrentDate(element);
+            }}
             style={[
               styles.dateButton,
-              element === currentDate ? styles.currentDayButton : null,
+              element === selectCurrentDate ? styles.currentDayButton : null,
               { marginRight: 10 },
               {
-                backgroundColor: element === currentDate ? "black" : "white",
+                backgroundColor:
+                  element === selectCurrentDate ? "black" : "white",
               },
             ]}
           >
@@ -155,7 +216,7 @@ function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
               key={element}
               style={[
                 styles.dateText,
-                element === currentDate
+                element === selectCurrentDate
                   ? { color: "white" }
                   : { color: "black" },
               ]}
@@ -165,7 +226,7 @@ function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
             <Text
               style={[
                 { color: "black" },
-                element === currentDate ? { color: "white" } : null,
+                element === selectCurrentDate ? { color: "white" } : null,
               ]}
             >
               {monthList[sevenDayMonth[index]]}
@@ -177,7 +238,13 @@ function DisplaySevenDayCalendar({ currentDate, currentMonth, monthList }) {
   );
 }
 
-function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
+function DisplayMonthCalendar({
+  currentDate,
+  selectCurrentDate,
+  updateSelectCurrentDate,
+  currentMonth,
+  monthList,
+}) {
   const currentYear = new Date().getFullYear();
   const daysInMonths = new Date(currentYear, currentMonth + 1, 0).getDate();
   const initialScrollX = (currentDate - 1) * 53.5;
@@ -193,22 +260,29 @@ function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
             <View key={index} style={{ paddingRight: 10 }}>
               <TouchableOpacity
                 key={index}
+                onPress={() => {
+                  updateSelectCurrentDate(element);
+                }}
                 style={[
                   styles.dateButton,
-                  index + 1 == currentDate ? null : styles.currentDayButton,
+                  index + 1 == selectCurrentDate
+                    ? null
+                    : styles.currentDayButton,
                 ]}
               >
                 <Text
                   key={index}
                   style={[
                     styles.dateText,
-                    index + 1 == currentDate ? { color: "white" } : null,
+                    index + 1 == selectCurrentDate ? { color: "white" } : null,
                   ]}
                 >
                   {index + 1}
                 </Text>
                 <Text
-                  style={[index + 1 == currentDate ? { color: "white" } : null]}
+                  style={[
+                    index + 1 == selectCurrentDate ? { color: "white" } : null,
+                  ]}
                 >
                   {monthList[currentMonth]}
                 </Text>
@@ -221,13 +295,17 @@ function DisplayMonthCalendar({ currentDate, currentMonth, monthList }) {
   );
 }
 
-function DateTasks({ navigation }) {
-  const todayTasks = [
-    "Basic leg Stretching Exercise",
-    "Finish Atoomic Habits",
-    "Practice Company Tests",
-  ];
+function DateTasks({ navigation, tasks, selectCurrentDate }) {
+  const filterCompletedTasks = tasks.filter(
+    (task) =>
+      task.completed === false &&
+      task.dueDateTime != null &&
+      new Date(task.dueDateTime).getDate() == selectCurrentDate
+  );
 
+  console.log(filterCompletedTasks);
+
+  const todayTasks = filterCompletedTasks.map((task) => task.name);
   return (
     <View style={styles.categoryContainer}>
       <Text style={styles.categoryText}>Today's Tasks</Text>
