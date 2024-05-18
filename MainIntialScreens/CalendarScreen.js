@@ -311,7 +311,13 @@ function DateTasks({ navigation, tasks, selectCurrentDate }) {
         <TouchableOpacity
           key={index}
           style={styles.taskButton}
-          onPress={() => navigation.navigate("ongoingTaskDetails")}
+          onPress={() =>
+            navigation.navigate("ongoingTaskDetails", {
+              name: task.name,
+              description: task.description,
+              dueDateTime: task.dueDateTime,
+            })
+          }
         >
           <View>
             <Text style={styles.taskText}>{task.name}</Text>

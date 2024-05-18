@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   View,
   Text,
@@ -6,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -254,15 +256,84 @@ function SubTasks({
 // TODO: Need to add comments.
 function TaskDetailsScreen() {
   const navigation = useNavigation();
-  const [description, setDescription] = useState(
-    "Need to pratice DSA alot, ll companies are asking code in java and on trees and graphs. link - https://leetcode.com/"
-  );
-
+  const route = useRoute();
   const [subTasks, setSubTasks] = useState([
-    "Practice leetcode",
-    "Learn Trees and Graphs",
-    "Revise everything",
+   
   ]);
+  // useEffect(() => {
+  //   const fetchTasks = async () => {
+  //     try {
+  //       const response = await fetch("http://172.27.64.24:3000/sub-tasks", {
+  //         headers: {
+  //           // Accept: "application/vnd.api+json",
+  //           // "Content-Type": "application/vnd.api+json",
+  //           Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
+  //         },
+  //         body: JSON.stringify({
+  //           "data": {
+  //               "attributes": {
+  //                   "task_id": 3
+  //               }
+  //           }
+  //         })
+  //       });
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       const json = await response.json();
+  //       setSubTasks(json);
+  //     } catch (error) {
+  //       console.error("Fetching tasks failed:", ercurrentDateror);
+  //     }
+  //   };
+
+  //   fetchTasks();
+  // }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = 'http://172.27.64.24:3000/sub-tasks';
+      const data = {
+        "data": {
+          "attributes": {
+              "task_id": 3
+          }
+      }
+      };
+
+      try {
+        const response = await axios.get('http://172.27.64.24:3000/sub-tasks', {
+          params: {
+            "data": {
+            "attributes": {
+              "task_id": 3
+            }
+         }
+          }, 
+          headers: {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
+        }
+          
+      })
+
+      setSubTasks(response.data);
+      } catch (error) {
+        console.error('Axios error:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
+  console.log(subTasks);
+
+  const [description, setDescription] = useState(route.params.description);
+
+  
   const addSubTask = (newSubTask) => {
     setSubTasks([...subTasks, newSubTask]);
   };
@@ -290,7 +361,7 @@ function TaskDetailsScreen() {
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Task Details"} />
       {/* // ! Make sure the date formate is proper while passing the value. */}
-      <MainTaskDetails title="Practice Leetcode" dueDateString="24/12/2023" />
+      <MainTaskDetails title={route.params.name} dueDateString = {route.params.dueDateTime} />
       <TaskDescription
         description={description}
         setDescription={setDescription}
