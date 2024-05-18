@@ -26,11 +26,11 @@ function CalendarScreen() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("http://192.168.29.176:3000/tasks", {
+        const response = await fetch("http://172.27.64.24:3000/tasks", {
           headers: {
             Accept: "application/vnd.api+json",
             "Content-Type": "application/vnd.api+json",
-            Authorization: `Bearer dpvvyGsgKXC_megsmcouoTLFaRpPUzxJu5-Lq-c8bxs_rhfjXWXfU6UYdsak`,
+            Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
           },
         });
         if (!response.ok) {
@@ -261,7 +261,7 @@ function DisplayMonthCalendar({
               <TouchableOpacity
                 key={index}
                 onPress={() => {
-                  updateSelectCurrentDate(element);
+                  updateSelectCurrentDate(index + 1)
                 }}
                 style={[
                   styles.dateButton,
@@ -303,9 +303,7 @@ function DateTasks({ navigation, tasks, selectCurrentDate }) {
       new Date(task.dueDateTime).getDate() == selectCurrentDate
   );
 
-  console.log(filterCompletedTasks);
-
-  const todayTasks = filterCompletedTasks.map((task) => task.name);
+  const todayTasks = filterCompletedTasks;
   return (
     <View style={styles.categoryContainer}>
       <Text style={styles.categoryText}>Today's Tasks</Text>
@@ -316,8 +314,8 @@ function DateTasks({ navigation, tasks, selectCurrentDate }) {
           onPress={() => navigation.navigate("ongoingTaskDetails")}
         >
           <View>
-            <Text style={styles.taskText}>{task}</Text>
-            <Text style={styles.secondLineText}>16:00:00 - 18:00:00</Text>
+            <Text style={styles.taskText}>{task.name}</Text>
+            <Text style={styles.secondLineText}>{task.dueDateTime}</Text>
           </View>
         </TouchableOpacity>
       ))}
