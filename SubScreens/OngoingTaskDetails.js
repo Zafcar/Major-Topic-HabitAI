@@ -10,7 +10,6 @@ import {
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { SERVER_IP, TOKEN } from "@env";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 import { TextInput } from "react-native-gesture-handler";
@@ -258,7 +257,9 @@ function SubTasks({
 function TaskDetailsScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const [subTasks, setSubTasks] = useState([]);
+  const [subTasks, setSubTasks] = useState([
+   
+  ]);
   // useEffect(() => {
   //   const fetchTasks = async () => {
   //     try {
@@ -291,44 +292,48 @@ function TaskDetailsScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = "http://172.27.64.24:3000/sub-tasks";
+      const url = 'http://172.27.64.24:3000/sub-tasks';
       const data = {
-        data: {
-          attributes: {
-            task_id: 3,
-          },
-        },
+        "data": {
+          "attributes": {
+              "task_id": 3
+          }
+      }
       };
 
       try {
-        const response = await axios.get(`${SERVER_IP}/sub-tasks`, {
+        const response = await axios.get('http://172.27.64.24:3000/sub-tasks', {
           params: {
-            data: {
-              attributes: {
-                task_id: 3,
-              },
-            },
-          },
+            "data": {
+            "attributes": {
+              "task_id": 3
+            }
+         }
+          }, 
           headers: {
             Accept: "application/vnd.api+json",
             "Content-Type": "application/vnd.api+json",
-            Authorization: `Bearer ${TOKEN}`,
-          },
-        });
+            Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
+        }
+          
+      })
 
-        setSubTasks(response.data);
+      setSubTasks(response.data);
       } catch (error) {
-        console.error("Axios error:", error);
+        console.error('Axios error:', error);
       }
     };
 
     fetchData();
   }, []);
 
+
+
   console.log(subTasks);
 
   const [description, setDescription] = useState(route.params.description);
 
+  
   const addSubTask = (newSubTask) => {
     setSubTasks([...subTasks, newSubTask]);
   };
@@ -356,10 +361,7 @@ function TaskDetailsScreen() {
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Task Details"} />
       {/* // ! Make sure the date formate is proper while passing the value. */}
-      <MainTaskDetails
-        title={route.params.name}
-        dueDateString={route.params.dueDateTime}
-      />
+      <MainTaskDetails title={route.params.name} dueDateString = {route.params.dueDateTime} />
       <TaskDescription
         description={description}
         setDescription={setDescription}
