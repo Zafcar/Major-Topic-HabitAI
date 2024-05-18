@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { SERVER_IP, TOKEN } from "@env";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
@@ -26,11 +27,11 @@ function CalendarScreen() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("http://172.27.64.24:3000/tasks", {
+        const response = await fetch(`${SERVER_IP}/tasks`, {
           headers: {
             Accept: "application/vnd.api+json",
             "Content-Type": "application/vnd.api+json",
-            Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
+            Authorization: `Bearer ${TOKEN}`,
           },
         });
         if (!response.ok) {
@@ -261,7 +262,7 @@ function DisplayMonthCalendar({
               <TouchableOpacity
                 key={index}
                 onPress={() => {
-                  updateSelectCurrentDate(index + 1)
+                  updateSelectCurrentDate(index + 1);
                 }}
                 style={[
                   styles.dateButton,
