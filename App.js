@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import HomeScreen from "./MainIntialScreens/HomeScreen";
 import CalendarScreen from "./MainIntialScreens/CalendarScreen";
 import TodoList from "./MainIntialScreens/CreateTaskScreen";
-import NotificationScreen from "./MainIntialScreens/NotificationScreen";
+import TimerScreen from "./MainIntialScreens/TimerScreen";
 import RewardsScreen from "./SubScreens/CompletedTaskDetails";
 import OngoingTaskDetails from "./SubScreens/OngoingTaskDetails";
 import CompletedTaskDetails from "./SubScreens/CompletedTaskDetails";
@@ -50,8 +50,8 @@ const App = () => {
         <Stack.Screen name="createTaskScreen" component={TodoList} />
         <Stack.Screen name="calendarScreen" component={CalendarScreen} />
         <Stack.Screen
-          name="notificationScreen"
-          component={NotificationScreen}
+          name="TimerScreen"
+          component={TimerScreen}
         />
         <Stack.Screen
           name="ongoingTaskDetails"

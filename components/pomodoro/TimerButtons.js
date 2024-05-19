@@ -24,6 +24,7 @@ class TimerButtons extends React.Component {
       );
     } else {
       return (
+
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.buttonStyle}
@@ -32,6 +33,7 @@ class TimerButtons extends React.Component {
             <Text style={styles.buttonText}>Play</Text>
           </TouchableOpacity>
         </View>
+
       );
     }
   }
@@ -39,21 +41,19 @@ class TimerButtons extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: "row",
-    marginLeft: 20,
     justifyContent: "space-evenly",
     marginBottom: 20,
   },
   buttonStyle: {
     alignItems: "center",
-    backgroundColor: "#C2362B",
+    borderWidth: 3,
     padding: 30,
     flexDirection: "row",
-    borderRadius: 80,
+    borderRadius: 6.5,
   },
   buttonText: {
-    color: "white",
+    color: "black",
     fontSize: 25,
     fontWeight: "300",
   },

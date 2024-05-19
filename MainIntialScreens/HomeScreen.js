@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,23 +11,46 @@ import { useNavigation } from "@react-navigation/native";
 import { BottonTools } from "../CommonFunctions/ToolBars";
 
 function HomeScreen() {
-  const navigation = useNavigation();
-  const completedTaskTexts = [
-    "Basic Leg Stretching Exercise",
-    "Finish Atomic Habits",
-    "Practice Japanese",
-  ];
-  const ongoingTaskTexts = [
-    "Practice leetcode",
-    "Posture training",
-    "Brushing and Flossing",
-  ];
 
-  const dueDates = [
-    "24-12-2023, 11AM - 1PM",
-    "Daily, 5PM - 7PM",
-    "Daily, 8PM-12AM",
-  ];
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch("http://172.27.64.24:3000/tasks", {
+          headers: {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        setTasks(json);
+      } catch (error) {
+        console.error("Fetching tasks failed:", ercurrentDateror);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  const uncompletedTasks = tasks.filter(
+    (task) =>
+      task.completed === false
+  );
+
+  const navigation = useNavigation();
+  const completedTaskTexts = tasks.filter(
+    (task) =>
+      task.completed === true
+  );
+  const ongoingTaskTexts = tasks.filter(
+    (task) =>
+      task.completed === false
+  );
 
   return (
     <View style={styles.container}>
@@ -40,7 +63,6 @@ function HomeScreen() {
         <OngoingTasks
           navigation={navigation}
           ongoingTaskTexts={ongoingTaskTexts}
-          dueDates={dueDates}
         />
       </View>
       <BottonTools navigation={navigation} currentpage={"homeScreen"} />
@@ -89,7 +111,7 @@ function CompletedTasks({ navigation, completedTaskTexts }) {
         {completedTaskTexts.map((text, index) => (
           <CompletedTask
             key={index}
-            text={text}
+            text={text.name}
             navigation={navigation}
             index={index}
           />
@@ -149,7 +171,7 @@ function CompletedTask({ text, navigation, index }) {
   );
 }
 
-function OngoingTasks({ navigation, ongoingTaskTexts, dueDates }) {
+function OngoingTasks({ navigation, ongoingTaskTexts}) {
   return (
     <View style={styles.categoriesContainer}>
       <Text
@@ -176,8 +198,10 @@ function OngoingTasks({ navigation, ongoingTaskTexts, dueDates }) {
         {ongoingTaskTexts.map((text, index) => (
           <OngoingTask
             key={index}
-            text={text}
-            dueDate={dueDates[index]}
+            id={text.id}
+            text={text.name}
+            description={text.description}
+            dueDateTime={text.dueDateTime}
             navigation={navigation}
             index={index}
           />
@@ -187,12 +211,19 @@ function OngoingTasks({ navigation, ongoingTaskTexts, dueDates }) {
   );
 }
 
-function OngoingTask({ text, dueDate, navigation, index }) {
+function OngoingTask({ id, text, description, dueDateTime, navigation, index }) {
   return (
     <TouchableOpacity
       style={styles.ongoingButtonContainer}
-      onPress={
-        index == 0 ? () => navigation.navigate("ongoingTaskDetails") : null
+      onPress={ () =>
+        {
+          navigation.navigate("ongoingTaskDetails", {
+            id: id,
+            name: text,
+            description: description,
+            dueDateTime: dueDateTime,
+          })
+        }
       }
     >
       <View style={[styles.ongoingButton, { borderRadius: 14 }]}>
@@ -208,7 +239,7 @@ function OngoingTask({ text, dueDate, navigation, index }) {
             bottom: 12,
           }}
         >
-          Due on: {dueDate}
+          Due on: {dueDateTime}
         </Text>
         <View
           style={{

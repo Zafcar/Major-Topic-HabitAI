@@ -90,11 +90,11 @@ function BottonTools({ navigation, currentpage }) {
       />
 
       <UtilTool
-        page="notificationScreen"
-        icon="bell"
+        page="TimerScreen"
+        icon="hourglass-2"
         size={15}
         navigation={navigation}
-        currentPage={"notificationScreen" == currentpage}
+        currentPage={"TimerScreen" == currentpage}
       />
     </View>
   );
