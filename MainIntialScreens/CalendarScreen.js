@@ -30,7 +30,7 @@ function CalendarScreen() {
           headers: {
             Accept: "application/vnd.api+json",
             "Content-Type": "application/vnd.api+json",
-            Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
+            Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
           },
         });
         if (!response.ok) {
@@ -300,31 +300,36 @@ function DateTasks({ navigation, tasks, selectCurrentDate }) {
     (task) =>
       task.completed === false &&
       task.dueDateTime != null &&
-      new Date(task.dueDateTime).getDate() == selectCurrentDate
+      task.dueDateTime.slice(8, 10) == selectCurrentDate,
+      // console.log(`${task.dueDateTime.slice(8, 10)}-----${new Date(task.dueDateTime).getDate()}`) 
   );
 
+  // console.log(selectCurrentDate)
   const todayTasks = filterCompletedTasks;
   return (
     <View style={styles.categoryContainer}>
       <Text style={styles.categoryText}>Today's Tasks</Text>
-      {todayTasks.map((task, index) => (
-        <TouchableOpacity
-          key={index}
-          style={styles.taskButton}
-          onPress={() =>
-            navigation.navigate("ongoingTaskDetails", {
-              name: task.name,
-              description: task.description,
-              dueDateTime: task.dueDateTime,
-            })
-          }
-        >
-          <View>
-            <Text style={styles.taskText}>{task.name}</Text>
-            <Text style={styles.secondLineText}>{task.dueDateTime}</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
+        <ScrollView style={{ flexDirection: "column" }}>
+          {todayTasks.map((task, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.taskButton}
+              onPress={() =>
+                navigation.navigate("ongoingTaskDetails", {
+                  id: task.id,
+                  name: task.name,
+                  description: task.description,
+                  dueDateTime: task.dueDateTime,
+                })
+              }
+            >
+              <View>
+                <Text style={styles.taskText}>{task.name} - {task.id }</Text>
+                <Text style={styles.secondLineText}>{task.dueDateTime}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+      </ScrollView>   
     </View>
   );
 }

@@ -15,16 +15,6 @@ import { useNavigation } from "@react-navigation/native";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
 
-const sendTask = async () => {
-  try {
-    const response = await fetch("https://reactnative.dev/movies.json");
-    const json = await response.json();
-    return json.movies;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 function TaskTitle({ setTaskTitle }) {
   return (
     <>
@@ -263,58 +253,38 @@ function SubTasks({ subTasks, addSubTask, removeSubTask }) {
   );
 }
 
-const createTask = () => {
-  fetch("http://127.0.0.1:3000/tasks", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/vnd.api+json",
-    },
-    body: JSON.stringify({
-      data: {
-        attributes: {
-          name: "squats",
-          task_id: 3,
-        },
-        type: "sub_tasks",
-      },
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-};
+function convertDate(inputDate) {
+  const [day, month, year] = inputDate.split('/');
+  const date = new Date(year, month - 1, day);
+  const formattedYear = date.getFullYear();
+  const formattedMonth = String(date.getMonth() + 1).padStart(2, '0');
+  const formattedDay = String(date.getDate()).padStart(2, '0');
 
-const createSubTask = () => {
-  for (let index = 0; index < array.length; index++) {
-    const element = array[index];
+  return `${formattedYear}-${formattedMonth}-${formattedDay}`;
+}
 
-    fetch("http://127.0.0.1:3000/tasks", {
+const createSubTask = async(text, taskId) => {
+
+    await fetch("http://172.27.64.24:3000/sub-tasks", {
       method: "POST",
       headers: {
+        Accept: "application/vnd.api+json",
         "Content-Type": "application/vnd.api+json",
+        Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
       },
       body: JSON.stringify({
         data: {
           attributes: {
-            name: "squats",
-            task_id: 3,
+            name: text,
+            task_id: taskId,
           },
           type: "sub_tasks",
         },
       }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
+    }).catch((error) => {
         console.error("Error:", error);
       });
-  }
+
 };
 
 function CreateButton({
@@ -322,18 +292,24 @@ function CreateButton({
   taskDescription,
   displayDate,
   displayTime,
+  createTask,
+  updateTaskID,
   subTasks,
+
+  
 }) {
+  
   return (
     <TouchableOpacity
       style={styles.lastButton}
-      onPress={
+      onPress={ () => {
+
         taskTitle != ""
-          ? [
-              createTask(taskTitle, taskDescription, displayDate, displayTime),
-              createSubTask(subTasks),
-            ]
-          : null
+        ? [
+          createTask(taskTitle, taskDescription, displayDate, displayTime, updateTaskID, subTasks)
+        ]
+        : null
+      }
       }
     >
       <Text style={styles.lastButtonText}>Create</Text>
@@ -341,8 +317,43 @@ function CreateButton({
   );
 }
 
+
 function CreateTaskScreen() {
   const navigation = useNavigation();
+
+  const createTask = async (taskTitle, taskDescription, displayDate, displayTime, sub_tasks) => {
+    try {
+      const response = await fetch("http://172.27.64.24:3000/tasks", {
+        method: "POST",
+        headers: {
+          Accept: "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+          Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+        },
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              name: taskTitle,
+              description: taskDescription,
+              dueDateTime: `${displayDate}T${displayTime}:00Z`,
+            },
+            type: "tasks",
+          },
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      for (var i = 0; i < subTasks.length; i++) {
+        createSubTask(subTasks[i], data.data.id)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
 
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
@@ -399,6 +410,7 @@ function CreateTaskScreen() {
         taskDescription={taskDescription}
         displayDate={displayDate}
         displayTime={displayTime}
+        createTask={createTask}
         subTasks={subTasks}
       />
     </View>

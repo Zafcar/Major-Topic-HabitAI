@@ -76,6 +76,7 @@ function EditSubTask({
   text,
   index,
   tick,
+  task_id,
   updateTick,
   updateEdited,
   updateSubTask,
@@ -89,14 +90,14 @@ function EditSubTask({
         defaultValue={text}
         autoFocus={true}
         onSubmitEditing={(value) => {
-          updateSubTask(value.nativeEvent.text, index);
+          updateSubTask(value.nativeEvent.text, index, task_id);
           updateEdited();
         }}
       />
       <TouchableOpacity
         style={styles.circleButton}
         onPress={() => {
-          removeSubTask(index);
+          removeSubTask(index, task_id);
           updateEdited();
           tick ? [updateProgress(-1), updateTick()] : updateProgress(0);
         }}
@@ -107,14 +108,19 @@ function EditSubTask({
   );
 }
 
-function DisplaySubTask({ text, tick, updateTick, updateProgress }) {
+function DisplaySubTask({ text, completed, task_id, tick, updateTick, updateProgress, postProgressCompleted }) {
+
+  // if (completed) {
+  //   updateTick()
+  // }
+
   return (
     <>
       <Text style={styles.subTaskButtonText}>{text}</Text>
       <TouchableOpacity
         style={styles.circleButton}
         onPress={() => {
-          [updateTick(), tick ? updateProgress(-1) : updateProgress(+1)];
+          [updateTick(), tick && filterCompletedTasks ? updateProgress(-1) : updateProgress(+1)];
         }}
       >
         <FontAwesome5
@@ -130,14 +136,18 @@ function DisplaySubTask({ text, tick, updateTick, updateProgress }) {
 function Subtask({
   text,
   index,
+  task_id,
+  completed,
   updateSubTask,
   removeSubTask,
   progress,
   updateProgress,
+  postProgressCompleted
 }) {
-  const [tick, setTick] = useState(false);
+  const [tick, setTick] = useState(completed);
   const updateTick = () => {
     setTick(!tick);
+    postProgressCompleted(task_id)
   };
 
   const [edited, setEdited] = useState(false);
@@ -157,6 +167,7 @@ function Subtask({
           text={text}
           index={index}
           tick={tick}
+          task_id={task_id}
           updateTick={updateTick}
           updateEdited={updateEdited}
           updateSubTask={updateSubTask}
@@ -166,10 +177,13 @@ function Subtask({
       ) : (
         <DisplaySubTask
           text={text}
+          completed={completed}
+          task_id={task_id}
           tick={tick}
           updateTick={updateTick}
           progress={progress}
           updateProgress={updateProgress}
+          postProgressCompleted={postProgressCompleted}
         />
       )}
     </TouchableOpacity>
@@ -185,6 +199,7 @@ function SubTasks({
   removeSubTask,
   click,
   updateClick,
+  postProgressCompleted
 }) {
   return (
     <>
@@ -237,15 +252,18 @@ function SubTasks({
         style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        {subTasks.map((text, index) => (
+        {subTasks.map((task, index) => (
           <Subtask
-            text={text}
+            text={task.name}
             index={index}
+            task_id={task.id}
+            completed={task.completed}
             updateSubTask={updateSubTask}
             removeSubTask={removeSubTask}
             progress={progress}
             updateProgress={updateProgress}
             key={index}
+            postProgressCompleted={postProgressCompleted}
           />
         ))}
       </ScrollView>
@@ -257,97 +275,180 @@ function SubTasks({
 function TaskDetailsScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const [subTasks, setSubTasks] = useState([
-   
-  ]);
-  // useEffect(() => {
-  //   const fetchTasks = async () => {
-  //     try {
-  //       const response = await fetch("http://172.27.64.24:3000/sub-tasks", {
-  //         headers: {
-  //           // Accept: "application/vnd.api+json",
-  //           // "Content-Type": "application/vnd.api+json",
-  //           Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
-  //         },
-  //         body: JSON.stringify({
-  //           "data": {
-  //               "attributes": {
-  //                   "task_id": 3
-  //               }
-  //           }
-  //         })
-  //       });
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  //       const json = await response.json();
-  //       setSubTasks(json);
-  //     } catch (error) {
-  //       console.error("Fetching tasks failed:", ercurrentDateror);
-  //     }
-  //   };
+  const [subTasks, setSubTasks] = useState([]);
+  const [tempSubTasks, setTempSubTasks] = useState([]);
 
-  //   fetchTasks();
-  // }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const url = 'http://172.27.64.24:3000/sub-tasks';
-      const data = {
-        "data": {
-          "attributes": {
-              "task_id": 3
-          }
-      }
-      };
-
-      try {
-        const response = await axios.get('http://172.27.64.24:3000/sub-tasks', {
-          params: {
-            "data": {
-            "attributes": {
-              "task_id": 3
+    useEffect(() => {
+      const fetchData = async () => {
+        
+        try {
+          const response = await axios.get(`http://172.27.64.24:3000/sub-tasks`, {
+            params: {
+              "data": {
+                "attributes": {
+                  "task_id": route.params.id
+                }
+              }
+            }, 
+            headers: {
+              Accept: "application/vnd.api+json",
+              "Content-Type": "application/vnd.api+json",
+              Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
             }
-         }
-          }, 
-          headers: {
-            Accept: "application/vnd.api+json",
-            "Content-Type": "application/vnd.api+json",
-            Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
-        }
+            
+          })
           
-      })
-
-      setSubTasks(response.data);
-      } catch (error) {
-        console.error('Axios error:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+          setSubTasks(response.data);
+        } catch (error) {
+          console.error('Axios error:', error);
+        }
+      };
+      
+      fetchData();
+    }, []);
 
 
-
-  console.log(subTasks);
 
   const [description, setDescription] = useState(route.params.description);
 
-  
+  const [tempAddTask, setTempAddTask] = useState([])
+
   const addSubTask = (newSubTask) => {
-    setSubTasks([...subTasks, newSubTask]);
-  };
-  const updateSubTask = (updatedSubTask, index) => {
-    const tempArray = [...subTasks];
-    tempArray[index] = updatedSubTask;
-    setSubTasks(tempArray);
-  };
-  const removeSubTask = (index) => {
-    const tempArray = subTasks.filter((_, i) => i !== index);
-    setSubTasks(tempArray);
+    postSubTask(newSubTask)
   };
 
-  const [progress, setProgress] = useState(0);
+  const postSubTask = async (newSubTask) => {
+    try {
+      const res = await fetch('http://172.27.64.24:3000/sub-tasks', {
+        method: 'POST',
+        headers: {
+          Accept: "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+          Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+        },
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              name: newSubTask,
+              task_id: route.params.id,
+            },
+            type: "sub_tasks"
+          }
+        })
+      });
+  
+      // console.log('Raw Response:', res); // Log the raw response
+  
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+  
+      const contentType = res.headers.get('Content-Type');
+      if (contentType && contentType.includes('application/vnd.api+json')) {
+        const data = await res.json(); // Attempt to parse the JSON
+        // console.log('Parsed Response:', data);
+        setTempAddTask(data)
+        // console.log(data["data"])
+        setSubTasks([...subTasks, {"completed": data["data"]["attributes"]["completed"], "created_at": data["data"]["attributes"]["created_at"], "id": data["data"]["id"], "name": data["data"]["attributes"]["name"], "task_id": data["data"]["attributes"]["task_id"], "updated_at": data["data"]["attributes"]["created_at"], "user_id": data["data"]["attributes"]["user_id"], "task_id": data["data"]["attributes"]["task_id"]}])
+      } else {
+        throw new Error('Response is not JSON');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  // console.log(tempAddTask.data.attributes)
+
+
+  const deleteSubTask = (task_id) => {
+    try {
+      const res =  fetch(`http://172.27.64.24:3000/sub-tasks/${task_id}`, {
+        method: 'DELETE',
+        headers: {
+          Accept: "application/vnd.api+json",
+          Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
+        }
+      });
+
+      if (res.status === 204) { // 204 No Content is a common response for successful DELETE requests
+        console.log('Delete successful');
+        setResponse({ message: 'Delete successful' });
+      } 
+    } catch (error) {
+      console.error('Error:', error);
+      setResponse({ error: 'Failed to delete data' });
+    }
+  };
+
+  const putSubTask = (task_id, task_name) => {
+    fetch(`http://172.27.64.24:3000/sub-tasks/${task_id}`, {
+      method: 'PUT',
+      headers: {
+        Accept: "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json",
+        Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+      },
+      body: JSON.stringify({
+        "data": {
+          "id": task_id,
+          "attributes": {
+              "name": task_name
+          },
+          "type": "sub_tasks"
+      }
+  
+      }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  };
+
+  const postProgressCompleted = async (task_id) => {
+    try {
+      const res = await fetch('http://172.27.64.24:3000/sub-tasks/mark_complete', {
+        method: 'POST',
+        headers: {
+          Accept: "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+          Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+        },
+        body: JSON.stringify({
+            "data": {
+                "attributes": {
+                    "sub_task_id": task_id
+                }
+            }        
+        })
+      });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const updateSubTask = (updatedSubTask, index, task_id) => {
+    const tempArray = [...subTasks];
+    tempArray[index].name = updatedSubTask;
+    setSubTasks(tempArray);
+    putSubTask(task_id, tempArray[index].name);
+  };
+
+  const removeSubTask = (index, task_id) => {
+    const tempArray = subTasks.filter((_, i) => i !== index);
+    setSubTasks(tempArray);
+    deleteSubTask(task_id)
+  };
+
+  // console.log(subTasks.filter((task) => task.completed === true).length);
+
+  const [progress, setProgress] = useState(subTasks.filter((task) => task.completed === true).length);
   const updateProgress = (value) => {
     setProgress(progress + value);
   };
@@ -377,6 +478,7 @@ function TaskDetailsScreen() {
         removeSubTask={removeSubTask}
         click={click}
         updateClick={updateClick}
+        postProgressCompleted={postProgressCompleted}
       />
     </View>
   );
