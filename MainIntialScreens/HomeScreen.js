@@ -21,7 +21,7 @@ function HomeScreen() {
           headers: {
             Accept: "application/vnd.api+json",
             "Content-Type": "application/vnd.api+json",
-            Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+            Authorization: `Bearer xrRybbDwy_pDaUhG8CCffJ3TYqYRp3whL7cQSYwbyFztVa7WWNJwVJRyKQxx`,
           },
         });
         if (!response.ok) {
@@ -111,7 +111,10 @@ function CompletedTasks({ navigation, completedTaskTexts }) {
         {completedTaskTexts.map((text, index) => (
           <CompletedTask
             key={index}
+            id={text.id}
             text={text.name}
+            description={text.description}
+            dueDateTime={text.dueDateTime}
             navigation={navigation}
             index={index}
           />
@@ -121,12 +124,17 @@ function CompletedTasks({ navigation, completedTaskTexts }) {
   );
 }
 
-function CompletedTask({ text, navigation, index }) {
+function CompletedTask({id, text, description, dueDateTime, navigation, index }) {
   return (
     <TouchableOpacity
       style={[styles.completedButton, { borderRadius: 14 }]}
       onPress={
-        index == 0 ? () => navigation.navigate("completedTaskDetails") : null
+        () => navigation.navigate("completedTaskDetails", { 
+          id: id,
+          name: text,
+          description: description,
+          dueDateTime: dueDateTime,
+        })
       }
     >
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -172,6 +180,7 @@ function CompletedTask({ text, navigation, index }) {
 }
 
 function OngoingTasks({ navigation, ongoingTaskTexts}) {
+
   return (
     <View style={styles.categoriesContainer}>
       <Text
@@ -194,7 +203,7 @@ function OngoingTasks({ navigation, ongoingTaskTexts}) {
       >
         See all
       </Text>
-      <ScrollView style={{ flexDirection: "column" }}>
+      <ScrollView style={{ flexDirection: "column"}}>
         {ongoingTaskTexts.map((text, index) => (
           <OngoingTask
             key={index}
@@ -212,6 +221,19 @@ function OngoingTasks({ navigation, ongoingTaskTexts}) {
 }
 
 function OngoingTask({ id, text, description, dueDateTime, navigation, index }) {
+  
+  
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+    return formattedDate;
+  }
+  
   return (
     <TouchableOpacity
       style={styles.ongoingButtonContainer}
@@ -239,7 +261,7 @@ function OngoingTask({ id, text, description, dueDateTime, navigation, index }) 
             bottom: 12,
           }}
         >
-          Due on: {dueDateTime}
+          Due on: {formatDate(dueDateTime)}
         </Text>
         <View
           style={{

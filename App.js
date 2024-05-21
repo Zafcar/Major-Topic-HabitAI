@@ -8,7 +8,7 @@ import HomeScreen from "./MainIntialScreens/HomeScreen";
 import CalendarScreen from "./MainIntialScreens/CalendarScreen";
 import TodoList from "./MainIntialScreens/CreateTaskScreen";
 import TimerScreen from "./MainIntialScreens/TimerScreen";
-import RewardsScreen from "./SubScreens/CompletedTaskDetails";
+import RewardsScreen from "./SubScreens/RewardsScreen";
 import OngoingTaskDetails from "./SubScreens/OngoingTaskDetails";
 import CompletedTaskDetails from "./SubScreens/CompletedTaskDetails";
 

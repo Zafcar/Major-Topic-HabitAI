@@ -293,7 +293,7 @@ function TaskDetailsScreen() {
             headers: {
               Accept: "application/vnd.api+json",
               "Content-Type": "application/vnd.api+json",
-              Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+              Authorization: `Bearer xrRybbDwy_pDaUhG8CCffJ3TYqYRp3whL7cQSYwbyFztVa7WWNJwVJRyKQxx`,
             }
             
           })
@@ -324,7 +324,7 @@ function TaskDetailsScreen() {
         headers: {
           Accept: "application/vnd.api+json",
           "Content-Type": "application/vnd.api+json",
-          Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+          Authorization: `Bearer xrRybbDwy_pDaUhG8CCffJ3TYqYRp3whL7cQSYwbyFztVa7WWNJwVJRyKQxx`,
         },
         body: JSON.stringify({
           data: {
@@ -367,7 +367,7 @@ function TaskDetailsScreen() {
         method: 'DELETE',
         headers: {
           Accept: "application/vnd.api+json",
-          Authorization: `Bearer 6oj_yBGN2fo37WojHArhzKEnb5-Hs_FYpUgHSUH5zAFDP7GsW8PFatPaqYGk`,
+          Authorization: `Bearer xrRybbDwy_pDaUhG8CCffJ3TYqYRp3whL7cQSYwbyFztVa7WWNJwVJRyKQxx`,
         }
       });
 
@@ -387,7 +387,7 @@ function TaskDetailsScreen() {
       headers: {
         Accept: "application/vnd.api+json",
         "Content-Type": "application/vnd.api+json",
-        Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+        Authorization: `Bearer xrRybbDwy_pDaUhG8CCffJ3TYqYRp3whL7cQSYwbyFztVa7WWNJwVJRyKQxx`,
       },
       body: JSON.stringify({
         "data": {
@@ -418,7 +418,7 @@ function TaskDetailsScreen() {
         headers: {
           Accept: "application/vnd.api+json",
           "Content-Type": "application/vnd.api+json",
-          Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+          Authorization: `Bearer xrRybbDwy_pDaUhG8CCffJ3TYqYRp3whL7cQSYwbyFztVa7WWNJwVJRyKQxx`,
         },
         body: JSON.stringify({
             "data": {
@@ -458,11 +458,22 @@ function TaskDetailsScreen() {
     setClick(!click);
   };
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+    return formattedDate;
+  }
+
   return (
     <View style={styles.container}>
       <TopScreenDisplay navigation={navigation} title={"Task Details"} />
       {/* // ! Make sure the date formate is proper while passing the value. */}
-      <MainTaskDetails title={route.params.name} dueDateString = {route.params.dueDateTime} />
+      <MainTaskDetails title={route.params.name} dueDateString = {formatDate(route.params.dueDateTime)} />
       <TaskDescription
         description={description}
         setDescription={setDescription}

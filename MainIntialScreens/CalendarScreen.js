@@ -30,7 +30,7 @@ function CalendarScreen() {
           headers: {
             Accept: "application/vnd.api+json",
             "Content-Type": "application/vnd.api+json",
-            Authorization: `Bearer ns1PvtaY8SK7if6WZy3nyhNsUsnC4924v9G8eN_2GZdkDdy7m7mZtZiuimxP`,
+            Authorization: `Bearer xrRybbDwy_pDaUhG8CCffJ3TYqYRp3whL7cQSYwbyFztVa7WWNJwVJRyKQxx`,
           },
         });
         if (!response.ok) {
@@ -304,6 +304,17 @@ function DateTasks({ navigation, tasks, selectCurrentDate }) {
       // console.log(`${task.dueDateTime.slice(8, 10)}-----${new Date(task.dueDateTime).getDate()}`) 
   );
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+    return formattedDate;
+  }
+
   // console.log(selectCurrentDate)
   const todayTasks = filterCompletedTasks;
   return (
@@ -325,7 +336,7 @@ function DateTasks({ navigation, tasks, selectCurrentDate }) {
             >
               <View>
                 <Text style={styles.taskText}>{task.name} - {task.id }</Text>
-                <Text style={styles.secondLineText}>{task.dueDateTime}</Text>
+                <Text style={styles.secondLineText}>{formatDate(task.dueDateTime)}</Text>
               </View>
             </TouchableOpacity>
           ))}

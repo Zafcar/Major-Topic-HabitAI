@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   View,
   Text,
@@ -7,6 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { TopScreenDisplay } from "../CommonFunctions/ToolBars";
@@ -77,7 +79,7 @@ function SubTasks({ subTaskTexts }) {
       <ScrollView style={styles.scrollContainer}>
         {subTaskTexts.map((text, index) => (
           <View key={index} style={styles.subTaskRow}>
-            <Text style={styles.subTaskButtonText}>{text}</Text>
+            <Text style={styles.subTaskButtonText}>{text.name}</Text>
 
             <View style={styles.checkButton}>
               <FontAwesome5 name="check" size={14} color="white" />
@@ -90,27 +92,69 @@ function SubTasks({ subTaskTexts }) {
 }
 
 function TaskDetailsScreen() {
+  const route = useRoute();
   const navigation = useNavigation();
-  const subTaskTexts = ["Squat", "Sholder rotations"];
+  const [subTasks, setSubTasks] = useState([]);
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+    return formattedDate;
+  }
+  
+  useEffect(() => {
+
+
+    const fetchData = async () => {
+      
+      try {
+        const response = await axios.get(`http://172.27.64.24:3000/sub-tasks`, {
+          params: {
+            "data": {
+              "attributes": {
+                "task_id": route.params.id
+              }
+            }
+          }, 
+          headers: {
+            Accept: "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            Authorization: `Bearer xrRybbDwy_pDaUhG8CCffJ3TYqYRp3whL7cQSYwbyFztVa7WWNJwVJRyKQxx`,
+          }
+          
+        })
+        
+        setSubTasks(response.data);
+      } catch (error) {
+        console.error('Axios error:', error);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   return (
     <View style={styles.container}>
       <TopScreenDisplay
         navigation={navigation}
-        title={"Completed Task Details"}
       />
 
-      <MainTaskDetails title="Basic Leg Stretching Exercise" dueDateString="12-12-2023" />
+      <MainTaskDetails title={route.params.name} dueDateString={formatDate(route.params.dueDateTime)} />
 
       <TaskDescription
         description={
-          "It's helpful to include stretching in your exercise plan. Stretching can increase flexibility and improve the range of motion in your joints, helping you move more freely. And the flexibility you gain from stretching might protect you from injury."
+          route.params.description
         }
       />
 
       <ProgressStatus />
 
-      <SubTasks subTaskTexts={subTaskTexts} />
+      <SubTasks subTaskTexts={subTasks} />
     </View>
   );
 }
@@ -201,7 +245,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 1,
   },
   subTaskRow: {
     flexDirection: "row",
